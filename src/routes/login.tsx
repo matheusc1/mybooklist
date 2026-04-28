@@ -11,19 +11,17 @@ function Login(){
     <div className='overflow-hidden grid grid-cols-[1fr_480px] h-dvh'>
       <div className="relative bg-[#0a0a0c] overflow-hidden flex flex-col justify-between p-[48px_52px] border-r border-border animate-fade-up [animation-delay:0.05s]">
 
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0
-        before:content-[''] before:absolute before:inset-0
-        before:bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.025)_0px,rgba(255,255,255,0.025)_1px,transparent_1px,transparent_80px)]
-        after:content-[''] after:absolute after:-top-30 after:-left-20
-        after:w-125 after:h-125
-        after:bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.12)_0%,transparent_65%)]"
+      <div className="absolute inset-0 pointer-events-none z-0
+        bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.025)_0px,rgba(255,255,255,0.025)_1px,transparent_1px,transparent_80px)]"
       />
-  
-      <div className="absolute -bottom-25 -right-15 w-105 h-105
-        bg-[radial-gradient(ellipse_at_center,rgba(139,184,168,0.09)_0%,transparent_65%)]
-        pointer-events-none z-0"
+
+      <div className="absolute -top-30 -left-20 w-125 h-125 pointer-events-none z-0
+        bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.12)_0%,transparent_65%)]"
       />
-  
+
+      <div className="absolute -bottom-25 -right-15 w-105 h-105 pointer-events-none z-0
+        bg-[radial-gradient(ellipse_at_center,rgba(139,184,168,0.09)_0%,transparent_65%)]"
+      />
 
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="deco-title text-[9rem] -top-5 -left-7.5 rotate-[-4deg]">
