@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { GitHubIcon } from '#/components/github-icon'
 import { GoogleIcon } from '#/components/google-icon'
+import { Logo } from '#/components/logo'
 
 export const Route = createFileRoute('/login')({
 	component: Login,
@@ -8,8 +9,8 @@ export const Route = createFileRoute('/login')({
 
 function Login() {
 	return (
-		<div className="overflow-hidden grid grid-cols-[1fr_480px] h-dvh">
-			<div className="relative bg-[#0a0a0c] overflow-hidden flex flex-col justify-between p-[48px_52px] border-r border-border animate-fade-up [animation-delay:0.05s]">
+		<div className="overflow-hidden flex md:grid grid-cols-[1fr_480px] min-h-dvh">
+			<div className="hidden relative bg-[#0a0a0c] overflow-hidden md:flex flex-col justify-between p-8 lg:p-[48px_52px] border-r border-border animate-fade-up [animation-delay:0.05s]">
 				<div
 					className="absolute inset-0 pointer-events-none z-0
         bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.025)_0px,rgba(255,255,255,0.025)_1px,transparent_1px,transparent_80px)]"
@@ -47,12 +48,7 @@ function Login() {
 					</div>
 				</div>
 
-				<div className="flex items-center gap-2.5">
-					<div className="size-8 bg-accent rounded-md flex items-center justify-center">
-						<span className="font-serif text-sm text-bg font-bold">M</span>
-					</div>
-					<p className="font-serif font-semibold ">MyBookList</p>
-				</div>
+				<Logo className='hidden md:flex' />
 
 				<div className="flex flex-col justify-center px-3">
 					<p className="font-serif text-accent/50 leading text-[80px]/[0.6] mb-5">
@@ -73,7 +69,7 @@ function Login() {
 					</div>
 				</div>
 
-				<div className="flex items-center gap-9">
+				<div className="flex items-center gap-8">
 					<div>
 						<p className="font-bold font-serif text-2xl">
 							12<span className="text-accent text-base">k+</span>
@@ -83,7 +79,7 @@ function Login() {
 						</p>
 					</div>
 
-					<div className="w-px bg-border h-full" />
+					<div className="w-px bg-border h-full hidden lg:block" />
 
 					<div>
 						<p className="font-bold font-serif text-2xl">
@@ -94,7 +90,7 @@ function Login() {
 						</p>
 					</div>
 
-					<div className="w-px bg-border h-full" />
+					<div className="w-px bg-border h-full hidden lg:block" />
 
 					<div>
 						<p className="font-bold font-serif text-2xl">
@@ -107,7 +103,8 @@ function Login() {
 				</div>
 			</div>
 
-			<div className="flex flex-col justify-center p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
+			<div className="flex flex-col justify-center p-[40px_20px] md:p-[60px_32px] lg:p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
+				<Logo className='md:hidden mb-12' />
 				<p className="font-mono text-xs uppercase tracking-[0.12em] text-accent mb-2.5">
 					Welcome back
 				</p>
