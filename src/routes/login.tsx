@@ -66,7 +66,7 @@ function Login() {
 						before he dies. The man who never reads lives only one.
 					</p>
 					<div className="flex items-center gap-3">
-						<div className="w-6 h-px bg-accent/50"></div>
+						<div className="w-6 h-px bg-accent/50" />
 						<p className="text-muted text-xs font-mono uppercase tracking-widest">
 							George R. R. Martin
 						</p>
@@ -75,9 +75,9 @@ function Login() {
 
 				<div className="flex items-center gap-9">
 					<div>
-						<div className="font-bold font-serif text-2xl">
-							12<span className="text-accent">k+</span>
-						</div>
+						<p className="font-bold font-serif text-2xl">
+							12<span className="text-accent text-base">k+</span>
+						</p>
 						<p className="text-[11px] text-muted uppercase font-mono tracking-[0.08em]">
 							Books tracked
 						</p>
@@ -86,9 +86,9 @@ function Login() {
 					<div className="w-px bg-border h-full" />
 
 					<div>
-						<div className="font-bold font-serif text-2xl">
-							3.4<span className="text-accent">k</span>
-						</div>
+						<p className="font-bold font-serif text-2xl">
+							3.4<span className="text-accent text-base">k</span>
+						</p>
 						<p className="text-[11px] text-muted uppercase font-mono tracking-[0.08em]">
 							Active readers
 						</p>
@@ -97,9 +97,9 @@ function Login() {
 					<div className="w-px bg-border h-full" />
 
 					<div>
-						<div className="font-bold font-serif text-2xl">
-							98<span className="text-accent">%</span>
-						</div>
+						<p className="font-bold font-serif text-2xl">
+							98<span className="text-accent text-base">%</span>
+						</p>
 						<p className="text-[11px] text-muted uppercase font-mono tracking-[0.08em]">
 							Goals reached
 						</p>
@@ -122,22 +122,22 @@ function Login() {
 				<div className="space-y-3">
 					<button
 						type="button"
-						className="w-full bg-surface py-3.5 px-5 flex items-center gap-3 rounded-[10px] border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(234,67,53,0.3)] hover:-translate-y-px"
+						className="group w-full bg-surface py-3.5 px-5 flex items-center gap-3 rounded-[10px] border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(234,67,53,0.3)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
 						<GoogleIcon />
 						<span className="text-sm font-medium">Continue with Google</span>
-						<span className="text-xs transition-transform text-muted ml-auto">
+						<span className="text-xs transition-transform text-muted ml-auto group-hover:translate-x-0.5 group-hover:text-text">
 							→
 						</span>
 					</button>
 
 					<button
 						type="button"
-						className="w-full bg-surface py-3.5 gap-3 px-5 flex items-center rounded-[10px] border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(255,255,255,0.2)] hover:-translate-y-px"
+						className="group w-full bg-surface py-3.5 gap-3 px-5 flex items-center rounded-[10px] border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(255,255,255,0.2)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
 						<GitHubIcon />
 						<span className="text-sm font-medium">Continue with GitHub</span>
-						<span className="text-xs transition-transform text-muted ml-auto">
+						<span className="text-xs transition-transform text-muted ml-auto group-hover:translate-x-0.5 group-hover:text-text">
 							→
 						</span>
 					</button>
