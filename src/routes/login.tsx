@@ -54,7 +54,7 @@ function Login() {
 					<p className="font-serif text-accent/50 leading text-[80px]/[0.6] mb-5">
 						"
 					</p>
-					<p className="font-serif italic text-2xl/[1.55] tracking-[-0.01em] text-text/85 mb-6">
+					<p className="font-serif italic text-xl lg:text-2xl leading-[1.55] tracking-[-0.01em] text-text/85 mb-6">
 						A reader lives a{' '}
 						<em className="font-normal not-italic text-accent">
 							thousand lives
@@ -103,7 +103,7 @@ function Login() {
 				</div>
 			</div>
 
-			<div className="flex flex-col justify-center p-[40px_20px] md:p-[60px_32px] lg:p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
+			<main className="flex flex-col justify-center p-[40px_20px] md:p-[60px_32px] lg:p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
 				<Logo className='md:hidden mb-12' />
 				<p className="font-mono text-xs uppercase tracking-[0.12em] text-accent mb-2.5">
 					Welcome back
@@ -173,7 +173,7 @@ function Login() {
 						.
 					</p>
 				</footer>
-			</div>
+			</main>
 		</div>
 	)
 }
