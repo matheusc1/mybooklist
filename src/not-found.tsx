@@ -1,5 +1,6 @@
 import { LucideArrowLeft } from 'lucide-react'
-import { Logo } from './components/logo'
+import { Button } from '#/components/ui/button'
+import { Logo } from '#/components/ui/logo'
 
 // const links = [
 //   { label: 'Home', to: '/' },
@@ -34,19 +35,13 @@ export function NotFound() {
 					</p>
 
 					<div className="flex gap-3 items-center">
-						<button
-							type="button"
-							className="inline-flex gap-2 items-center p-[12px_24px] bg-accent rounded-lg text-bg text-sm cursor-pointer transition-all hover:shadow-[0_6px_20px_color-mix(in_srgb,var(--color-accent)_30%,transparent)] hover:-translate-y-px hover:bg-[#d4b882]"
-						>
+						<Button variant="primary" size="lg">
 							<LucideArrowLeft className="w-4 h-4" />
-							<span className="font-semibold">Back to Home</span>
-						</button>
-						<button
-							type="button"
-							className="p-[12px_24px] border border-border rounded-lg text-muted text-sm cursor-pointer transition-all hover:text-text hover:bg-surface hover:border-white/30"
-						>
+							Back to Home
+						</Button>
+						<Button variant="ghost" size="lg" className="font-normal">
 							My Books
-						</button>
+						</Button>
 					</div>
 
 					<div className="w-px h-10 bg-border my-8 mx-auto" />
@@ -57,13 +52,9 @@ export function NotFound() {
 
 					<div className="flex gap-2 flex-wrap justify-center">
 						{['Home', 'My Books', 'Activity'].map((label) => (
-							<button
-								key={label}
-								type="button"
-								className="p-[6px_12px] border border-border bg-surface text-xs text-muted transition-all cursor-pointer rounded-2xl hover:border-accent/30 hover:text-accent hover:bg-surface-2"
-							>
+							<Button variant="pill" size="xs" rounded="pill" key={label}>
 								{label}
-							</button>
+							</Button>
 						))}
 					</div>
 				</div>
