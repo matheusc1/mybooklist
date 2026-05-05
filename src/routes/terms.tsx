@@ -1,87 +1,27 @@
-/** biome-ignore-all lint/a11y/useValidAnchor: <explanation> */
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Logo } from '#/components/logo'
+import { useScrollSpy } from '#/hooks/use-scroll-spy'
+import { scrollTo } from '#/utils/scroll-to'
 
 export const Route = createFileRoute('/terms')({
 	component: TermsOfService,
 })
 
-function useScrollSpy(ids: string[]) {
-	const [activeId, setActiveId] = useState(ids[0])
+const items = [
+	{ id: 'acceptance', label: '1. Acceptance' },
+	{ id: 'use', label: '2. Use of Service' },
+	{ id: 'account', label: '3. Your Account' },
+	{ id: 'content', label: '4. Your Content' },
+	{ id: 'termination', label: '5. Termination' },
+	{ id: 'liability', label: '6. Liability' },
+	{ id: 'changes', label: '7. Changes' },
+	{ id: 'contact', label: '8. Contact' },
+]
 
-	useEffect(() => {
-		const elements = ids
-			.map((id) => document.getElementById(id))
-			.filter((el): el is HTMLElement => el !== null)
-
-		const handleScroll = () => {
-			const LINE = 88 + window.innerHeight * 0.2
-
-			let current = ids[0]
-
-			for (const el of elements) {
-				const rect = el.getBoundingClientRect()
-
-				if (rect.top <= LINE && rect.bottom >= LINE) {
-					current = el.id
-					break
-				}
-
-				if (rect.top < LINE) {
-					current = el.id
-				}
-			}
-
-			const nearBottom =
-				window.innerHeight + window.scrollY >=
-				document.documentElement.scrollHeight - 10
-
-			if (nearBottom) {
-				current = ids[ids.length - 1]
-			}
-
-			setActiveId((prev) => (prev === current ? prev : current))
-		}
-
-		handleScroll()
-
-		window.addEventListener('scroll', handleScroll, { passive: true })
-		window.addEventListener('resize', handleScroll)
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll)
-			window.removeEventListener('resize', handleScroll)
-		}
-	}, [ids])
-
-	return activeId
-}
-
-const scrollTo = (id: string) => (e: React.MouseEvent) => {
-	e.preventDefault()
-
-	const el = document.getElementById(id)
-	if (!el) return
-
-	el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-
-	history.replaceState(null, '', `#${id}`)
-}
+const sections = items.map((item) => item.id)
 
 function TermsOfService() {
-	const sections = [
-		'acceptance',
-		'use',
-		'account',
-		'content',
-		'termination',
-		'liability',
-		'changes',
-		'contact',
-	]
-
 	const activeSection = useScrollSpy(sections)
 
 	const isActive = (id: string) =>
@@ -104,67 +44,23 @@ function TermsOfService() {
 			</div>
 
 			<div className="grid grid-cols-[220px_1fr] max-w-240 mx-auto gap-14 p-14 pb-25 items-start">
-				<aside className="sticky top-22 animate-fade-up">
+				<aside className="sticky top-22 animate-fade-up [animation-delay:0.05s]">
 					<p className="font-mono uppercase text-xs tracking-widest text-muted mb-3">
 						On this page
 					</p>
 					<ul className="flex flex-col gap-0.5 text-sm text-muted">
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('acceptance')}`}
-						>
-							<a href="#acceptance" onClick={scrollTo('acceptance')}>
-								1. Acceptance
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('use')}`}
-						>
-							<a href="#use" onClick={scrollTo('use')}>
-								2. Use of Service
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('account')}`}
-						>
-							<a href="#account" onClick={scrollTo('account')}>
-								3. Your Account
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('content')}`}
-						>
-							<a href="#content" onClick={scrollTo('content')}>
-								4. Your Content
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('termination')}`}
-						>
-							<a href="#termination" onClick={scrollTo('termination')}>
-								5. Termination
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('liability')}`}
-						>
-							<a href="#liability" onClick={scrollTo('liability')}>
-								6. Liability
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('changes')}`}
-						>
-							<a href="#changes" onClick={scrollTo('changes')}>
-								7. Changes
-							</a>
-						</li>
-						<li
-							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('contact')}`}
-						>
-							<a href="#contact" onClick={scrollTo('contact')}>
-								8. Contact
-							</a>
-						</li>
+						{items.map((item) => (
+							<li key={item.id}>
+								<a
+									href={`#${item.id}`}
+									onClick={scrollTo(item.id)}
+									className={`block border-l-2 w-full py-1.5 px-3 rounded-md ${isActive(item.id)}`}
+									aria-current={activeSection === item.id ? 'true' : undefined}
+								>
+									{item.label}
+								</a>
+							</li>
+						))}
 					</ul>
 
 					<div className="w-full h-px my-4 bg-border" />
@@ -182,7 +78,7 @@ function TermsOfService() {
 					</div>
 				</aside>
 
-				<div className="animate-fade-up">
+				<div className="animate-fade-up [animation-delay:0.1s]">
 					<div className="space-y-2.5 mb-10">
 						<p className="text-xs uppercase font-mono text-accent tracking-widest">
 							Legal
