@@ -1,23 +1,105 @@
+/** biome-ignore-all lint/a11y/useValidAnchor: <explanation> */
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Logo } from '#/components/logo'
 
 export const Route = createFileRoute('/terms')({
 	component: TermsOfService,
 })
 
+function useScrollSpy(ids: string[]) {
+	const [activeId, setActiveId] = useState(ids[0])
+
+	useEffect(() => {
+		const elements = ids
+			.map((id) => document.getElementById(id))
+			.filter((el): el is HTMLElement => el !== null)
+
+		const handleScroll = () => {
+			const LINE = 88 + window.innerHeight * 0.2
+
+			let current = ids[0]
+
+			for (const el of elements) {
+				const rect = el.getBoundingClientRect()
+
+				if (rect.top <= LINE && rect.bottom >= LINE) {
+					current = el.id
+					break
+				}
+
+				if (rect.top < LINE) {
+					current = el.id
+				}
+			}
+
+			const nearBottom =
+				window.innerHeight + window.scrollY >=
+				document.documentElement.scrollHeight - 10
+
+			if (nearBottom) {
+				current = ids[ids.length - 1]
+			}
+
+			setActiveId((prev) => (prev === current ? prev : current))
+		}
+
+		handleScroll()
+
+		window.addEventListener('scroll', handleScroll, { passive: true })
+		window.addEventListener('resize', handleScroll)
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll)
+			window.removeEventListener('resize', handleScroll)
+		}
+	}, [ids])
+
+	return activeId
+}
+
+const scrollTo = (id: string) => (e: React.MouseEvent) => {
+	e.preventDefault()
+
+	const el = document.getElementById(id)
+	if (!el) return
+
+	el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+	history.replaceState(null, '', `#${id}`)
+}
+
 function TermsOfService() {
+	const sections = [
+		'acceptance',
+		'use',
+		'account',
+		'content',
+		'termination',
+		'liability',
+		'changes',
+		'contact',
+	]
+
+	const activeSection = useScrollSpy(sections)
+
+	const isActive = (id: string) =>
+		activeSection === id
+			? 'text-accent border-l-accent bg-accent/6'
+			: 'border-transparent hover:text-text hover:bg-surface'
+
 	return (
 		<div className="min-h-dvh">
 			<div className="sticky top-0 bg-bg z-10">
-				<header className="flex w-full items-center justify-between h-17 px-5 sm:px-10">
+				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-10">
 					<Logo />
 
 					<div className="flex items-center justify-center gap-2 text-muted cursor-pointer hover:text-accent transition-colors">
 						<LucideArrowLeft className="w-4 h-4" />
 						<p className="font-mono text-xs tracking-wider">Back to app</p>
 					</div>
-				</header>
+				</nav>
 				<div className="w-full h-px bg-border" />
 			</div>
 
@@ -27,29 +109,61 @@ function TermsOfService() {
 						On this page
 					</p>
 					<ul className="flex flex-col gap-0.5 text-sm text-muted">
-						<li className="py-1.5 px-3 rounded-md border-l-2 text-accent border-l-accent bg-accent/6 cursor-pointer">
-							1. Acceptance
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('acceptance')}`}
+						>
+							<a href="#acceptance" onClick={scrollTo('acceptance')}>
+								1. Acceptance
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							2. Use of Service
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('use')}`}
+						>
+							<a href="#use" onClick={scrollTo('use')}>
+								2. Use of Service
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							3. Your Account
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('account')}`}
+						>
+							<a href="#account" onClick={scrollTo('account')}>
+								3. Your Account
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							4. Your content
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('content')}`}
+						>
+							<a href="#content" onClick={scrollTo('content')}>
+								4. Your Content
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							5. Termination
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('termination')}`}
+						>
+							<a href="#termination" onClick={scrollTo('termination')}>
+								5. Termination
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							6. Liability
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('liability')}`}
+						>
+							<a href="#liability" onClick={scrollTo('liability')}>
+								6. Liability
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							7. Changes
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('changes')}`}
+						>
+							<a href="#changes" onClick={scrollTo('changes')}>
+								7. Changes
+							</a>
 						</li>
-						<li className="py-1.5 px-3 rounded-md border-l-2 border-transparent hover:text-text hover:bg-surface cursor-pointer">
-							8. Contact
+						<li
+							className={`py-1.5 px-3 rounded-md border-l-2 cursor-pointer ${isActive('contact')}`}
+						>
+							<a href="#contact" onClick={scrollTo('contact')}>
+								8. Contact
+							</a>
 						</li>
 					</ul>
 
@@ -88,8 +202,8 @@ function TermsOfService() {
 						carefully before using the service.
 					</div>
 
-					<main className="space-y-12 scroll-mt-25">
-						<section>
+					<main className="space-y-12">
+						<section id="acceptance" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 1
 							</p>
@@ -111,7 +225,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="use" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 2
 							</p>
@@ -160,7 +274,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="account" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 3
 							</p>
@@ -184,7 +298,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="content" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 4
 							</p>
@@ -209,7 +323,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="termination" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 5
 							</p>
@@ -230,7 +344,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="liability" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 6
 							</p>
@@ -255,7 +369,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="changes" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 7
 							</p>
@@ -276,7 +390,7 @@ function TermsOfService() {
 							</div>
 						</section>
 
-						<section>
+						<section id="contact" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 8
 							</p>
