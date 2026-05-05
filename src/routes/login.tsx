@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { GitHubIcon } from '#/components/github-icon'
-import { GoogleIcon } from '#/components/google-icon'
-import { Logo } from '#/components/logo'
+import { GitHubIcon } from '#/components/ui/github-icon'
+import { GoogleIcon } from '#/components/ui/google-icon'
+import { Logo } from '#/components/ui/logo'
 
 export const Route = createFileRoute('/login')({
 	component: Login,
@@ -48,7 +48,7 @@ function Login() {
 					</div>
 				</div>
 
-				<Logo className='hidden md:flex' />
+				<Logo className="hidden md:flex" />
 
 				<div className="flex flex-col justify-center px-3">
 					<p className="font-serif text-accent/50 leading text-[80px]/[0.6] mb-5">
@@ -104,7 +104,7 @@ function Login() {
 			</div>
 
 			<main className="flex flex-col justify-center p-[40px_20px] md:p-[60px_32px] lg:p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
-				<Logo className='md:hidden mb-12' />
+				<Logo className="md:hidden mb-12" />
 				<p className="font-mono text-xs uppercase tracking-[0.12em] text-accent mb-2.5">
 					Welcome back
 				</p>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
-import { Logo } from '#/components/logo'
+import { Logo } from '#/components/ui/logo'
 import { useScrollSpy } from '#/hooks/use-scroll-spy'
 import { scrollTo } from '#/utils/scroll-to'
 
