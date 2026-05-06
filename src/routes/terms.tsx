@@ -43,8 +43,8 @@ function TermsOfService() {
 				<div className="w-full h-px bg-border" />
 			</div>
 
-			<div className="grid grid-cols-[220px_1fr] max-w-240 mx-auto gap-14 p-14 pb-25 items-start">
-				<aside className="sticky top-22 animate-fade-up [animation-delay:0.05s]">
+			<div className="grid sm:grid-cols-[220px_1fr] max-w-240 mx-auto gap-10 md:gap-14 p-[56px_20px] md:p-[56px_40px] lg:p-14 pb-25 items-start">
+				<aside className="hidden sm:block sticky top-22 animate-fade-up [animation-delay:0.05s]">
 					<p className="font-mono uppercase text-xs tracking-widest text-muted mb-3">
 						On this page
 					</p>
