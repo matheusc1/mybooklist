@@ -1,12 +1,13 @@
+import { Link } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
-import { Button } from '#/components/ui/button'
+import { button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
 
-// const links = [
-//   { label: 'Home', to: '/' },
-//   { label: 'My Books', to: '/books' },
-//   { label: 'Activity', to: '/activity' },
-// ]
+const links = [
+	{ label: 'Home', to: '/' },
+	{ label: 'My Books', to: '/books' },
+	{ label: 'Activity', to: '/activity' },
+]
 
 export function NotFound() {
 	return (
@@ -35,13 +36,17 @@ export function NotFound() {
 					</p>
 
 					<div className="flex gap-3 items-center">
-						<Button variant="primary" size="lg">
-							<LucideArrowLeft className="w-4 h-4" />
+						<Link to="/" className={button({ variant: 'primary', size: 'lg' })}>
+							<LucideArrowLeft className="size-4" />
 							Back to Home
-						</Button>
-						<Button variant="ghost" size="lg" className="font-normal">
+						</Link>
+
+						<Link
+							to="/books"
+							className={button({ variant: 'ghost', size: 'lg' })}
+						>
 							My Books
-						</Button>
+						</Link>
 					</div>
 
 					<div className="w-px h-10 bg-border my-8 mx-auto" />
@@ -51,10 +56,14 @@ export function NotFound() {
 					</p>
 
 					<div className="flex gap-2 flex-wrap justify-center">
-						{['Home', 'My Books', 'Activity'].map((label) => (
-							<Button variant="pill" size="xs" rounded="pill" key={label}>
+						{links.map(({ label, to }) => (
+							<Link
+								key={to}
+								to={to}
+								className="p-[6px_12px] border border-border bg-surface text-xs text-muted transition-all rounded-[20px] hover:border-accent/30 hover:text-accent"
+							>
 								{label}
-							</Button>
+							</Link>
 						))}
 					</div>
 				</div>
