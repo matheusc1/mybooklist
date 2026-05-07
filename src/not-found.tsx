@@ -16,7 +16,7 @@ export function NotFound() {
 			</header>
 			<div className="w-full h-px bg-border" />
 
-			<main className="relative flex-1 flex items-center justify-center overflow-hidden px-5 sm:px-0">
+			<main className="relative flex-1 flex items-center justify-center overflow-hidden px-5 sm:px-0 animate-fade-up [animation-delay:0.1s]">
 				<div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-[radial-gradient(ellipse,rgba(200,169,110,0.07)_0%,transparent_65%)] pointer-events-none" />
 				<p className="absolute font-serif font-bold italic text-[clamp(160px,22vw,280px)] text-white/2.5 tracking-[-0.04em] select-none pointer-events-none leading-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap">
 					404
