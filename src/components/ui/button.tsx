@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 
-const button = tv({
+export const button = tv({
 	base: 'inline-flex items-center justify-center gap-2 font-semibold transition-colors cursor-pointer',
 
 	variants: {
@@ -11,17 +11,14 @@ const button = tv({
 			ghost:
 				'text-sm border border-border text-muted bg-transparent hover:text-text hover:bg-surface hover:border-white/30',
 			danger: 'text-sm bg-danger text-bg rounded-lg',
-			pill: 'text-xs bg-surface text-muted border border-border hover:bg-surface2 hover:border-accent/30 hover:text-accent',
 		},
 		size: {
-			xs: 'px-3 py-1.5',
 			sm: 'px-4 py-2',
 			md: 'px-5 py-2.5',
 			lg: 'px-6 py-3',
 		},
 		rounded: {
 			default: 'rounded-lg',
-			pill: 'rounded-[20px]',
 			full: 'rounded-full',
 		},
 	},
