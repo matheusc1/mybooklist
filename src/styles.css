@@ -6,6 +6,9 @@
   --font-serif: 'Playfair Display', serif;
   --font-mono: 'DM Mono', monospace;
 
+  --text-xxs: 0.6875rem;
+  --text-xxs--line-height: 1rem;
+
   --color-bg: #0C0C0E;
   --color-surface: #141418;
   --color-surface2: #1C1C22;
