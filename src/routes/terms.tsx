@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
 import { Logo } from '#/components/ui/logo'
 import { useScrollSpy } from '#/hooks/use-scroll-spy'
@@ -22,6 +22,7 @@ const items = [
 const sections = items.map((item) => item.id)
 
 function TermsOfService() {
+	const router = useRouter()
 	const activeSection = useScrollSpy(sections)
 
 	const isActive = (id: string) =>
@@ -35,10 +36,14 @@ function TermsOfService() {
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-10">
 					<Logo />
 
-					<div className="flex items-center justify-center gap-2 text-muted cursor-pointer hover:text-accent transition-colors">
+					<button
+						type="button"
+						onClick={() => router.history.back()}
+						className="flex items-center justify-center gap-2 text-muted cursor-pointer hover:text-accent transition-colors"
+					>
 						<LucideArrowLeft className="w-4 h-4" />
 						<p className="font-mono text-xs tracking-wider">Back to app</p>
-					</div>
+					</button>
 				</nav>
 				<div className="w-full h-px bg-border" />
 			</div>
