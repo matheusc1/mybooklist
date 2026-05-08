@@ -10,9 +10,14 @@ export const button = tv({
 				'text-sm bg-accent text-bg hover:shadow-[0_6px_20px_color-mix(in_srgb,var(--color-accent)_30%,transparent)] hover:-translate-y-px hover:bg-[#d4b882]',
 			ghost:
 				'text-sm border border-border text-muted bg-transparent hover:text-text hover:bg-surface hover:border-white/30',
-			danger: 'text-sm bg-danger text-bg rounded-lg',
+			danger:
+				'text-sm bg-danger text-bg rounded-lg hover:bg-[#d4735f] hover:shadow-[0_6px_20px_color-mix(in_srgb,var(--color-danger)_30%,transparent)] hover:-translate-y-px',
+			icon: 'text-muted border border-border bg-surface2 hover:text-text hover:bg-surface3 hover:border-white/15',
+			destructive:
+				'text-muted border border-border bg-surface2 hover:text-danger hover:bg-danger/10 hover:border-danger/35',
 		},
 		size: {
+			icon: 'p-2',
 			sm: 'px-4 py-2',
 			md: 'px-5 py-2.5',
 			lg: 'px-6 py-3',
