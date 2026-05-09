@@ -69,12 +69,12 @@ function Login() {
 					</div>
 				</div>
 
-				<div className="flex items-center gap-8">
+				<div className="flex items-center gap-6 lg:gap-8">
 					<div>
 						<p className="font-bold font-serif text-2xl">
 							12<span className="text-accent text-base">k+</span>
 						</p>
-						<p className="text-[11px] text-muted uppercase font-mono tracking-[0.08em]">
+						<p className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
 							Books tracked
 						</p>
 					</div>
@@ -85,7 +85,7 @@ function Login() {
 						<p className="font-bold font-serif text-2xl">
 							3.4<span className="text-accent text-base">k</span>
 						</p>
-						<p className="text-[11px] text-muted uppercase font-mono tracking-[0.08em]">
+						<p className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
 							Active readers
 						</p>
 					</div>
@@ -96,7 +96,7 @@ function Login() {
 						<p className="font-bold font-serif text-2xl">
 							98<span className="text-accent text-base">%</span>
 						</p>
-						<p className="text-[11px] text-muted uppercase font-mono tracking-[0.08em]">
+						<p className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
 							Goals reached
 						</p>
 					</div>
@@ -119,7 +119,7 @@ function Login() {
 				<div className="space-y-3">
 					<button
 						type="button"
-						className="group w-full bg-surface py-3.5 px-5 flex items-center gap-3 rounded-[10px] border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(234,67,53,0.3)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
+						className="group w-full bg-surface py-3.5 px-5 flex items-center gap-3 rounded-xl border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(234,67,53,0.3)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
 						<GoogleIcon />
 						<span className="text-sm font-medium">Continue with Google</span>
@@ -130,7 +130,7 @@ function Login() {
 
 					<button
 						type="button"
-						className="group w-full bg-surface py-3.5 gap-3 px-5 flex items-center rounded-[10px] border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(255,255,255,0.2)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
+						className="group w-full bg-surface py-3.5 gap-3 px-5 flex items-center rounded-xl border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(255,255,255,0.2)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
 						<GitHubIcon />
 						<span className="text-sm font-medium">Continue with GitHub</span>
@@ -143,14 +143,14 @@ function Login() {
 				<div className="flex items-center gap-3 my-7">
 					<div className="flex-1 h-px bg-border" />
 
-					<span className="text-[0.68rem] text-muted uppercase tracking-widest font-mono">
+					<span className="text-xxs text-muted uppercase tracking-widest font-mono">
 						Secure sign in
 					</span>
 
 					<div className="flex-1 h-px bg-border" />
 				</div>
 
-				<div className="bg-surface border border-border rounded-[10px] p-[16px_18px] flex gap-3">
+				<div className="bg-surface border border-border rounded-xl p-[16px_18px] flex gap-3">
 					<span className="mt-px">🔒</span>
 					<p className="text-xs/[1.6] text-muted">
 						MyBookList uses{' '}
@@ -160,7 +160,7 @@ function Login() {
 					</p>
 				</div>
 
-				<footer className="mt-9 text-[11px]/[1.7] text-muted text-center">
+				<footer className="mt-9 text-xxs/[1.7] text-muted text-center">
 					<p>
 						By signing in you agree to our{' '}
 						<Link to="/terms" className="hover:underline hover:text-accent">

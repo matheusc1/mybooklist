@@ -24,7 +24,7 @@ export function NotFound() {
 				</p>
 
 				<div className="flex flex-col items-center text-center">
-					<span className="font-mono uppercase text-accent text-[11px] tracking-[0.14em] mb-4">
+					<span className="font-mono uppercase text-accent text-xs tracking-[0.14em] mb-4">
 						Error 404
 					</span>
 					<h1 className="font-serif font-bold tracking-tight text-2xl/loose lg:text-4xl/loose mb-3">
@@ -60,7 +60,7 @@ export function NotFound() {
 							<Link
 								key={to}
 								to={to}
-								className="p-[6px_12px] border border-border bg-surface text-xs text-muted transition-all rounded-[20px] hover:border-accent/30 hover:text-accent"
+								className="p-[6px_12px] border border-border bg-surface text-xs text-muted transition-all rounded-full hover:border-accent/30 hover:text-accent"
 							>
 								{label}
 							</Link>

@@ -41,7 +41,7 @@ function TermsOfService() {
 						onClick={() => router.history.back()}
 						className="flex items-center justify-center gap-2 text-muted cursor-pointer hover:text-accent transition-colors"
 					>
-						<LucideArrowLeft className="w-4 h-4" />
+						<LucideArrowLeft className="size-4" />
 						<p className="font-mono text-xs tracking-wider">Back to app</p>
 					</button>
 				</nav>
@@ -96,7 +96,7 @@ function TermsOfService() {
 						</p>
 					</div>
 
-					<div className="bg-surface border border-border border-l-3 border-l-accent rounded-[10px] p-5 text-sm/[1.7] text-text/75 mb-12">
+					<div className="bg-surface border border-border border-l-3 border-l-accent rounded-xl p-5 text-sm/[1.7] text-text/75 mb-12">
 						These Terms govern your use of MyBookList. By signing in, you agree
 						to these terms. MyBookList is a personal portfolio project — it is
 						provided as-is, with no warranties. Please read this document

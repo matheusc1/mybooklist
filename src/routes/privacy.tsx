@@ -41,7 +41,7 @@ function PrivacyPolicy() {
 						onClick={() => router.history.back()}
 						className="flex items-center justify-center gap-2 text-muted cursor-pointer hover:text-accent2 transition-colors"
 					>
-						<LucideArrowLeft className="w-4 h-4" />
+						<LucideArrowLeft className="size-4" />
 						<p className="font-mono text-xs tracking-wider">Back to app</p>
 					</button>
 				</nav>
@@ -96,7 +96,7 @@ function PrivacyPolicy() {
 						</p>
 					</div>
 
-					<div className="bg-surface border border-border border-l-3 border-l-accent2 rounded-[10px] p-5 text-sm/[1.7] text-text/75 mb-12">
+					<div className="bg-surface border border-border border-l-3 border-l-accent2 rounded-xl p-5 text-sm/[1.7] text-text/75 mb-12">
 						Your privacy matters. MyBookList is a personal portfolio project —
 						we collect only what is strictly necessary to provide the service,
 						we never sell your data, and you can request full deletion of your
@@ -117,7 +117,7 @@ function PrivacyPolicy() {
 									the service:
 								</p>
 
-								<div className="bg-surface2 p-4 border border-border rounded-[10px] flex flex-col gap-2.5">
+								<div className="bg-surface2 p-4 border border-border rounded-xl flex flex-col gap-2.5">
 									<div className="flex gap-3 items-start">
 										<p className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
 											Name
