@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucidePlus } from 'lucide-react'
 import { BookActivityCard } from '#/components/book-activity-card'
+import { FinishedBookCard } from '#/components/finished-book-card'
 import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/_authenticated/')({ component: Home })
@@ -26,6 +27,30 @@ const bookActivityData = [
 		author: 'Aldous Huxley',
 		status: 'want-to-read' as const,
 		date: 'Oct 1, 2025',
+	},
+]
+
+const finishedBooksData = [
+	{
+		image: '/book-cover.jpg',
+		title: 'White Nights',
+		author: 'Fyodor Dostoevsky',
+		rating: 4,
+		date: 'Oct 20, 2025',
+	},
+	{
+		image: '/book-cover.jpg',
+		title: '1984',
+		author: 'George Orwell',
+		rating: 5,
+		date: 'Nov 9, 2025',
+	},
+	{
+		image: '/book-cover.jpg',
+		title: 'We',
+		author: 'Yevgeny Zamyatin',
+		rating: 4,
+		date: 'Sep 1, 2025',
 	},
 ]
 
@@ -104,10 +129,44 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-6 justify-start p-7">
+			<div className="flex gap-6 flex-col justify-start p-7">
 				<h2 className="font-serif font-semibold tracking-tight text-xl">
 					Finished
 				</h2>
+
+				<div className='-mt-3'>
+					{finishedBooksData.map((book, index) => (
+						<FinishedBookCard
+							// biome-ignore lint/suspicious/noArrayIndexKey: will be replaced with real data soon
+							key={index}
+							book={book}
+						/>
+					))}
+				</div>
+
+				<div className="p-5 rounded-xl bg-surface border border-border">
+					<p className="text-muted uppercase tracking-widest text-xs mb-3">
+						READING GOAL · 2026
+					</p>
+
+					<div className="space-y-2">
+						<div className="flex justify-between items-center">
+							<span className="font-serif text-2xl font-semibold">24</span>
+							<p className="text-sm text-muted">of 50 books</p>
+						</div>
+
+						<div className="h-1.5 bg-surface2 rounded-full overflow-hidden">
+							<div
+								className="h-full bg-gradient-progress rounded-full"
+								style={{ width: '48%' }}
+							/>
+						</div>
+
+						<p className="text-xs text-muted">
+							62% complete · 5 months remaining
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	)
