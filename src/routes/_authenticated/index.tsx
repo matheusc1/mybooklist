@@ -3,6 +3,7 @@ import { LucidePlus } from 'lucide-react'
 import { BookActivityCard } from '#/components/book-activity-card'
 import { FinishedBookCard } from '#/components/finished-book-card'
 import { Button } from '#/components/ui/button'
+import { WeeklyChart } from '#/components/weekly-chart'
 
 export const Route = createFileRoute('/_authenticated/')({ component: Home })
 
@@ -117,7 +118,7 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-6 justify-start p-7">
+			<div className="flex flex-col gap-6 justify-start p-6">
 				<div className="w-full flex items-center justify-between">
 					<h2 className="font-serif font-semibold tracking-tight text-xl">
 						Weekly Stats
@@ -126,6 +127,57 @@ function Home() {
 						<LucidePlus className="size-3" />
 						Add Record
 					</Button>
+				</div>
+
+				<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-1">
+					<div className="bg-surface p-4 space-y-1 rounded-xl border border-border">
+						<p className="font-serif font-bold text-2xl/[1.0] text-accent">
+							148
+						</p>
+						<p className="text-xs text-muted tracking-wider uppercase">
+							Pages read
+						</p>
+					</div>
+					<div className="bg-surface p-4 space-y-1 rounded-xl border border-border">
+						<p className="font-serif font-bold text-2xl/[1.0] text-accent2">
+							2h 02m
+						</p>
+						<p className="text-xs text-muted tracking-wider uppercase">
+							Hours read
+						</p>
+					</div>
+					<div className="bg-surface p-4 space-y-1 rounded-xl border border-border">
+						<p className="font-serif font-bold text-2xl/[1.0]">7</p>
+						<p className="text-xs text-muted tracking-wider uppercase">
+							Days streak
+						</p>
+					</div>
+				</div>
+
+				<div className="flex flex-col gap-5 bg-surface rounded-xl border border-border p-6">
+					<p className="text-xs text-muted font-medium uppercase tracking-widest">
+						Pages per day
+					</p>
+					<WeeklyChart />
+				</div>
+
+				<div className="flex items-center justify-between bg-surface rounded-xl border border-border py-5 px-6">
+					<div className="flex flex-col gap-1.5">
+						<p className="text-xs text-muted uppercase tracking-widest">
+							This week
+						</p>
+						<p className="text-sm font-serif text-muted">
+							<strong className="text-2xl text-text">2 </strong>
+							hrs <strong className="text-2xl text-text">02 </strong>
+							min
+						</p>
+					</div>
+					<div className="flex flex-col text-right">
+						<p className="text-xs text-muted">Most active day</p>
+						<p className="text-sm font-mono text-accent2 font-medium">
+							Tuesday ↑
+						</p>
+					</div>
 				</div>
 			</div>
 
