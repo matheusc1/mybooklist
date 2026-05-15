@@ -109,7 +109,7 @@ function Home() {
 					Recent Activity
 				</p>
 
-				<div className="-mt-3 divide-y divide-border">
+				<div className="-mt-3">
 					{bookActivityData.map((activity, index) => (
 						// biome-ignore lint/suspicious/noArrayIndexKey: will be replaced with real data soon
 						<BookActivityCard key={index} activity={activity} />
@@ -134,7 +134,7 @@ function Home() {
 					Finished
 				</h2>
 
-				<div className='-mt-3'>
+				<div className="-mt-3">
 					{finishedBooksData.map((book, index) => (
 						<FinishedBookCard
 							// biome-ignore lint/suspicious/noArrayIndexKey: will be replaced with real data soon

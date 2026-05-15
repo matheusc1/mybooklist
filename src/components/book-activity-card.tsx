@@ -35,7 +35,7 @@ interface BookActivityCardProps {
 
 export function BookActivityCard({ activity }: BookActivityCardProps) {
 	return (
-		<div className="flex gap-3 py-3">
+		<div className="flex gap-3 py-3 border-b border-border last:border-b-0">
 			<div className="flex items-center justify-center w-10 h-15 bg-surface2 rounded-sm shadow-[2px_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
 				{activity.image ? (
 					<img
