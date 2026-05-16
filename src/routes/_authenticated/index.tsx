@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucidePlus } from 'lucide-react'
 import { BookActivityCard } from '#/components/book-activity-card'
 import { FinishedBookCard } from '#/components/finished-book-card'
+import { StatCard } from '#/components/stat-card'
 import { Button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
 
@@ -57,8 +58,8 @@ const finishedBooksData = [
 
 function Home() {
 	return (
-		<div className="h-[calc(100vh-69px)] grid grid-cols-[300px_1fr_280px] divide-x divide-border">
-			<div className="flex flex-col gap-6 justify-start p-7">
+		<div className="h-[calc(100vh-69px)] grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] divide-x divide-border">
+			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6">
 				<div className="w-full flex items-baseline justify-between">
 					<h2 className="font-serif font-semibold tracking-tight text-xl">
 						Bookshelf
@@ -118,50 +119,35 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-6 justify-start p-6">
+			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6">
 				<div className="w-full flex items-center justify-between">
 					<h2 className="font-serif font-semibold tracking-tight text-xl">
 						Weekly Stats
 					</h2>
 					<Button variant="primary" size="sm">
-						<LucidePlus className="size-3" />
+						<LucidePlus className="size-3 md:hidden lg:block" />
 						Add Record
 					</Button>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-1">
-					<div className="bg-surface p-4 space-y-1 rounded-xl border border-border">
-						<p className="font-serif font-bold text-2xl/[1.0] text-accent">
-							148
-						</p>
-						<p className="text-xs text-muted tracking-wider uppercase">
-							Pages read
-						</p>
-					</div>
-					<div className="bg-surface p-4 space-y-1 rounded-xl border border-border">
-						<p className="font-serif font-bold text-2xl/[1.0] text-accent2">
-							2h 02m
-						</p>
-						<p className="text-xs text-muted tracking-wider uppercase">
-							Hours read
-						</p>
-					</div>
-					<div className="bg-surface p-4 space-y-1 rounded-xl border border-border">
-						<p className="font-serif font-bold text-2xl/[1.0]">7</p>
-						<p className="text-xs text-muted tracking-wider uppercase">
-							Days streak
-						</p>
-					</div>
+				<div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1">
+					<StatCard value={148} label="Pages read" textColor="text-accent" />
+					<StatCard
+						value="2h 02m"
+						label="Hours read"
+						textColor="text-accent2"
+					/>
+					<StatCard value={7} label="Days streak" />
 				</div>
 
-				<div className="flex flex-col gap-5 bg-surface rounded-xl border border-border p-6">
+				<div className="flex flex-col gap-5 bg-surface rounded-xl border border-border p-4 lg:p-6">
 					<p className="text-xs text-muted font-medium uppercase tracking-widest">
 						Pages per day
 					</p>
 					<WeeklyChart />
 				</div>
 
-				<div className="flex items-center justify-between bg-surface rounded-xl border border-border py-5 px-6">
+				<div className="flex items-center justify-between bg-surface rounded-xl border border-border py-5 px-4 lg:px-6">
 					<div className="flex flex-col gap-1.5">
 						<p className="text-xs text-muted uppercase tracking-widest">
 							This week
@@ -181,7 +167,7 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="flex gap-6 flex-col justify-start p-7">
+			<div className="flex gap-6 flex-col justify-start px-5 lg:px-7 py-6">
 				<h2 className="font-serif font-semibold tracking-tight text-xl">
 					Finished
 				</h2>
@@ -196,7 +182,7 @@ function Home() {
 					))}
 				</div>
 
-				<div className="p-5 rounded-xl bg-surface border border-border">
+				<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
 					<p className="text-muted uppercase tracking-widest text-xs mb-3">
 						READING GOAL · 2026
 					</p>

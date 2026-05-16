@@ -20,7 +20,7 @@ const mostActiveDay = chartData.reduce((a, b) =>
 
 export function WeeklyChart() {
 	return (
-		<div className="flex items-end gap-2.5">
+		<div className="flex items-end gap-1 lg:gap-2.5">
 			{chartData.map(({ day, pages }) => {
 				const heightPercent = (pages / maxPages) * 100
 				const isActive = day === mostActiveDay
