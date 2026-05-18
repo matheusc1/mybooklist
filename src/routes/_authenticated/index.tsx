@@ -58,7 +58,7 @@ const finishedBooksData = [
 
 function Home() {
 	return (
-		<div className="h-[calc(100vh-69px)] grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] divide-x divide-border">
+		<div className="min-h-[calc(100vh-69px)] grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
 			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6">
 				<div className="w-full flex items-baseline justify-between">
 					<h2 className="font-serif font-semibold tracking-tight text-xl">
