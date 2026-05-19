@@ -58,8 +58,8 @@ const finishedBooksData = [
 
 function Home() {
 	return (
-		<div className="min-h-[calc(100vh-69px)] grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
-			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6">
+		<div className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
+			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.05s]">
 				<div className="w-full flex items-baseline justify-between">
 					<h2 className="font-serif font-semibold tracking-tight text-xl">
 						Bookshelf
@@ -119,7 +119,7 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6">
+			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.12s]">
 				<div className="w-full flex items-center justify-between">
 					<h2 className="font-serif font-semibold tracking-tight text-xl">
 						Weekly Stats
@@ -132,11 +132,7 @@ function Home() {
 
 				<div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1">
 					<StatCard value={148} label="Pages read" textColor="text-accent" />
-					<StatCard
-						value="2h 02m"
-						label="Hours read"
-						textColor="text-accent2"
-					/>
+					<StatCard value="~2h" label="Hours read" textColor="text-accent2" />
 					<StatCard value={7} label="Days streak" />
 				</div>
 
@@ -167,7 +163,7 @@ function Home() {
 				</div>
 			</div>
 
-			<div className="flex gap-6 flex-col justify-start px-5 lg:px-7 py-6">
+			<div className="flex gap-6 flex-col justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.19s]">
 				<h2 className="font-serif font-semibold tracking-tight text-xl">
 					Finished
 				</h2>

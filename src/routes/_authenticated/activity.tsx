@@ -148,7 +148,7 @@ const currentMonthLabel = new Intl.DateTimeFormat('en-US', {
 function Activity() {
 	return (
 		<div className="min-h-[calc(100vh-69px)] w-full max-w-250 mx-auto p-5 lg:p-10 space-y-10">
-			<div className="space-y-1.5">
+			<div className="space-y-1.5 animate-fade-up [animation-delay:0.05s]">
 				<p className="font-mono text-xs text-accent uppercase tracking-widest">
 					History
 				</p>
@@ -158,7 +158,7 @@ function Activity() {
 				<p className="text-muted text-xs tracking-wider">{currentMonthLabel}</p>
 			</div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3">
+			<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3 animate-fade-up [animation-delay:0.1s]">
 				<StatCard
 					value="18"
 					label="Sessions this month"
@@ -169,7 +169,9 @@ function Activity() {
 				<StatCard value="12" label="Active Days" />
 			</div>
 
-			<Calendar sessions={sessions} />
+			<div className="animate-fade-up [animation-delay:0.15s]">
+				<Calendar sessions={sessions} />
+			</div>
 		</div>
 	)
 }
