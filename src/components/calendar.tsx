@@ -117,7 +117,7 @@ export function Calendar({ sessions }: CalendarProps) {
 								{state.hasSession && (
 									<span
 										className={cn(
-											'absolute bottom-1.5 size-1.5 rounded-full',
+											'absolute bottom-1.5 size-1 sm:size-1.5 rounded-full',
 											state.isMulti ? 'bg-accent2' : 'bg-accent',
 										)}
 									/>
