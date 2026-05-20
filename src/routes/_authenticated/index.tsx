@@ -10,21 +10,18 @@ export const Route = createFileRoute('/_authenticated/')({ component: Home })
 
 const bookActivityData = [
 	{
-		image: '/book-cover.jpg',
 		title: 'Crime and Punishment',
 		author: 'Fyodor Dostoevsky',
 		status: 'reading' as const,
 		date: 'Oct 10, 2025',
 	},
 	{
-		image: '/book-cover.jpg',
 		title: 'The Final Empire',
 		author: 'Brandon Sanderson',
 		status: 'finished' as const,
 		date: 'Oct 8, 2025',
 	},
 	{
-		image: '/book-cover.jpg',
 		title: 'Brave New World',
 		author: 'Aldous Huxley',
 		status: 'want-to-read' as const,
@@ -34,21 +31,18 @@ const bookActivityData = [
 
 const finishedBooksData = [
 	{
-		image: '/book-cover.jpg',
 		title: 'White Nights',
 		author: 'Fyodor Dostoevsky',
 		rating: 4,
 		date: 'Oct 20, 2025',
 	},
 	{
-		image: '/book-cover.jpg',
 		title: '1984',
 		author: 'George Orwell',
 		rating: 5,
 		date: 'Nov 9, 2025',
 	},
 	{
-		image: '/book-cover.jpg',
 		title: 'We',
 		author: 'Yevgeny Zamyatin',
 		rating: 4,

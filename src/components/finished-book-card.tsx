@@ -1,7 +1,7 @@
 import { LucideStar } from 'lucide-react'
 
 interface FinishedBook {
-	image?: string
+	bookCover?: string
 	title: string
 	author: string
 	rating: number
@@ -18,17 +18,20 @@ export function FinishedBookCard({ book }: FinishedBookCardProps) {
 	return (
 		<div className="flex gap-3 py-3 border-b border-border transition-all duration-200 cursor-pointer hover:opacity-95">
 			<div className="relative w-13 h-19.5 shrink-0 bg-surface2 rounded overflow-hidden flex items-center justify-center shadow-[3px_3px_12px_rgba(0,0,0,0.4)]">
-				{book.image ? (
+				{book.bookCover ? (
 					<img
-						src={book.image}
+						src={book.bookCover}
 						alt={`${book.title} cover`}
 						className="w-full h-full object-cover"
-						onError={(e) => {
-							e.currentTarget.style.display = 'none'
-						}}
 					/>
 				) : null}
-				{!book.image && <span className="text-lg">📖</span>}
+				{!book.bookCover && (
+					<img
+						src="/public/book-cover.jpg"
+						alt="Default Book Cover"
+						className="w-full h-full object-cover"
+					/>
+				)}
 			</div>
 
 			<div className="flex-1">

@@ -1,5 +1,5 @@
 import { LucideStar } from 'lucide-react'
-import type { ActivityStatus } from './book-activity-card'
+import type { ActivityStatus } from '#/types/types'
 
 interface BookCard {
 	title: string

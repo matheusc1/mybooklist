@@ -1,9 +1,4 @@
-type ActivityStatus =
-	| 'reading'
-	| 'finished'
-	| 'paused'
-	| 'abandoned'
-	| 'want-to-read'
+import type { ActivityStatus } from '#/types/types'
 
 const statusColor: Record<ActivityStatus, string> = {
 	reading: 'bg-accent2',
@@ -22,7 +17,7 @@ const statusLabel: Record<ActivityStatus, string> = {
 }
 
 interface BookActivity {
-	image?: string
+	bookCover?: string
 	title: string
 	author: string
 	status: ActivityStatus
@@ -37,17 +32,20 @@ export function BookActivityCard({ activity }: BookActivityCardProps) {
 	return (
 		<div className="flex gap-3 py-3 border-b border-border last:border-b-0">
 			<div className="flex items-center justify-center w-10 h-15 bg-surface2 rounded-sm shadow-[2px_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
-				{activity.image ? (
+				{activity.bookCover ? (
 					<img
-						src={activity.image}
+						src={activity.bookCover}
 						alt={`${activity.title} cover`}
 						className="w-full h-full object-cover"
-						onError={(e) => {
-							e.currentTarget.style.display = 'none'
-						}}
 					/>
 				) : null}
-				{!activity.image && <span>📖</span>}
+				{!activity.bookCover && (
+					<img
+						src="/public/book-cover.jpg"
+						alt="Default Book Cover"
+						className="w-full h-full object-cover"
+					/>
+				)}
 			</div>
 			<div className="flex flex-col justify-between">
 				<div>
