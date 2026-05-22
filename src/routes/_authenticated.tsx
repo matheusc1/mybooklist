@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect, useMatches } from '@tanstack/react-router'
 import { NavBar } from '#/components/ui/nav-bar'
 
 const isAuthenticated = () => {
@@ -20,10 +20,13 @@ export const Route = createFileRoute('/_authenticated')({
 })
 
 function Layout() {
-	return (
-		<div className="min-h-dvh flex flex-col">
-			<NavBar />
-			<Outlet />
-		</div>
-	)
+  const matches = useMatches()
+  const hideNav = matches.some((m) => (m.staticData as any)?.hideNav)
+
+  return (
+    <div className="min-h-dvh flex flex-col">
+      {!hideNav && <NavBar />}
+      <Outlet />
+    </div>
+  )
 }
