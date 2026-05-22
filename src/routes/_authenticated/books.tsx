@@ -1,5 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { LucideLibrary, LucidePlus, LucideSearch, SearchX } from 'lucide-react'
+import {
+	LucideLibrary,
+	LucidePlus,
+	LucideSearch,
+	LucideX,
+	SearchX,
+} from 'lucide-react'
 import { useState } from 'react'
 import { BookCard } from '#/components/book-card'
 import { Button } from '#/components/ui/button'
@@ -121,14 +127,29 @@ function MyBooks() {
 			<div className="space-y-8 animate-fade-up [animation-delay:0.1s]">
 				<div className="flex items-center gap-3 gap-y-1 flex-wrap">
 					<div className="relative flex-1 max-w-75 min-w-50">
-						<LucideSearch className="absolute size-4 left-4 top-[50%] transform translate-y-[-50%] text-muted pointer-events-none" />
+						<LucideSearch className="absolute size-4 left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
 						<input
 							type="text"
 							placeholder="Search by title or author..."
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
-							className="w-full text-sm bg-surface border border-border py-2.5 pl-10 pr-5 rounded-lg placeholder:text-muted/55 outline-none input-focus"
+							onKeyDown={(e) => {
+								if (e.key === 'Escape') {
+									setSearch('')
+								}
+							}}
+							className="w-full text-sm bg-surface border border-border py-2.5 pl-10 pr-10 rounded-lg placeholder:text-muted/55 outline-none input-focus"
 						/>
+						{search && (
+							<button
+								type="button"
+								aria-label="Clear search"
+								onClick={() => setSearch('')}
+								className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-muted hover:text-text hover:bg-surface2 transition-colors"
+							>
+								<LucideX className="size-3.5" />
+							</button>
+						)}
 					</div>
 
 					<div className="flex flex-wrap items-center justify-start gap-1">
@@ -161,7 +182,7 @@ function MyBooks() {
 				</div>
 
 				{isEmpty || isFilterEmpty ? (
-					<div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
+					<div className="flex flex-col items-center justify-center gap-3 py-20 text-center animate-fade-up">
 						{emptyState.icon}
 						<div className="space-y-1">
 							<h3 className="font-serif text-lg font-semibold">
