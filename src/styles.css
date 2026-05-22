@@ -78,8 +78,7 @@
   .shadow-btn-accent { box-shadow: 0 6px 20px color-mix(in srgb, var(--color-accent) 30%, transparent); }
   .shadow-avatar-ring { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent); }
   .shadow-avatar-ring-strong { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 40%, transparent); }
-  .input-focus {
-    outline: none;
+  .input-focus:focus {
     border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 8%, transparent);
   }
