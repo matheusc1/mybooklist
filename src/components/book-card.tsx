@@ -53,7 +53,7 @@ export function BookCard({ book }: BookCardProps) {
 					/>
 				) : (
 					<img
-						src="/public/book-cover.jpg"
+						src="/book-cover.jpg"
 						alt="Default Book Cover"
 						className="w-full h-full object-cover"
 					/>

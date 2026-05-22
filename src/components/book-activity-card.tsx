@@ -41,7 +41,7 @@ export function BookActivityCard({ activity }: BookActivityCardProps) {
 				) : null}
 				{!activity.bookCover && (
 					<img
-						src="/public/book-cover.jpg"
+						src="/book-cover.jpg"
 						alt="Default Book Cover"
 						className="w-full h-full object-cover"
 					/>
