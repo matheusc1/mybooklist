@@ -14,6 +14,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedReadingSpeedRouteImport } from './routes/_authenticated/reading-speed'
 import { Route as AuthenticatedBooksRouteImport } from './routes/_authenticated/books'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 
@@ -41,6 +42,12 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedReadingSpeedRoute =
+  AuthenticatedReadingSpeedRouteImport.update({
+    id: '/reading-speed',
+    path: '/reading-speed',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedBooksRoute = AuthenticatedBooksRouteImport.update({
   id: '/books',
   path: '/books',
@@ -59,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/books': typeof AuthenticatedBooksRoute
+  '/reading-speed': typeof AuthenticatedReadingSpeedRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/books': typeof AuthenticatedBooksRoute
+  '/reading-speed': typeof AuthenticatedReadingSpeedRoute
   '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesById {
@@ -76,13 +85,28 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/books': typeof AuthenticatedBooksRoute
+  '/_authenticated/reading-speed': typeof AuthenticatedReadingSpeedRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/privacy' | '/terms' | '/activity' | '/books'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/activity'
+    | '/books'
+    | '/reading-speed'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/privacy' | '/terms' | '/activity' | '/books' | '/'
+  to:
+    | '/login'
+    | '/privacy'
+    | '/terms'
+    | '/activity'
+    | '/books'
+    | '/reading-speed'
+    | '/'
   id:
     | '__root__'
     | '/_authenticated'
@@ -91,6 +115,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_authenticated/activity'
     | '/_authenticated/books'
+    | '/_authenticated/reading-speed'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
 }
@@ -138,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/reading-speed': {
+      id: '/_authenticated/reading-speed'
+      path: '/reading-speed'
+      fullPath: '/reading-speed'
+      preLoaderRoute: typeof AuthenticatedReadingSpeedRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/books': {
       id: '/_authenticated/books'
       path: '/books'
@@ -158,12 +190,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedActivityRoute: typeof AuthenticatedActivityRoute
   AuthenticatedBooksRoute: typeof AuthenticatedBooksRoute
+  AuthenticatedReadingSpeedRoute: typeof AuthenticatedReadingSpeedRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedActivityRoute: AuthenticatedActivityRoute,
   AuthenticatedBooksRoute: AuthenticatedBooksRoute,
+  AuthenticatedReadingSpeedRoute: AuthenticatedReadingSpeedRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
