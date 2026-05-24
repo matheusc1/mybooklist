@@ -3,7 +3,7 @@ import { UserMenu } from '../user-menu'
 import { Logo } from './logo'
 
 const links = [
-	{ label: 'Home', to: '/' },
+	{ label: 'Home', to: '/home' },
 	{ label: 'My Books', to: '/books' },
 	{ label: 'Activity', to: '/activity' },
 ]

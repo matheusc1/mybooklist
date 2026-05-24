@@ -6,7 +6,9 @@ import { StatCard } from '#/components/stat-card'
 import { Button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
 
-export const Route = createFileRoute('/_authenticated/')({ component: Home })
+export const Route = createFileRoute('/_authenticated/home')({
+	component: Home,
+})
 
 const bookActivityData = [
 	{

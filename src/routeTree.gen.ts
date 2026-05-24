@@ -13,8 +13,9 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedReadingSpeedRouteImport } from './routes/_authenticated/reading-speed'
+import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedBooksRouteImport } from './routes/_authenticated/books'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 
@@ -37,10 +38,10 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedReadingSpeedRoute =
   AuthenticatedReadingSpeedRouteImport.update({
@@ -48,6 +49,11 @@ const AuthenticatedReadingSpeedRoute =
     path: '/reading-speed',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedBooksRoute = AuthenticatedBooksRouteImport.update({
   id: '/books',
   path: '/books',
@@ -60,33 +66,36 @@ const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedIndexRoute
+  '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/books': typeof AuthenticatedBooksRoute
+  '/home': typeof AuthenticatedHomeRoute
   '/reading-speed': typeof AuthenticatedReadingSpeedRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/books': typeof AuthenticatedBooksRoute
+  '/home': typeof AuthenticatedHomeRoute
   '/reading-speed': typeof AuthenticatedReadingSpeedRoute
-  '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/books': typeof AuthenticatedBooksRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/reading-speed': typeof AuthenticatedReadingSpeedRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,29 +106,33 @@ export interface FileRouteTypes {
     | '/terms'
     | '/activity'
     | '/books'
+    | '/home'
     | '/reading-speed'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/login'
     | '/privacy'
     | '/terms'
     | '/activity'
     | '/books'
+    | '/home'
     | '/reading-speed'
-    | '/'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/login'
     | '/privacy'
     | '/terms'
     | '/_authenticated/activity'
     | '/_authenticated/books'
+    | '/_authenticated/home'
     | '/_authenticated/reading-speed'
-    | '/_authenticated/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -156,18 +169,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
+    '/': {
+      id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/reading-speed': {
       id: '/_authenticated/reading-speed'
       path: '/reading-speed'
       fullPath: '/reading-speed'
       preLoaderRoute: typeof AuthenticatedReadingSpeedRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/books': {
@@ -190,15 +210,15 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedActivityRoute: typeof AuthenticatedActivityRoute
   AuthenticatedBooksRoute: typeof AuthenticatedBooksRoute
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedReadingSpeedRoute: typeof AuthenticatedReadingSpeedRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedActivityRoute: AuthenticatedActivityRoute,
   AuthenticatedBooksRoute: AuthenticatedBooksRoute,
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedReadingSpeedRoute: AuthenticatedReadingSpeedRoute,
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -206,6 +226,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,

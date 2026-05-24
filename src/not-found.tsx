@@ -4,7 +4,7 @@ import { button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
 
 const links = [
-	{ label: 'Home', to: '/' },
+	{ label: 'Home', to: '/home' },
 	{ label: 'My Books', to: '/books' },
 	{ label: 'Activity', to: '/activity' },
 ]
@@ -36,7 +36,7 @@ export function NotFound() {
 					</p>
 
 					<div className="flex gap-3 items-center">
-						<Link to="/" className={button({ variant: 'primary', size: 'lg' })}>
+						<Link to="/home" className={button({ variant: 'primary', size: 'lg' })}>
 							<LucideArrowLeft className="size-4" />
 							Back to Home
 						</Link>
