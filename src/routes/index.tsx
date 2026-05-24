@@ -8,6 +8,13 @@ export const Route = createFileRoute('/')({
 	component: LadingPage,
 })
 
+const stats = [
+	{ value: '12', sup: 'k+', label: 'Books tracked' },
+	{ value: '3.4', sup: 'k', label: 'Active readers' },
+	{ value: '98', sup: '%', label: 'Goals reached' },
+	{ value: '4.9', sup: '★', label: 'Average rating' },
+]
+
 function LadingPage() {
 	return (
 		<div className="overflow-x-hidden min-h-dvh">
@@ -117,7 +124,28 @@ function LadingPage() {
 				</div>
 			</section>
 
-
+			<section className="py-20 px-15 bg-surface border-t border-b border-border">
+				<div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-y-8">
+					{stats.map((stat, i) => (
+						<div
+							key={stat.label}
+							className={`px-5 text-center relative ${
+								i !== 0
+									? 'before:absolute before:left-0 before:top-[20%] before:bottom-[20%] before:w-px before:bg-border'
+									: ''
+							} ${i === 2 ? 'before:hidden sm:before:block' : ''}`}
+						>
+							<p className="font-serif text-4xl/[1.0] font-bold tracking-tight text-accent mb-1.5">
+								{stat.value}
+								<sup className="text-xl font-normal text-muted">{stat.sup}</sup>
+							</p>
+							<p className="font-mono text-xs text-muted uppercase tracking-widest">
+								{stat.label}
+							</p>
+						</div>
+					))}
+				</div>
+			</section>
 		</div>
 	)
 }
