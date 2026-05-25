@@ -62,18 +62,18 @@ function LandingPage() {
 					<div className="flex gap-0.5 text-xs sm:text-sm text-muted uppercase tracking-wider transition-all">
 						<button
 							type="button"
-							onClick={scrollTo('features')}
-							className="uppercase py-1.5 px-3 rounded-md hover:text-text hover:bg-surface2 cursor-pointer"
-						>
-							Features
-						</button>
-
-						<button
-							type="button"
 							onClick={scrollTo('preview')}
 							className="uppercase py-1.5 px-3 rounded-md hover:text-text hover:bg-surface2 cursor-pointer"
 						>
 							Preview
+						</button>
+
+						<button
+							type="button"
+							onClick={scrollTo('features')}
+							className="uppercase py-1.5 px-3 rounded-md hover:text-text hover:bg-surface2 cursor-pointer"
+						>
+							Features
 						</button>
 					</div>
 					<Link to="/login" className={button({ size: 'sm' })}>
@@ -101,28 +101,28 @@ function HeroSection() {
 
 			<div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex flex-col justify-center">
 				<div
-					className="deco-title static"
+					className="deco-title text-white/2 static"
 					style={{ fontSize: 'clamp(80px, 12vw, 160px)', marginLeft: '-2%' }}
 				>
-					Crime and Punishment
+					To Kill a Mockingbird
 				</div>
 				<div
-					className="deco-title static"
+					className="deco-title text-white/2 static"
 					style={{ fontSize: 'clamp(60px, 9vw, 120px)', marginLeft: '5%' }}
 				>
-					The Final Empire
+					One Hundred Years of Solitude
 				</div>
 				<div
-					className="deco-title static"
+					className="deco-title text-white/2 static"
 					style={{ fontSize: 'clamp(100px, 15vw, 200px)', marginLeft: '-1%' }}
 				>
-					Brave New World
+					A Tale of Two Cities
 				</div>
 				<div
-					className="deco-title static"
+					className="deco-title text-white/2 static"
 					style={{ fontSize: 'clamp(70px, 11vw, 150px)', marginLeft: '8%' }}
 				>
-					The Hobbit
+					Dom Quixote
 				</div>
 			</div>
 
@@ -162,11 +162,8 @@ function HeroSection() {
 				</p>
 			</div>
 
-			<div className="absolute bottom-3 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-up [animation-delay:0.6s]">
+			<div className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-up [animation-delay:0.6s]">
 				<div className="w-px h-8 sm:h-10 bg-linear-to-b from-accent/80 to-transparent animate-pulse" />
-				<span className="font-mono text-[10px] text-muted uppercase tracking-widest">
-					Scroll
-				</span>
 			</div>
 		</section>
 	)
