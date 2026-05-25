@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucideArrowRight } from 'lucide-react'
 import { button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
+import { useReveal } from '#/hooks/use-reveal'
 import { scrollTo } from '#/utils/scroll-to'
 
 export const Route = createFileRoute('/')({
@@ -170,9 +171,14 @@ function HeroSection() {
 }
 
 function StatsSection() {
+	const ref = useReveal()
+
 	return (
 		<section className="py-20 px-15 bg-surface border-t border-b border-border">
-			<div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-y-8">
+			<div
+				ref={ref}
+				className="reveal max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-y-8"
+			>
 				{stats.map((stat, i) => (
 					<div
 						key={stat.label}
@@ -197,13 +203,16 @@ function StatsSection() {
 }
 
 function PreviewSection() {
+	const headerRef = useReveal()
+	const windowRef = useReveal()
+
 	return (
 		<section
 			id="preview"
 			className="py-25 px-5 sm:px-15 overflow-hidden relative"
 		>
 			<div className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]" />
-			<div className="text-center mb-15 space-y-3">
+			<div ref={headerRef} className="reveal text-center mb-15 space-y-3">
 				<p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
 					The app
 				</p>
@@ -212,7 +221,10 @@ function PreviewSection() {
 				</p>
 			</div>
 
-			<div className="max-w-240 mx-auto bg-surface border border-white/12 rounded-2xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)]">
+			<div
+				ref={windowRef}
+				className="reveal max-w-240 mx-auto bg-surface border border-white/12 rounded-2xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)]"
+			>
 				<div className="flex items-center justify-between p-4 px-5 bg-surface2 border-b border-border">
 					<div className="flex gap-1.5">
 						<div className="size-2.5 rounded-full bg-danger" />
