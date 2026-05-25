@@ -17,33 +17,33 @@ const stats = [
 
 const books = [
 	{
-		title: 'Crime and Punishment',
+		title: 'As I Lay Dying',
 		sub: 'Reading · Oct 10',
 	},
 	{
-		title: 'To Kill a Mockingbird',
+		title: 'Lord of the Flies',
 		sub: 'Finished · Oct 8',
 	},
 ]
 
 const finishedBooks = [
 	{
-		bookCover: 'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
+		bookCover: '/covers/dune.jpg',
 		title: 'Dune',
 		author: 'Frank Herbert',
 		stars: '★★★★☆',
 	},
 	{
-		bookCover: 'https://m.media-amazon.com/images/I/618lb8MnrhL._SL1500_.jpg',
-		title: 'Brave New World',
-		author: 'Aldous Huxley',
+		bookCover: '/covers/we.jpg',
+		title: 'We',
+		author: 'Yevgeny Zamyatin',
 		stars: '★★★★★',
 	},
 	{
-		bookCover: 'https://m.media-amazon.com/images/I/91jAiO8KNAL._SL1500_.jpg',
-		title: 'East of Eden',
-		author: 'John Steinbeck',
-		stars: '★★★★★',
+		bookCover: '/covers/david-copperfield.jpg',
+		title: 'David Copperfield',
+		author: 'Charles Dickens',
+		stars: '★★★☆☆',
 	},
 ]
 
@@ -239,23 +239,23 @@ function PreviewSection() {
 							</p>
 							<div className="flex gap-2 items-start">
 								<img
-									src="https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg"
-									alt="The Hobbit book cover"
+									src="/covers/hamlet.jpg"
+									alt="Hamlet book cover"
 									className="w-10 h-15 object-cover rounded-sm"
 								/>
 								<div className="flex-1">
 									<p className="font-serif text-xxs font-semibold mb-px">
-										The Hobbit
+										Hamlet
 									</p>
 									<p className="text-[0.6rem] text-muted mb-2">
-										J.R.R. Tolkien
+										William Shakespeare
 									</p>
 									<div className="flex justify-between text-[0.6rem] text-muted mb-1">
-										<span>Page 150 of 260</span>
-										<span className="text-accent font-mono">58%</span>
+										<span>Page 179 of 330</span>
+										<span className="text-accent font-mono">54%</span>
 									</div>
 									<div className="h-0.5 bg-surface3 rounded-full overflow-hidden">
-										<div className="h-full w-[58%] bg-gradient-progress" />
+										<div className="h-full w-[54%] bg-gradient-progress" />
 									</div>
 								</div>
 							</div>
@@ -357,3 +357,5 @@ function PreviewSection() {
 		</section>
 	)
 }
+
+// features
