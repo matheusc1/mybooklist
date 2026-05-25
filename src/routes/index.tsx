@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { LucideArrowRight } from 'lucide-react'
+import {
+	LucideArrowRight,
+	LucideChartLine,
+	LucideCompass,
+	LucideLibrary,
+	LucideLock,
+	LucideTarget,
+	LucideTimer,
+} from 'lucide-react'
 import { button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
 import { useReveal } from '#/hooks/use-reveal'
@@ -54,6 +62,45 @@ const metrics = [
 	{ val: '7', color: 'text-text', desc: 'Days' },
 ]
 
+const features = [
+	{
+		icon: LucideLibrary,
+		title: 'Your complete library',
+		desc: 'Organize every book by status — reading, finished, paused, want to read. Your whole collection, always one click away.',
+		tag: 'My Books',
+	},
+	{
+		icon: LucideTimer,
+		title: 'Session tracking',
+		desc: 'Log reading sessions with page ranges. See exactly how many pages and hours you read each week, day by day.',
+		tag: 'Activity',
+	},
+	{
+		icon: LucideChartLine,
+		title: 'Weekly statistics',
+		desc: 'Charts, streaks, and reading time estimates personalized to your actual pace — not a generic average.',
+		tag: 'Dashboard',
+	},
+	{
+		icon: LucideTarget,
+		title: 'Reading goals',
+		desc: 'Set a yearly book goal and track your progress. See how many books you need per month to stay on track.',
+		tag: 'Goals',
+	},
+	{
+		icon: LucideLock,
+		title: 'OAuth sign in',
+		desc: 'No passwords to remember. Sign in securely with Google or GitHub. Your data is private and always yours.',
+		tag: 'Security',
+	},
+	{
+		icon: LucideCompass,
+		title: 'Personal pace calibration',
+		desc: "Take a short reading test and we'll calibrate your reading speed — so every time estimate actually reflects you.",
+		tag: 'Reading Speed',
+	},
+]
+
 function LandingPage() {
 	return (
 		<div className="overflow-x-hidden min-h-dvh">
@@ -88,6 +135,7 @@ function LandingPage() {
 			<HeroSection />
 			<StatsSection />
 			<PreviewSection />
+			<FeaturesSection />
 		</div>
 	)
 }
@@ -370,4 +418,52 @@ function PreviewSection() {
 	)
 }
 
-// features
+function FeaturesSection() {
+	const headerRef = useReveal()
+	const gridRef = useReveal()
+
+	return (
+		<section
+			id="features"
+			className="py-25 px-5 sm:px-15 overflow-hidden relative"
+		>
+			<div className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]" />
+
+			<div ref={headerRef} className="reveal text-center mb-15 space-y-3">
+				<p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
+					Features
+				</p>
+				<p className="font-serif font-bold text-2xl sm:text-3xl tracking-tight">
+					Built around{' '}
+					<em className="italic text-accent">how readers actually read</em>
+				</p>
+			</div>
+
+			<div
+				ref={gridRef}
+				className="reveal max-w-240 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border border border-border rounded-2xl overflow-hidden"
+			>
+				{features.map((feature) => {
+					const Icon = feature.icon
+					return (
+						<div
+							key={feature.tag}
+							className="bg-bg p-8 transition-colors duration-200 hover:bg-surface group"
+						>
+							<div className="size-9 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center mb-4 transition-colors group-hover:bg-accent/15">
+								<Icon className="size-4 text-accent" />
+							</div>
+							<p className="font-serif font-semibold tracking-[-0.01em] mb-3">
+								{feature.title}
+							</p>
+							<p className="text-sm/[1.7] text-muted">{feature.desc}</p>
+							<span className="inline-block mt-3.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent border-b border-accent/30 pb-px">
+								{feature.tag}
+							</span>
+						</div>
+					)
+				})}
+			</div>
+		</section>
+	)
+}
