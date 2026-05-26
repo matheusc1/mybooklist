@@ -196,14 +196,21 @@ function HeroSection() {
 				</p>
 
 				<div className="flex items-center gap-3 flex-wrap animate-fade-up [animation-delay:0.34s]">
-					<Link to="/login" className={button({ size: 'lg' })}>
+					<Link
+						to="/login"
+						className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
+					>
 						Start for free
 						<LucideArrowRight className="size-4" />
 					</Link>
 
 					<a
 						href="#preview"
-						className={button({ variant: 'ghost', size: 'lg' })}
+						className={button({
+							variant: 'ghost',
+							size: 'lg',
+							className: 'w-full sm:w-auto',
+						})}
 					>
 						See how it works
 					</a>
@@ -267,9 +274,9 @@ function PreviewSection() {
 				<p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
 					The app
 				</p>
-				<p className="font-serif font-bold text-2xl sm:text-3xl tracking-tight">
+				<h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl leading-[1.2] tracking-tight">
 					Everything in one <em className="italic text-accent">clean view</em>
-				</p>
+				</h2>
 			</div>
 
 			<div
@@ -436,10 +443,10 @@ function FeaturesSection() {
 				<p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
 					Features
 				</p>
-				<p className="font-serif font-bold text-2xl sm:text-3xl tracking-tight">
+				<h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl leading-[1.2] tracking-tight">
 					Built around{' '}
 					<em className="italic text-accent">how readers actually read</em>
-				</p>
+				</h2>
 			</div>
 
 			<div
@@ -477,7 +484,7 @@ function QuoteSection() {
 	const quoteAuthorRef = useReveal()
 
 	return (
-		<section className="py-30 px-15 text-center relative overflow-hidden">
+		<section className="py-30 px-5 sm:px-15 text-center relative overflow-hidden">
 			<div className="w-200 h-100 absolute top-1/2 left-1/2 -translate-1/2 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.06)_0%,transparent_65%)] pointer-events-none" />
 			<p
 				ref={quoteMarkRef}
@@ -522,14 +529,14 @@ function CtaSection() {
 			>
 				Start today
 			</p>
-			<p
+			<h2
 				ref={titleRef}
-				className="reveal max-w-140 font-serif font-bold text-3xl md:text-4xl lg:text-5xl leading-[1.2] tracking-tight mb-4"
+				className="reveal max-w-140 font-serif font-bold text-3xl sm:text-4xl lg:text-5xl leading-[1.2] tracking-tight mb-4"
 			>
 				Your reading life,
 				<br />
 				<em className="italic text-accent">finally tracked.</em>
-			</p>
+			</h2>
 			<p
 				ref={textRef}
 				className="reveal text-sm/[1.7] text-muted max-w-105 mb-10"
@@ -542,14 +549,24 @@ function CtaSection() {
 				ref={actionsRef}
 				className="reveal flex flex-wrap items-center gap-3"
 			>
-				<Link to="/login" className={button({ size: 'lg' })}>
+				<Link
+					to="/login"
+					className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
+				>
 					Sign in with Google
 					<LucideArrowRight className="size-4" />
 				</Link>
 
-				<a href="#preview" className={button({ variant: 'ghost', size: 'lg' })}>
+				<Link
+					to="/login"
+					className={button({
+						variant: 'ghost',
+						size: 'lg',
+						className: 'w-full sm:w-auto',
+					})}
+				>
 					Sign in with GitHub
-				</a>
+				</Link>
 			</div>
 
 			<p
