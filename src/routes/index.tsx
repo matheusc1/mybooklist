@@ -137,6 +137,8 @@ function LandingPage() {
 			<PreviewSection />
 			<FeaturesSection />
 			<QuoteSection />
+			<CtaSection />
+			<FooterSection />
 		</div>
 	)
 }
@@ -501,5 +503,85 @@ function QuoteSection() {
 				</p>
 			</div>
 		</section>
+	)
+}
+
+function CtaSection() {
+	const eyebrowRef = useReveal()
+	const titleRef = useReveal()
+	const textRef = useReveal()
+	const actionsRef = useReveal()
+	const noteRef = useReveal()
+
+	return (
+		<div className="py-25 px-5 sm:px-15 border-t border-border flex flex-col items-center text-center relative overflow-hidden">
+			<div className="absolute -top-50 left-1/2 -translate-x-1/2 size-150 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.08)_0%,transparent_65%)] pointer-events-none" />
+			<p
+				ref={eyebrowRef}
+				className="reveal font-mono text-xs uppercase tracking-[0.14em] text-accent mb-4"
+			>
+				Start today
+			</p>
+			<p
+				ref={titleRef}
+				className="reveal max-w-140 font-serif font-bold text-3xl md:text-4xl lg:text-5xl leading-[1.2] tracking-tight mb-4"
+			>
+				Your reading life,
+				<br />
+				<em className="italic text-accent">finally tracked.</em>
+			</p>
+			<p
+				ref={textRef}
+				className="reveal text-sm/[1.7] text-muted max-w-105 mb-10"
+			>
+				Join thousands of readers who turned a habit into a practice. It's free,
+				and it takes 30 seconds to get started.
+			</p>
+
+			<div
+				ref={actionsRef}
+				className="reveal flex flex-wrap items-center gap-3"
+			>
+				<Link to="/login" className={button({ size: 'lg' })}>
+					Sign in with Google
+					<LucideArrowRight className="size-4" />
+				</Link>
+
+				<a href="#preview" className={button({ variant: 'ghost', size: 'lg' })}>
+					Sign in with GitHub
+				</a>
+			</div>
+
+			<p
+				ref={noteRef}
+				className="reveal mt-3.5 text-xxs text-muted/50 font-mono tracking-wider"
+			>
+				No credit card. No password. Cancel anytime.
+			</p>
+		</div>
+	)
+}
+
+function FooterSection() {
+	return (
+		<div className="py-8 px-5 sm:px-15 border-t border-border flex items-center justify-between flex-wrap gap-4">
+			<div className="flex items-center gap-2 font-serif font-semibold text-muted">
+				<div className="size-6 bg-accent/40 rounded-sm flex items-center justify-center text-xxs text-bg font-bold">
+					M
+				</div>
+				MyBookList
+			</div>
+
+			<div className="flex gap-6 font-mono text-xs text-muted uppercase tracking-wider transition-colors">
+				<Link to="/terms" className="hover:text-accent">
+					Terms of Service
+				</Link>
+				<Link to="/privacy" className="hover:text-accent2">
+					Privacy Policy
+				</Link>
+			</div>
+
+			<p className="font-mono text-xs text-muted/40">&copy; 2026 MyBookList</p>
+		</div>
 	)
 }
