@@ -104,7 +104,7 @@ const features = [
 function LandingPage() {
 	return (
 		<div className="min-h-dvh">
-			<div className="sticky top-0 bg-bg z-100">
+			<div className="sticky top-0 bg-bg/85 z-100 backdrop-blur-md">
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-15">
 					<Logo textClassName="hidden sm:block" />
 					<div className="flex gap-0.5 text-xs sm:text-sm text-muted uppercase tracking-wider transition-all">

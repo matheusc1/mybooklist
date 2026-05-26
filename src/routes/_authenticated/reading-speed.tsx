@@ -118,13 +118,15 @@ function IntroContent({ onStart }: { onStart: () => void }) {
 				</p>
 			</div>
 
-			<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 [&>*:last-child]:sm:col-span-1">
+			<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 [&>*:last-child]:col-span-2 [&>*:last-child]:sm:col-span-1 mb-10">
 				{infoCards.map(({ icon: Icon, label, description }) => (
 					<div
 						key={label}
-						className="bg-surface p-3 lg:p-4 rounded-xl border border-border text-xs"
+						className="bg-surface p-4 rounded-xl border border-border text-xs group transition-colors hover:bg-surface2"
 					>
-						<Icon className="text-text/70 mb-2" />
+						<div className="size-8 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center mb-3 transition-colors group-hover:bg-accent/15">
+							<Icon className="size-4 text-accent" />
+						</div>
 						<p className="font-medium mb-0.5">{label}</p>
 						<p className="text-xs/[1.75] text-muted">{description}</p>
 					</div>
@@ -244,7 +246,7 @@ function ResultContent({
 }) {
 	return (
 		<div className="flex flex-col items-center justify-center text-center">
-			<LucideLibrary className="size-12 text-text/70 mb-5" />
+			<LucideLibrary className="size-12 text-accent/80 mb-5" />
 			<p className="text-xs uppercase font-mono text-accent tracking-widest">
 				Test complete
 			</p>

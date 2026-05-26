@@ -10,7 +10,7 @@ const links = [
 
 export function NavBar() {
 	return (
-		<div className="sticky top-0 bg-bg z-10">
+		<div className="sticky top-0 bg-bg/85 z-10 backdrop-blur-md">
 			<nav className="flex w-full items-center justify-between h-17 px-5 lg:px-10">
 				<Logo textClassName="hidden md:block" />
 

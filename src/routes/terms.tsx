@@ -32,7 +32,7 @@ function TermsOfService() {
 
 	return (
 		<div className="min-h-dvh">
-			<div className="sticky top-0 bg-bg z-10">
+			<div className="sticky top-0 bg-bg/85 z-10 backdrop-blur-md">
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-10">
 					<Logo />
 
