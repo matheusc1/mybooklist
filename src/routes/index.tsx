@@ -136,6 +136,7 @@ function LandingPage() {
 			<StatsSection />
 			<PreviewSection />
 			<FeaturesSection />
+			<QuoteSection />
 		</div>
 	)
 }
@@ -463,6 +464,41 @@ function FeaturesSection() {
 						</div>
 					)
 				})}
+			</div>
+		</section>
+	)
+}
+
+function QuoteSection() {
+	const quoteMarkRef = useReveal()
+	const quoteTextRef = useReveal()
+	const quoteAuthorRef = useReveal()
+
+	return (
+		<section className="py-30 px-15 text-center relative overflow-hidden">
+			<div className="w-200 h-100 absolute top-1/2 left-1/2 -translate-1/2 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.06)_0%,transparent_65%)] pointer-events-none" />
+			<p
+				ref={quoteMarkRef}
+				className="reveal font-serif text-accent leading text-8xl/[0.5] mb-5"
+			>
+				"
+			</p>
+			<p
+				ref={quoteTextRef}
+				className="reveal max-w-2xl mx-auto font-serif italic text-xl lg:text-2xl leading-[1.6] text-text/75 mb-6"
+			>
+				A reader lives a{' '}
+				<em className="font-normal not-italic text-accent">thousand lives</em>{' '}
+				before he dies. The man who never reads lives only one.
+			</p>
+			<div
+				ref={quoteAuthorRef}
+				className="reveal flex items-center justify-center gap-3"
+			>
+				<div className="w-6 h-px bg-accent/50" />
+				<p className="text-muted text-xs font-mono uppercase tracking-widest">
+					George R. R. Martin
+				</p>
 			</div>
 		</section>
 	)
