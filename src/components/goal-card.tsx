@@ -5,13 +5,15 @@ function formatMonthsRemaining(months: number): string {
 	return `${months} month${months === 1 ? '' : 's'} remaining`
 }
 
-function getPercent(goal: Goal) {
-	return Math.round((goal.current / goal.target) * 100)
+function getPercent(current: number, target: number) {
+	if (target <= 0) return 0
+
+	return Math.min(Math.round((current / target) * 100), 100)
 }
 
 export function GoalCard() {
 	const goal: Goal = { target: 10, current: 2, year: 2026 }
-	const percent = getPercent(goal)
+	const percent = getPercent(goal.current, goal.target)
 
 	const now = new Date()
 	const monthsRemaining = 11 - now.getMonth()
@@ -65,7 +67,7 @@ function EmptyCard({ year }: { year: number }) {
 				<div className="h-1.5 bg-surface2 rounded-full" />
 
 				<p className="text-xs text-muted underline cursor-pointer">
-					Set a gol and start reading.
+					Set a goal and start reading.
 				</p>
 			</div>
 		</div>
@@ -73,7 +75,7 @@ function EmptyCard({ year }: { year: number }) {
 }
 
 export function GoalCardCompact({ goal }: { goal: Goal }) {
-	const percent = getPercent(goal)
+	const percent = getPercent(goal.current, goal.target)
 
 	return (
 		<div className="px-4 py-3 border-b border-border">
@@ -93,7 +95,7 @@ export function GoalCardCompact({ goal }: { goal: Goal }) {
 			</div>
 			<div className="h-0.75 bg-surface2 rounded-full overflow-hidden">
 				<div
-					className="h-full rounded-full bg-linear-to-r from-accent to-accent2"
+					className="h-full rounded-full bg-gradient-progress"
 					style={{ width: `${percent}%` }}
 				/>
 			</div>
