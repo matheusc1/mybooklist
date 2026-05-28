@@ -15,6 +15,7 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@tailwindcss/vite": "4.2.4",
     "@tanstack/react-devtools": "0.10.2",
     "@tanstack/react-form": "1.29.1",
