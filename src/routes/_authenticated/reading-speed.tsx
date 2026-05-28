@@ -43,6 +43,7 @@ function getRandomPassage(lastPassageId?: string) {
 		(passage) => passage.id !== lastPassageId,
 	)
 
+	if (availablePassages.length === 0) return readingPassages[0]
 	return availablePassages[Math.floor(Math.random() * availablePassages.length)]
 }
 
@@ -56,10 +57,15 @@ function ReadingSpeed() {
 	const [step, setStep] = useState<Step>('intro')
 	const [secondsPerPage, setSecondsPerPage] = useState(0)
 	const [lastPassageId, setLastPassageId] = useState<string>()
-
 	const [selectedPassage, setSelectedPassage] = useState(() =>
 		getRandomPassage(),
 	)
+
+	const handleStart = () => {
+		const nextPassage = getRandomPassage(lastPassageId)
+		setSelectedPassage(nextPassage)
+		setStep('reading')
+	}
 
 	return (
 		<div className="overflow-hidden min-h-dvh">
@@ -75,16 +81,7 @@ function ReadingSpeed() {
 			</div>
 
 			<div className="max-w-170 mx-auto py-10 px-5 sm:px-10 space-y-8 animate-fade-up [animation-delay:0.02s]">
-				{step === 'intro' && (
-					<IntroContent
-						onStart={() => {
-							const passage = getRandomPassage(lastPassageId)
-
-							setSelectedPassage(passage)
-							setStep('reading')
-						}}
-					/>
-				)}
+				{step === 'intro' && <IntroContent onStart={handleStart} />}
 				{step === 'reading' && (
 					<ReadingContent
 						key={selectedPassage.id}
@@ -157,8 +154,9 @@ function ReadingContent({
 	const [page, setPage] = useState<1 | 2>(1)
 
 	useEffect(() => {
+		const start = Date.now()
 		const interval = setInterval(() => {
-			setSeconds((s) => s + 1)
+			setSeconds(Math.floor((Date.now() - start) / 1000))
 		}, 1000)
 		return () => clearInterval(interval)
 	}, [])
@@ -167,7 +165,12 @@ function ReadingContent({
 	const secs = seconds % 60
 	const display = `${minutes}:${secs.toString().padStart(2, '0')}`
 
-	function handleFinish() {
+	function handleNextOrFinish() {
+		if (page === 1) {
+			setPage(2)
+			window.scrollTo({ top: 0, behavior: 'smooth' })
+			return
+		}
 		const secondsPerPage = Math.max(60, Math.round(seconds / 2))
 		onFinish(secondsPerPage)
 	}
@@ -192,7 +195,7 @@ function ReadingContent({
 
 			<div className="h-0.5 bg-surface2 rounded-full overflow-hidden">
 				<div
-					className="h-full bg-gradient-progress rounded-full"
+					className="h-full bg-gradient-progress rounded-full transition-all duration-1000"
 					style={{ width: page === 1 ? '50%' : '100%' }}
 				/>
 			</div>
@@ -212,24 +215,7 @@ function ReadingContent({
 			</div>
 
 			<div className="-mt-1 flex justify-end">
-				<Button
-					onClick={() => {
-						if (page === 1) {
-							setPage(2)
-
-							window.scrollTo({
-								top: 0,
-								behavior: 'smooth',
-							})
-
-							return
-						}
-
-						handleFinish()
-					}}
-					size="lg"
-					className="ml-auto"
-				>
+				<Button onClick={handleNextOrFinish} size="lg" className="ml-auto">
 					{page === 1 ? 'Next page' : 'Finish'}{' '}
 					<LucideArrowRight className="size-4" />
 				</Button>
