@@ -1,18 +1,17 @@
-type Goal = {
-	target: number
-	current: number
-	year: number
-}
+import type { Goal } from '#/types/types'
 
 function formatMonthsRemaining(months: number): string {
 	if (months === 0) return '< 1 month remaining'
 	return `${months} month${months === 1 ? '' : 's'} remaining`
 }
 
+function getPercent(goal: Goal) {
+	return Math.round((goal.current / goal.target) * 100)
+}
+
 export function GoalCard() {
 	const goal: Goal = { target: 10, current: 2, year: 2026 }
-
-	const percent = Math.round((goal.current / goal.target) * 100)
+	const percent = getPercent(goal)
 
 	const now = new Date()
 	const monthsRemaining = 11 - now.getMonth()
@@ -68,6 +67,35 @@ function EmptyCard({ year }: { year: number }) {
 				<p className="text-xs text-muted underline cursor-pointer">
 					Set a gol and start reading.
 				</p>
+			</div>
+		</div>
+	)
+}
+
+export function GoalCardCompact({ goal }: { goal: Goal }) {
+	const percent = getPercent(goal)
+
+	return (
+		<div className="px-4 py-3 border-b border-border">
+			<div className="flex items-center mb-2">
+				<span className="text-muted uppercase tracking-widest text-xs">
+					Reading Goal · {goal.year}
+				</span>
+			</div>
+			<div className="flex justify-between items-baseline mb-2">
+				<p className="font-serif text-2xl font-semibold">
+					{goal.current}{' '}
+					<span className="text-sm text-muted font-sans font-normal">
+						of {goal.target} books
+					</span>
+				</p>
+				<span className="text-xs text-accent font-mono">{percent}%</span>
+			</div>
+			<div className="h-0.75 bg-surface2 rounded-full overflow-hidden">
+				<div
+					className="h-full rounded-full bg-linear-to-r from-accent to-accent2"
+					style={{ width: `${percent}%` }}
+				/>
 			</div>
 		</div>
 	)
