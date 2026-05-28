@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucidePlus } from 'lucide-react'
 import { BookActivityCard } from '#/components/book-activity-card'
 import { FinishedBookCard } from '#/components/finished-book-card'
+import { GoalCard } from '#/components/goal-card'
 import { StatCard } from '#/components/stat-card'
 import { Button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
@@ -174,29 +175,7 @@ function Home() {
 					))}
 				</div>
 
-				<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
-					<p className="text-muted uppercase tracking-widest text-xs mb-3">
-						READING GOAL · 2026
-					</p>
-
-					<div className="space-y-2">
-						<div className="flex justify-between items-center">
-							<span className="font-serif text-2xl font-semibold">24</span>
-							<p className="text-sm text-muted">of 50 books</p>
-						</div>
-
-						<div className="h-1.5 bg-surface2 rounded-full overflow-hidden">
-							<div
-								className="h-full bg-gradient-progress rounded-full"
-								style={{ width: '48%' }}
-							/>
-						</div>
-
-						<p className="text-xs text-muted">
-							62% complete · 5 months remaining
-						</p>
-					</div>
-				</div>
+				<GoalCard />
 			</div>
 		</div>
 	)
