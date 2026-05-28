@@ -46,9 +46,15 @@ function getRandomPassage(lastPassageId?: string) {
 	return availablePassages[Math.floor(Math.random() * availablePassages.length)]
 }
 
+function formatPace(seconds: number) {
+	const m = Math.floor(seconds / 60)
+	const s = seconds % 60
+	return s === 0 ? `${m} min` : `${m} min ${s} sec`
+}
+
 function ReadingSpeed() {
 	const [step, setStep] = useState<Step>('intro')
-	const [minutesPerPage, setMinutesPerPage] = useState(0)
+	const [secondsPerPage, setSecondsPerPage] = useState(0)
 	const [lastPassageId, setLastPassageId] = useState<string>()
 
 	const [selectedPassage, setSelectedPassage] = useState(() =>
@@ -83,8 +89,8 @@ function ReadingSpeed() {
 					<ReadingContent
 						key={selectedPassage.id}
 						passage={selectedPassage}
-						onFinish={(avg) => {
-							setMinutesPerPage(avg)
+						onFinish={(secs) => {
+							setSecondsPerPage(secs)
 							setLastPassageId(selectedPassage.id)
 							setStep('result')
 						}}
@@ -92,7 +98,7 @@ function ReadingSpeed() {
 				)}
 				{step === 'result' && (
 					<ResultContent
-						minutesPerPage={minutesPerPage}
+						secondsPerPage={secondsPerPage}
 						onRetake={() => setStep('intro')}
 					/>
 				)}
@@ -140,17 +146,12 @@ function IntroContent({ onStart }: { onStart: () => void }) {
 	)
 }
 
-// TODO: `minutesPerPage` is rounded (Math.round) — works for now, but loses
-// precision over long books. Once the API is ready, save the raw seconds
-// (seconds / 2) and only round when displaying.
-// e.g. 1000 pages × 59s of error ≈ 16h difference in estimated reading time.
-
 function ReadingContent({
 	passage,
 	onFinish,
 }: {
 	passage: Passage
-	onFinish: (minutesPerPage: number) => void
+	onFinish: (secondsPerPage: number) => void
 }) {
 	const [seconds, setSeconds] = useState(0)
 	const [page, setPage] = useState<1 | 2>(1)
@@ -167,8 +168,8 @@ function ReadingContent({
 	const display = `${minutes}:${secs.toString().padStart(2, '0')}`
 
 	function handleFinish() {
-		const minutesPerPage = Math.max(1, Math.round(seconds / 2 / 60))
-		onFinish(minutesPerPage)
+		const secondsPerPage = Math.max(60, Math.round(seconds / 2))
+		onFinish(secondsPerPage)
 	}
 
 	return (
@@ -238,10 +239,10 @@ function ReadingContent({
 }
 
 function ResultContent({
-	minutesPerPage,
+	secondsPerPage,
 	onRetake,
 }: {
-	minutesPerPage: number
+	secondsPerPage: number
 	onRetake: () => void
 }) {
 	return (
@@ -258,9 +259,9 @@ function ResultContent({
 				will be used to estimate your session durations going forward.
 			</p>
 			<div className="bg-surface border border-white/12 rounded-2xl max-w-90 w-full py-7 px-10 mb-8">
-				<p className="font-serif text-muted mb-2">
+				<p className="font-serif text-muted mb-1">
 					<span className="text-5xl font-bold text-accent mr-1">
-						{minutesPerPage}
+						{Math.floor(secondsPerPage / 60)}
 					</span>{' '}
 					min
 				</p>
@@ -271,7 +272,7 @@ function ResultContent({
 				<p className="text-xs/[1.6] text-muted">
 					Your stats will now reflect{' '}
 					<strong className="font-medium text-text/55">
-						~{minutesPerPage} minutes per page
+						~{formatPace(secondsPerPage)} per page
 					</strong>{' '}
 					for all past and future reading sessions. You can retake this test
 					anytime from your profile menu.
