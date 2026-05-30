@@ -132,6 +132,16 @@
 ::-webkit-scrollbar       { width: 4px; }
 ::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.07); border-radius: 2px; }
 
+::-webkit-calendar-picker-indicator {
+  filter: invert(93%) sepia(8%) saturate(300%) hue-rotate(15deg);
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+::-webkit-calendar-picker-indicator:hover {
+  filter: invert(75%) sepia(8%) saturate(300%) hue-rotate(15deg);
+}
+
 html {
   scroll-behavior: smooth;
 }
