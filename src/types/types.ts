@@ -16,3 +16,18 @@ export type Goal = {
 	current: number
 	year: number
 }
+
+export type Book = {
+	id: number
+	title: string
+	author: string
+	genre: string
+	status: ActivityStatus
+	currentPage: number
+	totalPages: number
+	rating?: number
+	bookCover?: string
+	startDate?: string
+	endDate?: string
+	updatedAt: string
+}
