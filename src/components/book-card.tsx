@@ -1,18 +1,9 @@
 import { LucideStar } from 'lucide-react'
-import type { ActivityStatus } from '#/types/types'
-
-interface BookCard {
-	title: string
-	author: string
-	genre: string
-	status: ActivityStatus
-	rating?: number
-	bookCover?: string
-	progress: number
-}
+import type { ActivityStatus, Book } from '#/types/types'
+import { getPercent } from '#/utils/get-percent'
 
 interface BookCardProps {
-	book: BookCard
+	book: Book
 }
 
 const STATUS_COLORS: Record<ActivityStatus, string> = {
@@ -42,22 +33,16 @@ export function BookCard({ book }: BookCardProps) {
 	const showRating =
 		book.status === 'finished' && !!book.rating && book.rating > 0
 
+	const progress = getPercent(book.currentPage, book.totalPages)
+
 	return (
 		<div className="group cursor-pointer animate-fade-up">
 			<div className="relative w-full aspect-2/3 rounded-lg overflow-hidden bg-surface2 shadow-[4px_6px_20px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-250 ease-out group-hover:-translate-y-1 group-hover:scale-[1.02] group-hover:shadow-[6px_12px_32px_rgba(0,0,0,0.6)] mb-3">
-				{book.bookCover ? (
-					<img
-						src={book.bookCover}
-						alt={book.title}
-						className="w-full h-full object-cover"
-					/>
-				) : (
-					<img
-						src="/book-cover.jpg"
-						alt="Default Book Cover"
-						className="w-full h-full object-cover"
-					/>
-				)}
+				<img
+					src={book.bookCover ?? '/book-cover.jpg'}
+					alt={book.bookCover ? `${book.title} cover` : 'Default Book Cover'}
+					className="w-full h-full object-cover"
+				/>
 
 				<span
 					className={`absolute top-2 right-2 size-2 rounded-full shadow-[0_0_0_2px_rgba(12,12,14,0.8)] ${STATUS_COLORS[book.status]}`}
@@ -67,7 +52,7 @@ export function BookCard({ book }: BookCardProps) {
 					<div className="absolute bottom-0 left-0 right-0 h-0.75 bg-white/8">
 						<div
 							className="h-full bg-linear-to-r from-accent to-accent2"
-							style={{ width: `${book.progress}%` }}
+							style={{ width: `${progress}%` }}
 						/>
 					</div>
 				)}

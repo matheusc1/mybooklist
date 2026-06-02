@@ -1,14 +1,9 @@
 import type { Goal } from '#/types/types'
+import { getPercent } from '#/utils/get-percent'
 
 function formatMonthsRemaining(months: number): string {
 	if (months === 0) return '< 1 month remaining'
 	return `${months} month${months === 1 ? '' : 's'} remaining`
-}
-
-function getPercent(current: number, target: number) {
-	if (target <= 0) return 0
-
-	return Math.min(Math.round((current / target) * 100), 100)
 }
 
 export function GoalCard() {

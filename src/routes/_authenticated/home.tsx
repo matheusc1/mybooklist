@@ -1,59 +1,47 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucidePlus } from 'lucide-react'
+import { useMemo } from 'react'
 import { BookActivityCard } from '#/components/book-activity-card'
 import { FinishedBookCard } from '#/components/finished-book-card'
 import { GoalCard } from '#/components/goal-card'
 import { StatCard } from '#/components/stat-card'
 import { Button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
+import { books } from '#/mocks/books'
+import { sortByDateDesc } from '#/utils/sort-by-date'
 
 export const Route = createFileRoute('/_authenticated/home')({
 	component: Home,
 })
 
-const bookActivityData = [
-	{
-		title: 'Crime and Punishment',
-		author: 'Fyodor Dostoevsky',
-		status: 'reading' as const,
-		date: 'Oct 10, 2025',
-	},
-	{
-		title: 'The Final Empire',
-		author: 'Brandon Sanderson',
-		status: 'finished' as const,
-		date: 'Oct 8, 2025',
-	},
-	{
-		title: 'Brave New World',
-		author: 'Aldous Huxley',
-		status: 'want-to-read' as const,
-		date: 'Oct 1, 2025',
-	},
-]
-
-const finishedBooksData = [
-	{
-		title: 'White Nights',
-		author: 'Fyodor Dostoevsky',
-		rating: 4,
-		date: 'Oct 20, 2025',
-	},
-	{
-		title: '1984',
-		author: 'George Orwell',
-		rating: 5,
-		date: 'Nov 9, 2025',
-	},
-	{
-		title: 'We',
-		author: 'Yevgeny Zamyatin',
-		rating: 4,
-		date: 'Sep 1, 2025',
-	},
-]
-
 function Home() {
+	const currentBook = useMemo(
+		() =>
+			sortByDateDesc(
+				books.filter((b) => b.status === 'reading'),
+				(b) => b.updatedAt,
+			)[0],
+		[],
+	)
+
+	const recentActivity = useMemo(
+		() =>
+			sortByDateDesc(
+				books.filter((b) => b.id !== currentBook?.id),
+				(b) => b.updatedAt,
+			).slice(0, 3),
+		[currentBook],
+	)
+
+	const recentFinishedBooks = useMemo(
+		() =>
+			sortByDateDesc(
+				books.filter((b) => b.status === 'finished'),
+				(b) => b.endDate ?? '',
+			).slice(0, 3),
+		[],
+	)
+
 	return (
 		<div className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
 			<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.05s]">
@@ -77,26 +65,42 @@ function Home() {
 						</span>
 
 						<div className="flex gap-3.5 items-start">
-							<div className="w-13.5 h-19 rounded-md bg-surface2 shrink-0 flex items-center justify-center text-2xl shadow-[4px_4px_16px_rgba(0,0,0,0.5)]">
-								📖
-							</div>
+							<img
+								src={currentBook?.bookCover ?? '/book-cover.jpg'}
+								alt={
+									currentBook?.bookCover
+										? `${currentBook?.title} cover`
+										: 'Default Book Cover'
+								}
+								className="w-13.5 h-19 rounded-md object-cover"
+							/>
 
 							<div className="flex flex-col flex-1">
-								<span className="font-serif font-semibold leading-snug">
-									The Hobbit
+								<span className="font-serif font-semibold leading-snug line-clamp-1">
+									{currentBook?.title}
 								</span>
-								<span className="text-muted text-xs mt-0.5 mb-2.5">
-									J.R.R. Tolkien
+								<span className="text-muted text-xs mt-0.5 mb-2.5 line-clamp-1">
+									{currentBook?.author}
 								</span>
 
 								<div className="flex justify-between text-xs text-muted mb-1.5">
-									<span>Page 150 of 260</span>
-									<span className="text-accent font-medium">58%</span>
+									<span>
+										Page {currentBook?.currentPage} of {currentBook?.totalPages}
+									</span>
+									<span className="text-accent font-medium">
+										{Math.round(
+											(currentBook?.currentPage / currentBook?.totalPages) *
+												100,
+										)}
+										%
+									</span>
 								</div>
 								<div className="h-0.75 bg-surface2 rounded-full overflow-hidden">
 									<div
 										className="h-full bg-gradient-progress rounded-full"
-										style={{ width: '58%' }}
+										style={{
+											width: `${(currentBook?.currentPage / currentBook?.totalPages) * 100}%`,
+										}}
 									/>
 								</div>
 							</div>
@@ -109,9 +113,8 @@ function Home() {
 				</p>
 
 				<div className="-mt-3">
-					{bookActivityData.map((activity, index) => (
-						// biome-ignore lint/suspicious/noArrayIndexKey: will be replaced with real data soon
-						<BookActivityCard key={index} activity={activity} />
+					{recentActivity.map((book) => (
+						<BookActivityCard key={book.id} book={book} />
 					))}
 				</div>
 			</div>
@@ -166,12 +169,8 @@ function Home() {
 				</h2>
 
 				<div className="-mt-3">
-					{finishedBooksData.map((book, index) => (
-						<FinishedBookCard
-							// biome-ignore lint/suspicious/noArrayIndexKey: will be replaced with real data soon
-							key={index}
-							book={book}
-						/>
+					{recentFinishedBooks.map((book) => (
+						<FinishedBookCard key={book.id} book={book} />
 					))}
 				</div>
 

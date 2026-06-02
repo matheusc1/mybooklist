@@ -1,44 +1,29 @@
 import { LucideStar } from 'lucide-react'
-
-interface FinishedBook {
-	bookCover?: string
-	title: string
-	author: string
-	rating: number
-	date: string
-}
+import type { Book } from '#/types/types'
+import { formatBookDate } from '#/utils/format-date'
 
 interface FinishedBookCardProps {
-	book: FinishedBook
+	book: Book
 }
 
 export function FinishedBookCard({ book }: FinishedBookCardProps) {
-	const stars = Array.from({ length: 5 }, (_, i) => i < book.rating)
+	const stars = Array.from({ length: 5 }, (_, i) => i < (book.rating ?? 0))
 
 	return (
-		<div className="flex gap-3 py-3 border-b border-border transition-all duration-200 cursor-pointer hover:opacity-95">
+		<div className="group flex gap-3 py-3 border-b border-border transition-all duration-200 cursor-pointer hover:opacity-95">
 			<div className="relative w-13 h-19.5 shrink-0 bg-surface2 rounded overflow-hidden flex items-center justify-center shadow-[3px_3px_12px_rgba(0,0,0,0.4)]">
-				{book.bookCover ? (
-					<img
-						src={book.bookCover}
-						alt={`${book.title} cover`}
-						className="w-full h-full object-cover"
-					/>
-				) : null}
-				{!book.bookCover && (
-					<img
-						src="/book-cover.jpg"
-						alt="Default Book Cover"
-						className="w-full h-full object-cover"
-					/>
-				)}
+				<img
+					src={book.bookCover ?? '/book-cover.jpg'}
+					alt={book.bookCover ? `${book.title} cover` : 'Default Book Cover'}
+					className="w-full h-full object-cover"
+				/>
 			</div>
 
 			<div className="flex-1">
-				<h3 className="text-sm font-semibold font-serif text-text mb-0.5 leading-snug hover:text-accent transition-colors duration-200">
+				<h3 className="line-clamp-1 text-sm font-semibold font-serif text-text mb-0.5 leading-snug group-hover:text-accent transition-colors duration-200">
 					{book.title}
 				</h3>
-				<p className="text-xs text-muted mb-2">{book.author}</p>
+				<p className="line-clamp-1 text-xs text-muted mb-2">{book.author}</p>
 
 				<div className="flex gap-0.5 mb-1">
 					{stars.map((isFilled, i) => (
@@ -51,7 +36,9 @@ export function FinishedBookCard({ book }: FinishedBookCardProps) {
 					))}
 				</div>
 
-				<p className="text-xxs text-muted font-mono">{book.date}</p>
+				<p className="text-xxs text-muted font-mono">
+					{formatBookDate(book.endDate ?? '')}
+				</p>
 			</div>
 		</div>
 	)
