@@ -287,7 +287,7 @@ function WeeklyStatsEmptyState() {
 function FinishedBooksEmptyState() {
 	return (
 		<div className="flex flex-col items-center text-center py-7 px-4 pb-8 border-b border-border -mt-3">
-			<LucideLibrary className="size-12 text-accent/80 mb-5" />
+			<LucideLibrary className="size-12 text-muted mb-5" />
 			<p className="font-serif font-semibold text-sm lg:text-base text-text/50 mb-1.5">
 				No books finished yet
 			</p>

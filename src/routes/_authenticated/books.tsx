@@ -125,7 +125,7 @@ function MyBooks() {
 			</div>
 
 			<div className="space-y-8 animate-fade-up [animation-delay:0.1s]">
-				<div className="flex items-center gap-3 gap-y-1 flex-wrap">
+				<div className="flex items-center gap-3 flex-wrap">
 					<div className="relative flex-1 max-w-75 min-w-50">
 						<LucideSearch className="absolute size-4 left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
 						<input
