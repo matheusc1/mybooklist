@@ -5,7 +5,7 @@ import { BookActivityCard } from '#/components/book-activity-card'
 import { FinishedBookCard } from '#/components/finished-book-card'
 import { GoalCard } from '#/components/goal-card'
 import { StatCard } from '#/components/stat-card'
-import { Button } from '#/components/ui/button'
+import { Button, button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
 import { books } from '#/mocks/books'
 import { sortByDateDesc } from '#/utils/sort-by-date'
@@ -26,7 +26,7 @@ const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 const weeklyStats: WeeklyStats = {
 	pagesRead: 148,
-	hoursRead: 7540, // seconds
+	hoursRead: 126, // minutes
 	daysStreak: 7,
 }
 
@@ -194,12 +194,15 @@ function CurrentBookEmptyState() {
 					<p className="text-xs/normal text-muted">
 						You're not tracking any book right now.
 					</p>
-					<button
-						type="button"
-						className="cursor-pointer self-start border border-accent/40 text-accent rounded-lg px-4 py-1.5 text-xs font-medium transition-all hover:bg-accent/10 hover:border-accent"
+					<Link
+						to="/books"
+						className={button({
+							variant: 'dashed',
+							className: 'self-start px-4 py-1.5',
+						})}
 					>
 						Start tracking
-					</button>
+					</Link>
 				</div>
 			</div>
 		</div>
@@ -207,7 +210,8 @@ function CurrentBookEmptyState() {
 }
 
 function WeeklyStatsContent() {
-	const hours = Math.floor(weeklyStats.hoursRead / 3600)
+	const hours = Math.floor(weeklyStats.hoursRead / 60)
+	const readingTime = hours === 0 ? '~1h' : `~${hours}h`
 
 	return (
 		<>
@@ -219,7 +223,7 @@ function WeeklyStatsContent() {
 					isEmpty={!weeklyStats.pagesRead}
 				/>
 				<StatCard
-					value={hours === 0 ? '~1h' : `~${hours}h`}
+					value={readingTime}
 					label="Hours read"
 					textColor="text-accent2"
 					isEmpty={!weeklyStats.hoursRead}
