@@ -14,9 +14,21 @@ export const Route = createFileRoute('/_authenticated/home')({
 	component: Home,
 })
 
+interface WeeklyStats {
+	pagesRead: number
+	hoursRead: number
+	daysStreak: number
+}
+
 type Book = (typeof books)[number]
 
 const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+const weeklyStats: WeeklyStats = {
+	pagesRead: 148,
+	hoursRead: 7540, // seconds
+	daysStreak: 7,
+}
 
 function Home() {
 	const currentBook = useMemo(
@@ -195,12 +207,28 @@ function CurrentBookEmptyState() {
 }
 
 function WeeklyStatsContent() {
+	const hours = Math.floor(weeklyStats.hoursRead / 3600)
+
 	return (
 		<>
 			<div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1">
-				<StatCard value={148} label="Pages read" textColor="text-accent" />
-				<StatCard value="~2h" label="Hours read" textColor="text-accent2" />
-				<StatCard value={7} label="Days streak" />
+				<StatCard
+					value={weeklyStats.pagesRead}
+					label="Pages read"
+					textColor="text-accent"
+					isEmpty={!weeklyStats.pagesRead}
+				/>
+				<StatCard
+					value={hours === 0 ? '~1h' : `~${hours}h`}
+					label="Hours read"
+					textColor="text-accent2"
+					isEmpty={!weeklyStats.hoursRead}
+				/>
+				<StatCard
+					value={weeklyStats.daysStreak}
+					label="Days streak"
+					isEmpty={!weeklyStats.daysStreak}
+				/>
 			</div>
 
 			<div className="flex flex-col gap-5 bg-surface rounded-xl border border-border p-4 lg:p-6">
@@ -236,9 +264,9 @@ function WeeklyStatsEmptyState() {
 	return (
 		<>
 			<div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1">
-				<StatCard value="--" label="Pages read" textColor="text-white/15" />
-				<StatCard value="--" label="Hours read" textColor="text-white/15" />
-				<StatCard value="--" label="Days streak" textColor="text-white/15" />
+				<StatCard isEmpty label="Pages read" />
+				<StatCard isEmpty label="Hours read" />
+				<StatCard isEmpty label="Days streak" />
 			</div>
 
 			<div className="flex flex-col gap-5 bg-surface rounded-xl border border-border p-4 lg:p-6">

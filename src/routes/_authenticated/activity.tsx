@@ -7,6 +7,20 @@ export const Route = createFileRoute('/_authenticated/activity')({
 	component: Activity,
 })
 
+interface Stats {
+	sessions: number
+	pages: number
+	readingTime: number
+	activeDays: number
+}
+
+const monthlyStats: Stats = {
+	sessions: 18,
+	pages: 342,
+	readingTime: 50530, // seconds
+	activeDays: 12,
+}
+
 const today = new Date()
 const currentMonthLabel = new Intl.DateTimeFormat('en-US', {
 	month: 'long',
@@ -26,20 +40,42 @@ function Activity() {
 				<p className="text-muted text-xs tracking-wider">{currentMonthLabel}</p>
 			</div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3 animate-fade-up [animation-delay:0.1s]">
-				<StatCard
-					value="18"
-					label="Sessions this month"
-					textColor="text-accent"
-				/>
-				<StatCard value="342" label="Pages this month" />
-				<StatCard value="~14h" label="Reading time" textColor="text-accent2" />
-				<StatCard value="12" label="Active Days" />
-			</div>
+			<ActivityStatsContent monthlyStats={monthlyStats} />
 
 			<div className="animate-fade-up [animation-delay:0.15s]">
 				<Calendar sessions={sessions} />
 			</div>
+		</div>
+	)
+}
+
+function ActivityStatsContent({ monthlyStats }: { monthlyStats: Stats }) {
+	const hours = Math.floor(monthlyStats.readingTime / 3600)
+
+	return (
+		<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3 animate-fade-up [animation-delay:0.1s]">
+			<StatCard
+				value={monthlyStats?.sessions}
+				isEmpty={!monthlyStats?.sessions}
+				label="Sessions this month"
+				textColor="text-accent"
+			/>
+			<StatCard
+				value={monthlyStats?.pages}
+				isEmpty={!monthlyStats?.pages}
+				label="Pages this month"
+			/>
+			<StatCard
+				value={hours === 0 ? '~1h' : `~${hours}h`}
+				isEmpty={!monthlyStats?.readingTime}
+				label="Reading time"
+				textColor="text-accent2"
+			/>
+			<StatCard
+				value={monthlyStats?.activeDays}
+				isEmpty={!monthlyStats?.activeDays}
+				label="Active Days"
+			/>
 		</div>
 	)
 }
