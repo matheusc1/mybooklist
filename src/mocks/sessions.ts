@@ -1,132 +1,208 @@
-export const sessions = {
-	'2026-05-01': [
-		{
-			book: 'The Hobbit',
-			author: 'J.R.R. Tolkien',
-			pages: [130, 150],
-			time: '32min',
-		},
-	],
-	'2026-05-02': [
-		{
-			book: 'Crime and Punishment',
-			author: 'Fyodor Dostoevsky',
-			pages: [80, 104],
-			time: '48min',
-		},
-	],
-	'2026-05-03': [
-		{
-			book: 'The Hobbit',
-			author: 'J.R.R. Tolkien',
-			pages: [150, 168],
-			time: '28min',
-		},
-		{
-			book: 'Sapiens',
-			author: 'Yuval Noah Harari',
-			pages: [200, 224],
-			time: '40min',
-		},
-	],
-	'2026-05-05': [
-		{
-			book: 'The Hobbit',
-			author: 'J.R.R. Tolkien',
-			pages: [168, 190],
-			time: '35min',
-		},
-	],
-	'2026-05-06': [
-		{
-			book: 'Crime and Punishment',
-			author: 'Fyodor Dostoevsky',
-			pages: [104, 122],
-			time: '30min',
-		},
-	],
-	'2026-05-08': [
-		{
-			book: 'Sapiens',
-			author: 'Yuval Noah Harari',
-			pages: [224, 260],
-			time: '55min',
-		},
-	],
-	'2026-05-09': [
-		{
-			book: 'The Hobbit',
-			author: 'J.R.R. Tolkien',
-			pages: [190, 210],
-			time: '32min',
-		},
-		{
-			book: 'Crime and Punishment',
-			author: 'Fyodor Dostoevsky',
-			pages: [122, 140],
-			time: '28min',
-		},
-	],
-	'2026-05-11': [
-		{
-			book: 'The Hobbit',
-			author: 'J.R.R. Tolkien',
-			pages: [210, 230],
-			time: '30min',
-		},
-	],
-	'2026-05-12': [
-		{
-			book: 'Crime and Punishment',
-			author: 'Fyodor Dostoevsky',
-			pages: [140, 165],
-			time: '44min',
-		},
-	],
-	'2026-05-14': [
-		{
-			book: 'The Hobbit',
-			author: 'J.R.R. Tolkien',
-			pages: [230, 260],
-			time: '50min',
-		},
-	],
-	'2026-05-15': [
-		{
-			book: 'Dune',
-			author: 'Frank Herbert',
-			pages: [1, 40],
-			time: '1h 10min',
-		},
-	],
-	'2026-05-16': [
-		{
-			book: 'Dune',
-			author: 'Frank Herbert',
-			pages: [40, 72],
-			time: '55min',
-		},
-	],
-	'2026-05-17': [
-		{
-			book: 'Dune',
-			author: 'Frank Herbert',
-			pages: [72, 98],
-			time: '42min',
-		},
-		{
-			book: 'Crime and Punishment',
-			author: 'Fyodor Dostoevsky',
-			pages: [165, 180],
-			time: '25min',
-		},
-	],
-	'2026-05-19': [
-		{
-			book: 'Dune',
-			author: 'Frank Herbert',
-			pages: [98, 130],
-			time: '52min',
-		},
-	],
-}
+export const calendar = [
+	{
+		date: '2026-06-01',
+		sessions: [
+			{
+				bookId: 'the-hobbit',
+				title: 'The Hobbit',
+				author: 'J.R.R. Tolkien',
+				fromPage: 130,
+				toPage: 150,
+				duration: 32,
+			},
+		],
+	},
+	{
+		date: '2026-06-02',
+		sessions: [
+			{
+				bookId: 'crime-and-punishment',
+				title: 'Crime and Punishment',
+				author: 'Fyodor Dostoevsky',
+				fromPage: 80,
+				toPage: 104,
+				duration: 48,
+			},
+		],
+	},
+	{
+		date: '2026-06-03',
+		sessions: [
+			{
+				bookId: 'the-hobbit',
+				title: 'The Hobbit',
+				author: 'J.R.R. Tolkien',
+				fromPage: 150,
+				toPage: 168,
+				duration: 28,
+			},
+			{
+				bookId: 'sapiens',
+				title: 'Sapiens',
+				author: 'Yuval Noah Harari',
+				fromPage: 200,
+				toPage: 224,
+				duration: 40,
+			},
+		],
+	},
+	{
+		date: '2026-06-05',
+		sessions: [
+			{
+				bookId: 'the-hobbit',
+				title: 'The Hobbit',
+				author: 'J.R.R. Tolkien',
+				fromPage: 168,
+				toPage: 190,
+				duration: 35,
+			},
+		],
+	},
+	{
+		date: '2026-06-06',
+		sessions: [
+			{
+				bookId: 'crime-and-punishment',
+				title: 'Crime and Punishment',
+				author: 'Fyodor Dostoevsky',
+				fromPage: 104,
+				toPage: 122,
+				duration: 30,
+			},
+		],
+	},
+	{
+		date: '2026-06-08',
+		sessions: [
+			{
+				bookId: 'sapiens',
+				title: 'Sapiens',
+				author: 'Yuval Noah Harari',
+				fromPage: 224,
+				toPage: 260,
+				duration: 55,
+			},
+		],
+	},
+	{
+		date: '2026-06-09',
+		sessions: [
+			{
+				bookId: 'the-hobbit',
+				title: 'The Hobbit',
+				author: 'J.R.R. Tolkien',
+				fromPage: 190,
+				toPage: 210,
+				duration: 32,
+			},
+			{
+				bookId: 'crime-and-punishment',
+				title: 'Crime and Punishment',
+				author: 'Fyodor Dostoevsky',
+				fromPage: 122,
+				toPage: 140,
+				duration: 28,
+			},
+		],
+	},
+	{
+		date: '2026-06-11',
+		sessions: [
+			{
+				bookId: 'the-hobbit',
+				title: 'The Hobbit',
+				author: 'J.R.R. Tolkien',
+				fromPage: 210,
+				toPage: 230,
+				duration: 30,
+			},
+		],
+	},
+	{
+		date: '2026-06-12',
+		sessions: [
+			{
+				bookId: 'crime-and-punishment',
+				title: 'Crime and Punishment',
+				author: 'Fyodor Dostoevsky',
+				fromPage: 140,
+				toPage: 165,
+				duration: 44,
+			},
+		],
+	},
+	{
+		date: '2026-06-14',
+		sessions: [
+			{
+				bookId: 'the-hobbit',
+				title: 'The Hobbit',
+				author: 'J.R.R. Tolkien',
+				fromPage: 230,
+				toPage: 260,
+				duration: 50,
+			},
+		],
+	},
+	{
+		date: '2026-06-15',
+		sessions: [
+			{
+				bookId: 'dune',
+				title: 'Dune',
+				author: 'Frank Herbert',
+				fromPage: 1,
+				toPage: 40,
+				duration: 70,
+			},
+		],
+	},
+	{
+		date: '2026-06-16',
+		sessions: [
+			{
+				bookId: 'dune',
+				title: 'Dune',
+				author: 'Frank Herbert',
+				fromPage: 40,
+				toPage: 72,
+				duration: 55,
+			},
+		],
+	},
+	{
+		date: '2026-06-17',
+		sessions: [
+			{
+				bookId: 'dune',
+				title: 'Dune',
+				author: 'Frank Herbert',
+				fromPage: 72,
+				toPage: 98,
+				duration: 42,
+			},
+			{
+				bookId: 'crime-and-punishment',
+				title: 'Crime and Punishment',
+				author: 'Fyodor Dostoevsky',
+				fromPage: 165,
+				toPage: 180,
+				duration: 25,
+			},
+		],
+	},
+	{
+		date: '2026-06-19',
+		sessions: [
+			{
+				bookId: 'dune',
+				title: 'Dune',
+				author: 'Frank Herbert',
+				fromPage: 98,
+				toPage: 130,
+				duration: 52,
+			},
+		],
+	},
+]

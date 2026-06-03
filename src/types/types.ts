@@ -31,3 +31,23 @@ export type Book = {
 	endDate?: string
 	updatedAt: string
 }
+
+export interface ActivityResponse {
+	stats: {
+		sessions: number
+		pages: number
+		readingTime: number
+		activeDays: number
+	}
+	calendar: {
+		date: string
+		sessions: {
+			bookId: string
+			title: string
+			author: string
+			fromPage: number
+			toPage: number
+			duration: number
+		}[]
+	}[]
+}
