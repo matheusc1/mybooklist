@@ -1,14 +1,17 @@
 import { LucideArrowLeft, LucideArrowRight } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { cn } from 'tailwind-variants'
 import { Button } from '#/components/ui/button'
 import { getCalendarDays } from '#/hooks/get-calendar-days'
+import type { ActivityResponse } from '#/types/types'
 
 type Session = {
-	book: string
+	bookId: string
+	title: string
 	author: string
-	pages: number[]
-	time: string
+	fromPage: number
+	toPage: number
+	duration: number
 }
 
 type DayState = {
@@ -19,10 +22,10 @@ type DayState = {
 }
 
 type CalendarProps = {
-	sessions: Record<string, Session[]>
+	calendar: ActivityResponse['calendar']
 }
 
-export function Calendar({ sessions }: CalendarProps) {
+export function Calendar({ calendar }: CalendarProps) {
 	const today = new Date()
 
 	const [view, setView] = useState({
@@ -30,14 +33,21 @@ export function Calendar({ sessions }: CalendarProps) {
 		month: today.getMonth(),
 	})
 
+	const sessionsByDate = useMemo(
+		() => Object.fromEntries(calendar.map((day) => [day.date, day.sessions])),
+		[calendar],
+	)
+
 	const calendarDays = getCalendarDays(view.year, view.month)
+
 	const viewMonthLabel = new Intl.DateTimeFormat('en-US', {
 		month: 'long',
 		year: 'numeric',
 	}).format(new Date(view.year, view.month))
 
 	function getDayState(key: string, day: number): DayState {
-		const daySessions = sessions[key] ?? []
+		const daySessions = sessionsByDate[key] ?? []
+
 		const isToday =
 			today.getFullYear() === view.year &&
 			today.getMonth() === view.month &&
@@ -69,10 +79,12 @@ export function Calendar({ sessions }: CalendarProps) {
 				<h3 className="font-serif font-semibold text-xl tracking-[-0.01em]">
 					{viewMonthLabel}
 				</h3>
+
 				<div className="flex gap-1.5">
 					<Button variant="icon" size="icon" onClick={prevMonth}>
 						<LucideArrowLeft className="size-4" />
 					</Button>
+
 					<Button variant="icon" size="icon" onClick={nextMonth}>
 						<LucideArrowRight className="size-4" />
 					</Button>
@@ -93,7 +105,9 @@ export function Calendar({ sessions }: CalendarProps) {
 
 				<div className="grid grid-cols-7 gap-1">
 					{calendarDays.map(({ day, key }) => {
-						if (!day) return <div key={key} className="aspect-square" />
+						if (!day) {
+							return <div key={key} className="aspect-square" />
+						}
 
 						const state = getDayState(key, day)
 
@@ -102,9 +116,8 @@ export function Calendar({ sessions }: CalendarProps) {
 								key={key}
 								className={cn(
 									'aspect-square rounded-lg flex flex-col items-center justify-center relative',
-									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150',
-									state.hasSession &&
-										'bg-surface border-border text-text cursor-pointer',
+									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150 cursor-pointer',
+									state.hasSession && 'bg-surface border-border text-text ',
 									state.hasSession &&
 										'hover:bg-surface2 hover:border-accent/30 hover:scale-105 hover:z-10 hover:shadow-lg',
 									state.isToday && 'border-accent/50 text-accent font-medium',
@@ -114,6 +127,7 @@ export function Calendar({ sessions }: CalendarProps) {
 								)}
 							>
 								{day}
+
 								{state.hasSession && (
 									<span
 										className={cn(
@@ -132,11 +146,13 @@ export function Calendar({ sessions }: CalendarProps) {
 				<div className="flex items-center gap-1.5">
 					<div className="size-1.5 rounded-full bg-accent" /> Session logged
 				</div>
+
 				<div className="flex items-center gap-1.5">
 					<div className="size-1.5 rounded-full bg-accent2" /> Multiple sessions
 				</div>
+
 				<div className="flex items-center gap-1.5">
-					<div className="size-1.5 rounded-full bg-accent/40 border border-accent" />{' '}
+					<div className="size-1.5 rounded-full bg-accent/40 border border-accent" />
 					Today
 				</div>
 			</div>

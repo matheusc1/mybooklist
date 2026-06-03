@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Calendar } from '#/components/calendar'
 import { StatCard } from '#/components/stat-card'
-import { sessions } from '#/mocks/sessions'
+import { calendar } from '#/mocks/sessions'
 
 export const Route = createFileRoute('/_authenticated/activity')({
 	component: Activity,
@@ -17,7 +17,7 @@ interface Stats {
 const monthlyStats: Stats = {
 	sessions: 18,
 	pages: 342,
-	readingTime: 50530, // seconds
+	readingTime: 842, // minutes
 	activeDays: 12,
 }
 
@@ -43,14 +43,15 @@ function Activity() {
 			<ActivityStatsContent monthlyStats={monthlyStats} />
 
 			<div className="animate-fade-up [animation-delay:0.15s]">
-				<Calendar sessions={sessions} />
+				<Calendar calendar={calendar} />
 			</div>
 		</div>
 	)
 }
 
 function ActivityStatsContent({ monthlyStats }: { monthlyStats: Stats }) {
-	const hours = Math.floor(monthlyStats.readingTime / 3600)
+	const hours = Math.floor(monthlyStats.readingTime / 60)
+	const readingTime = hours === 0 ? '~1h' : `~${hours}h`
 
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3 animate-fade-up [animation-delay:0.1s]">
@@ -66,7 +67,7 @@ function ActivityStatsContent({ monthlyStats }: { monthlyStats: Stats }) {
 				label="Pages this month"
 			/>
 			<StatCard
-				value={hours === 0 ? '~1h' : `~${hours}h`}
+				value={readingTime}
 				isEmpty={!monthlyStats?.readingTime}
 				label="Reading time"
 				textColor="text-accent2"
