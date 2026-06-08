@@ -1,5 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import type { Goal, User } from '#/types/types'
+import { useGoalStore } from '#/stores/goal-store'
+import type { User } from '#/types/types'
 import { UserDropdown } from './dropdown-menu'
 
 const user: User = {
@@ -7,8 +8,6 @@ const user: User = {
 	email: 'john.doe@example.com',
 	avatar: 'https://avatars.githubusercontent.com/u/117493813?v=4',
 }
-
-const goal: Goal = { target: 10, current: 2, year: 2026 }
 
 function UserMenuTrigger({ user }: { user: User }) {
 	const triggerClassName =
@@ -34,6 +33,8 @@ function UserMenuTrigger({ user }: { user: User }) {
 }
 
 export function UserMenu() {
+	const { goal } = useGoalStore()
+
 	return (
 		<DropdownMenu.Root>
 			<div className="flex items-center">

@@ -8,6 +8,7 @@ import { StatCard } from '#/components/stat-card'
 import { Button, button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
 import { books } from '#/mocks/books'
+import { useGoalStore } from '#/stores/goal-store'
 import { sortByDateDesc } from '#/utils/sort-by-date'
 
 export const Route = createFileRoute('/_authenticated/home')({
@@ -31,6 +32,8 @@ const weeklyStats: WeeklyStats = {
 }
 
 function Home() {
+	const { goal } = useGoalStore()
+
 	const currentBook = useMemo(
 		() =>
 			sortByDateDesc(
@@ -125,7 +128,7 @@ function Home() {
 					<FinishedBooksEmptyState />
 				)}
 
-				<GoalCard />
+				<GoalCard goal={goal} />
 			</div>
 		</div>
 	)

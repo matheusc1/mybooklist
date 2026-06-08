@@ -1,13 +1,13 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Link } from '@tanstack/react-router'
 import { LucideGauge, LucideLogOut, LucideTarget } from 'lucide-react'
+import { useGoalStore } from '#/stores/goal-store'
 import type { Goal, User } from '#/types/types'
 import { GoalCardCompact } from './goal-card'
 
 type UserDropdownProps = {
 	user: User
 	goal: Goal | null
-	onUpdateGoal?: () => void
 	onSignOut?: () => void
 }
 
@@ -34,13 +34,9 @@ function DropdownMenuUser({ user }: { user: User }) {
 	)
 }
 
-function DropdownMenuActions({
-	onUpdateGoal,
-	onSignOut,
-}: {
-	onUpdateGoal?: () => void
-	onSignOut?: () => void
-}) {
+function DropdownMenuActions({ onSignOut }: { onSignOut?: () => void }) {
+	const { openModal, goal } = useGoalStore()
+
 	const itemClassName =
 		'flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-muted cursor-pointer outline-none transition-colors'
 
@@ -50,7 +46,7 @@ function DropdownMenuActions({
 	return (
 		<div className="p-1.5">
 			<DropdownMenu.Item
-				onSelect={onUpdateGoal}
+				onClick={() => openModal(goal ? 'edit' : 'add')}
 				className={`${itemClassName} hover:bg-surface2 hover:text-text data-highlighted:bg-surface2 data-highlighted:text-text`}
 			>
 				<span className={`${iconClassName} bg-accent/10 border-accent/15`}>
@@ -86,12 +82,7 @@ function DropdownMenuActions({
 	)
 }
 
-export function UserDropdown({
-	user,
-	goal,
-	onUpdateGoal,
-	onSignOut,
-}: UserDropdownProps) {
+export function UserDropdown({ user, goal, onSignOut }: UserDropdownProps) {
 	return (
 		<DropdownMenu.Content
 			align="end"
@@ -111,7 +102,7 @@ export function UserDropdown({
 					No reading goal set.
 				</p>
 			)}
-			<DropdownMenuActions onUpdateGoal={onUpdateGoal} onSignOut={onSignOut} />
+			<DropdownMenuActions onSignOut={onSignOut} />
 		</DropdownMenu.Content>
 	)
 }
