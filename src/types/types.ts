@@ -12,6 +12,7 @@ export type User = {
 }
 
 export type Goal = {
+	id: string
 	target: number
 	current: number
 	year: number
