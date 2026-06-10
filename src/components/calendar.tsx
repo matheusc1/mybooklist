@@ -116,7 +116,7 @@ export function Calendar({ calendar }: CalendarProps) {
 								key={key}
 								className={cn(
 									'aspect-square rounded-lg flex flex-col items-center justify-center relative',
-									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150 cursor-pointer',
+									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150 cursor-pointer hover:border-border',
 									state.hasSession && 'bg-surface border-border text-text ',
 									state.hasSession &&
 										'hover:bg-surface2 hover:border-accent/30 hover:scale-105 hover:z-10 hover:shadow-lg',
