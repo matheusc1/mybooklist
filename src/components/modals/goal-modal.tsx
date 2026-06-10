@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { useGoalStore } from '@/stores/goal-store'
 import { Button } from '../ui/button'
-import { FieldLabel, Input } from '../ui/inputs'
+import { FieldError, FieldLabel, Input } from '../ui/inputs'
 import { Modal } from '../ui/modal'
 
 const goalSchema = z.object({
@@ -52,7 +52,9 @@ export function GoalModal() {
 					<form.Field name="target">
 						{(field) => (
 							<fieldset className="flex flex-col gap-2">
-								<FieldLabel htmlFor={field.name}>Books to read</FieldLabel>
+								<FieldLabel required htmlFor={field.name}>
+									Books to read
+								</FieldLabel>
 								<Input
 									id={field.name}
 									name={field.name}
@@ -63,9 +65,10 @@ export function GoalModal() {
 									placeholder="e.g. 12"
 								/>
 								{field.state.meta.errors.length > 0 && (
-									<span className="text-xs text-danger -mt-1">
-										{field.state.meta.errors[0]?.message}
-									</span>
+									<FieldError
+										message={field.state.meta.errors[0]?.message}
+										className="-mt-1"
+									/>
 								)}
 								<span className="font-medium text-xs text-muted -mt-1">
 									How many books do you want to read this year?
