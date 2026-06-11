@@ -1,10 +1,12 @@
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
-type BookStatusSelectorProps = RadioGroup.RadioGroupProps
+interface BookStatusSelectorProps extends RadioGroup.RadioGroupProps {
+	readOnly?: boolean
+}
 
 const statuses = [
 	{
-		value: 'want',
+		value: 'want-to-read',
 		label: 'Want to read',
 		activeClass: 'data-[state=checked]:bg-mist',
 	},
@@ -30,14 +32,25 @@ const statuses = [
 	},
 ]
 
-export function BookStatusSelector({ ...props }: BookStatusSelectorProps) {
+export function BookStatusSelector({
+	readOnly,
+	...props
+}: BookStatusSelectorProps) {
+	const visibleStatuses = readOnly
+		? statuses.filter((s) => s.value === props.value)
+		: statuses
+
 	return (
 		<RadioGroup.Root className="flex flex-wrap gap-2" {...props}>
-			{statuses.map(({ value, label, activeClass }) => (
+			{visibleStatuses.map(({ value, label, activeClass }) => (
 				<RadioGroup.Item
 					key={value}
 					value={value}
-					className={`cursor-pointer select-none rounded-full border border-border bg-surface2 px-4 py-2 text-xs font-medium text-muted outline-none transition-all duration-150 hover:border-white/12 hover:text-text data-[state=checked]:border-transparent data-[state=checked]:font-semibold data-[state=checked]:text-bg ${activeClass}`}
+					className={`select-none rounded-full border border-border bg-surface2 px-4 py-2 text-xs font-medium text-muted outline-none transition-all duration-150 data-[state=checked]:border-transparent data-[state=checked]:font-semibold data-[state=checked]:text-bg ${activeClass} ${
+						readOnly
+							? 'cursor-default pointer-events-none'
+							: 'cursor-pointer hover:border-white/12 hover:text-text'
+					}`}
 				>
 					{label}
 				</RadioGroup.Item>

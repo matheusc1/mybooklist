@@ -5,7 +5,7 @@ type GenreSelectorProps = Select.SelectProps
 
 const genres = [
 	['fantasy', 'Fantasy'],
-	['science-fiction', 'Science Fiction'],
+	['sci-fi', 'Sci-Fi'],
 	['literary-fiction', 'Literary Fiction'],
 	['mystery-thriller', 'Mystery / Thriller'],
 	['romance', 'Romance'],
