@@ -64,12 +64,10 @@ export function GoalModal() {
 									type="number"
 									placeholder="e.g. 12"
 								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										message={field.state.meta.errors[0]?.message}
-										className="-mt-1"
-									/>
-								)}
+								<FieldError
+									message={field.state.meta.errors[0]?.message}
+									className="-mt-1"
+								/>
 								<span className="font-medium text-xs text-muted -mt-1">
 									How many books do you want to read this year?
 								</span>
