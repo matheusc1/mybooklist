@@ -323,10 +323,10 @@ export function BookModal({
 								)}
 							</form.Field>
 
-							<div className="flex gap-3">
+							<div className="grid grid-cols-2 gap-3">
 								<form.Field name="dateStarted">
 									{(field) => (
-										<div className="w-1/2 flex flex-col gap-2">
+										<div className="flex flex-col gap-2">
 											<FieldLabel htmlFor={field.name}>Date Started</FieldLabel>
 											<Input
 												id={field.name}
@@ -344,7 +344,7 @@ export function BookModal({
 								{status === 'finished' && (
 									<form.Field name="dateFinished">
 										{(field) => (
-											<div className="w-1/2 flex flex-col gap-2">
+											<div className="flex flex-col gap-2">
 												<FieldLabel htmlFor={field.name}>
 													Date Finished
 												</FieldLabel>

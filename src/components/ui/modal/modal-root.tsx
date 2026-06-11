@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const modalContent = tv({
-	base: 'w-full max-h-[90vh] overflow-hidden flex flex-col border border-white/12 animate-slide-up rounded-2xl fixed bg-surface top-1/2 left-1/2 -translate-1/2 shadow-modal z-20',
+	base: 'w-[calc(100%-2rem)] max-h-[90vh] overflow-hidden flex flex-col border border-white/12 animate-slide-up rounded-2xl fixed bg-surface top-1/2 left-1/2 -translate-1/2 shadow-modal z-20',
 	variants: {
 		size: {
 			sm: 'max-w-105',
