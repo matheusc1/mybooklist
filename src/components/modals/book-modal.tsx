@@ -4,6 +4,7 @@ import { LucideTrash2 } from 'lucide-react'
 import { useState } from 'react'
 import z from 'zod'
 import type { Book, Mode } from '#/types/types'
+import { getPercent } from '#/utils/get-percent'
 import { Button } from '../ui/button'
 import {
 	BookStatusSelector,
@@ -41,6 +42,12 @@ const bookSchema = z.object({
 	dateStarted: z.string(),
 	dateFinished: z.string(),
 })
+
+const headerTitleMap = {
+	add: 'Add Book',
+	edit: 'Edit Book',
+	view: 'Book Details',
+} as const
 
 export function BookModal({
 	open,
@@ -80,17 +87,9 @@ export function BookModal({
 	const currentPage = useStore(form.store, (s) => s.values.currentPage)
 	const totalPages = useStore(form.store, (s) => s.values.totalPages)
 
-	const progress =
-		currentPage && totalPages && totalPages > 0
-			? Math.min(Math.round((currentPage / totalPages) * 100), 100)
-			: 0
+	const progress = getPercent(currentPage ?? 0, totalPages ?? 0)
 
-	const headerTitle =
-		currentMode === 'add'
-			? 'Add Book'
-			: currentMode === 'edit'
-				? 'Edit Book'
-				: 'Book Details'
+	const headerTitle = headerTitleMap[currentMode]
 
 	function handlePageChange(
 		value: number,
