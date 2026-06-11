@@ -4,6 +4,7 @@ import { getPercent } from '#/utils/get-percent'
 
 interface BookCardProps {
 	book: Book
+	onClick?: () => void
 }
 
 const STATUS_COLORS: Record<ActivityStatus, string> = {
@@ -28,15 +29,21 @@ function Stars({ rating }: { rating: number }) {
 	)
 }
 
-export function BookCard({ book }: BookCardProps) {
+export function BookCard({ book, onClick }: BookCardProps) {
 	const showProgress = book.status === 'reading' || book.status === 'paused'
 	const showRating =
 		book.status === 'finished' && !!book.rating && book.rating > 0
 
-	const progress = getPercent(book.currentPage, book.totalPages)
+	const progress = showProgress
+		? getPercent(book.currentPage, book.totalPages)
+		: 0
 
 	return (
-		<div className="group cursor-pointer animate-fade-up">
+		<button
+			type="button"
+			className="group cursor-pointer animate-fade-up text-left w-full"
+			onClick={onClick}
+		>
 			<div className="relative w-full aspect-2/3 rounded-lg overflow-hidden bg-surface2 shadow-[4px_6px_20px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-250 ease-out group-hover:-translate-y-1 group-hover:scale-[1.02] group-hover:shadow-[6px_12px_32px_rgba(0,0,0,0.6)] mb-3">
 				<img
 					src={book.bookCover ?? '/book-cover.jpg'}
@@ -76,6 +83,6 @@ export function BookCard({ book }: BookCardProps) {
 					{showRating && <Stars rating={book.rating as number} />}
 				</div>
 			</div>
-		</div>
+		</button>
 	)
 }

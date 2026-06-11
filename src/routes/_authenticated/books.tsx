@@ -3,14 +3,15 @@ import {
 	LucideLibrary,
 	LucidePlus,
 	LucideSearch,
+	LucideSearchX,
 	LucideX,
-	SearchX,
 } from 'lucide-react'
 import { useState } from 'react'
 import { BookCard } from '#/components/book-card'
+import { BookModal } from '#/components/modals/book-modal'
 import { Button } from '#/components/ui/button'
 import { books } from '#/mocks/books'
-import type { ActivityStatus } from '#/types/types'
+import type { ActivityStatus, Book, Mode } from '#/types/types'
 
 export const Route = createFileRoute('/_authenticated/books')({
 	component: MyBooks,
@@ -60,6 +61,10 @@ const filters: Filter[] = [
 function MyBooks() {
 	const [activeFilter, setActiveFilter] = useState<ActivityStatus | null>(null) // null = All
 	const [search, setSearch] = useState('')
+	const [bookModal, setBookModal] = useState<{
+		book?: Book
+		mode: Mode
+	} | null>(null)
 
 	const statusCounts = books.reduce(
 		(acc, book) => {
@@ -98,7 +103,7 @@ function MyBooks() {
 				text: "Start building your collection by adding the first book you're reading or want to read.",
 			}
 		: {
-				icon: <SearchX className="size-12 text-muted" />,
+				icon: <LucideSearchX className="size-12 text-muted" />,
 				title: 'No books here yet',
 				text: 'No books match your current filters.',
 			}
@@ -118,7 +123,7 @@ function MyBooks() {
 					</p>
 				</div>
 
-				<Button>
+				<Button onClick={() => setBookModal({ mode: 'add' })}>
 					<LucidePlus className="size-3" />
 					Add Book
 				</Button>
@@ -154,14 +159,14 @@ function MyBooks() {
 
 					<div className="flex flex-wrap items-center justify-start gap-1">
 						{filters.map(({ label, status, color, activeColor }) => {
-							const isActive = activeFilter === (status ?? null)
+							const isActive = activeFilter === status
 							const dotColor = isActive ? activeColor : color
 
 							return (
 								<Button
 									key={label}
 									variant="ghost"
-									onClick={() => setActiveFilter(status ?? null)}
+									onClick={() => setActiveFilter(status)}
 									className={`py-2 px-3 gap-1.5 border-border ${
 										isActive
 											? 'bg-surface2 border-white/12 text-text hover:bg-surface2 hover:border-white/12 cursor-default'
@@ -194,11 +199,25 @@ function MyBooks() {
 				) : (
 					<div className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-5">
 						{filteredBooks.map((book) => (
-							<BookCard key={book.id} book={book} />
+							<BookCard
+								key={book.id}
+								book={book}
+								onClick={() => setBookModal({ book, mode: 'view' })}
+							/>
 						))}
 					</div>
 				)}
 			</div>
+
+			{bookModal && (
+				<BookModal
+					key={bookModal.book?.id ?? 'add'}
+					open={!!bookModal}
+					onOpenChange={(v) => !v && setBookModal(null)}
+					mode={bookModal.mode}
+					book={bookModal.book}
+				/>
+			)}
 		</div>
 	)
 }

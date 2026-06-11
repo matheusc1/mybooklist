@@ -52,3 +52,5 @@ export interface ActivityResponse {
 		}[]
 	}[]
 }
+
+export type Mode = 'add' | 'edit' | 'view'
