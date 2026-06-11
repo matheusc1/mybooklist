@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 export const button = tv({
-	base: 'inline-flex items-center justify-center gap-2 font-semibold transition-colors cursor-pointer',
+	base: 'inline-flex items-center justify-center gap-2 font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:pointer-events-none',
 
 	variants: {
 		variant: {
@@ -15,7 +15,8 @@ export const button = tv({
 			icon: 'text-muted border border-border bg-surface2 hover:text-text hover:bg-surface3 hover:border-white/15',
 			destructive:
 				'text-muted border border-border bg-surface2 hover:text-danger hover:bg-danger/10 hover:border-danger/35',
-			dashed: 'border border-accent/40 text-accent text-xs font-medium transition-all hover:bg-accent/10 hover:border-accent',
+			dashed:
+				'border border-accent/40 text-accent text-xs font-medium transition-all hover:bg-accent/10 hover:border-accent',
 		},
 		size: {
 			icon: 'p-2',

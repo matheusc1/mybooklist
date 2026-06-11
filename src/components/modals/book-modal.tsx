@@ -34,7 +34,7 @@ const bookSchema = z.object({
 		z.undefined(),
 	]),
 	totalPages: z.union([
-		z.number().gte(0, 'Total pages cannot be less than 0'),
+		z.number().gt(0, 'Total pages cannot be less than 1'),
 		z.undefined(),
 	]),
 	rating: z.union([z.number(), z.undefined()]),
@@ -52,6 +52,7 @@ export function BookModal({
 	const [deleteOpen, setDeleteOpen] = useState(false)
 
 	const isView = currentMode === 'view'
+	const secondaryLabel = isView ? 'Close' : 'Cancel'
 
 	const form = useForm({
 		defaultValues: {
@@ -90,12 +91,6 @@ export function BookModal({
 			: currentMode === 'edit'
 				? 'Edit Book'
 				: 'Book Details'
-	const submitLabel =
-		currentMode === 'add'
-			? 'Add Book'
-			: currentMode === 'view'
-				? 'Edit Book'
-				: 'Save'
 
 	function handlePageChange(
 		value: number,
@@ -394,22 +389,26 @@ export function BookModal({
 									variant="ghost"
 									onClick={handleCancel}
 								>
-									{isView ? 'Close' : 'Cancel'}
+									{secondaryLabel}
 								</Button>
-								<Button
-									form="book-form"
-									type={currentMode === 'view' ? 'button' : 'submit'}
-									disabled={
-										currentMode !== 'view' && (!canSubmit || isSubmitting)
-									}
-									onClick={
-										currentMode === 'view'
-											? () => setCurrentMode('edit')
-											: undefined
-									}
-								>
-									{submitLabel}
-								</Button>
+								{isView ? (
+									<Button
+										key="edit"
+										type="button"
+										onClick={() => setCurrentMode('edit')}
+									>
+										Edit Book
+									</Button>
+								) : (
+									<Button
+										key="save"
+										form="book-form"
+										type="submit"
+										disabled={!canSubmit || isSubmitting}
+									>
+										Save
+									</Button>
+								)}
 							</>
 						)}
 					</form.Subscribe>
