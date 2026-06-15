@@ -16,7 +16,7 @@ export const button = tv({
 			destructive:
 				'text-muted border border-border bg-surface2 hover:text-danger hover:bg-danger/10 hover:border-danger/35',
 			dashed:
-				'border border-accent/40 text-accent text-xs font-medium transition-all hover:bg-accent/10 hover:border-accent',
+				'border border-dashed border-accent/40 text-accent font-medium transition-all hover:bg-accent/10 hover:border-accent hover:border-solid',
 		},
 		size: {
 			icon: 'p-2',

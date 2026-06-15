@@ -201,7 +201,7 @@ function CurrentBookEmptyState() {
 						to="/books"
 						className={button({
 							variant: 'dashed',
-							className: 'self-start px-4 py-1.5',
+							className: 'self-start px-4 py-1.5 text-xs',
 						})}
 					>
 						Start tracking
