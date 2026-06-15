@@ -10,8 +10,10 @@ import { useState } from 'react'
 import { BookCard } from '#/components/book-card'
 import { BookModal } from '#/components/modals/book-modal'
 import { Button } from '#/components/ui/button'
+import type { ActivityStatus } from '#/constants/book-status'
+import { BOOK_STATUS } from '#/constants/book-status'
 import { books } from '#/mocks/books'
-import type { ActivityStatus, Book, Mode } from '#/types/types'
+import type { Book, Mode } from '#/types/types'
 
 export const Route = createFileRoute('/_authenticated/books')({
 	component: MyBooks,
@@ -25,36 +27,41 @@ type Filter = {
 }
 
 const filters: Filter[] = [
-	{ label: 'All', status: null, color: null, activeColor: null },
 	{
-		label: 'Reading',
+		label: 'All',
+		status: null,
+		color: null,
+		activeColor: null,
+	},
+	{
+		label: BOOK_STATUS.reading.label,
 		status: 'reading',
 		color: 'bg-accent2/50',
-		activeColor: 'bg-accent2',
+		activeColor: BOOK_STATUS.reading.color,
 	},
 	{
-		label: 'Want to read',
-		status: 'want-to-read',
+		label: BOOK_STATUS.want.label,
+		status: 'want',
 		color: 'bg-mist/50',
-		activeColor: 'bg-mist',
+		activeColor: BOOK_STATUS.want.color,
 	},
 	{
-		label: 'Finished',
+		label: BOOK_STATUS.finished.label,
 		status: 'finished',
 		color: 'bg-accent/50',
-		activeColor: 'bg-accent',
+		activeColor: BOOK_STATUS.finished.color,
 	},
 	{
-		label: 'Paused',
+		label: BOOK_STATUS.paused.label,
 		status: 'paused',
 		color: 'bg-parchment/50',
-		activeColor: 'bg-parchment',
+		activeColor: BOOK_STATUS.paused.color,
 	},
 	{
-		label: 'Abandoned',
+		label: BOOK_STATUS.abandoned.label,
 		status: 'abandoned',
 		color: 'bg-danger/50',
-		activeColor: 'bg-danger',
+		activeColor: BOOK_STATUS.abandoned.color,
 	},
 ]
 
@@ -68,16 +75,10 @@ function MyBooks() {
 
 	const statusCounts = books.reduce(
 		(acc, book) => {
-			acc[book.status]++
+			acc[book.status] = (acc[book.status] ?? 0) + 1
 			return acc
 		},
-		{
-			reading: 0,
-			finished: 0,
-			paused: 0,
-			abandoned: 0,
-			'want-to-read': 0,
-		} satisfies Record<ActivityStatus, number>,
+		{} as Record<ActivityStatus, number>,
 	)
 
 	const normalizedSearch = search.trim().toLowerCase()

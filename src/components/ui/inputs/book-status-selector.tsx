@@ -1,41 +1,28 @@
 import * as RadioGroup from '@radix-ui/react-radio-group'
+import { BOOK_STATUS } from '#/constants/book-status'
 
 interface BookStatusSelectorProps extends RadioGroup.RadioGroupProps {
 	readOnly?: boolean
 }
 
-const statuses = [
-	{
-		value: 'want-to-read',
-		label: 'Want to read',
-		activeClass: 'data-[state=checked]:bg-mist',
-	},
-	{
-		value: 'reading',
-		label: 'Reading',
-		activeClass: 'data-[state=checked]:bg-accent2',
-	},
-	{
-		value: 'paused',
-		label: 'Paused',
-		activeClass: 'data-[state=checked]:bg-parchment',
-	},
-	{
-		value: 'finished',
-		label: 'Finished',
-		activeClass: 'data-[state=checked]:bg-accent',
-	},
-	{
-		value: 'abandoned',
-		label: 'Abandoned',
-		activeClass: 'data-[state=checked]:bg-danger',
-	},
-]
+const activeClasses = {
+	reading: 'data-[state=checked]:bg-accent2',
+	want: 'data-[state=checked]:bg-mist',
+	paused: 'data-[state=checked]:bg-parchment',
+	finished: 'data-[state=checked]:bg-accent',
+	abandoned: 'data-[state=checked]:bg-danger',
+} as const
 
 export function BookStatusSelector({
 	readOnly,
 	...props
 }: BookStatusSelectorProps) {
+	const statuses = Object.entries(BOOK_STATUS).map(([value, { label }]) => ({
+		value,
+		label,
+		activeClass: activeClasses[value as keyof typeof activeClasses],
+	}))
+
 	const visibleStatuses = readOnly
 		? statuses.filter((s) => s.value === props.value)
 		: statuses

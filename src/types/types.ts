@@ -1,9 +1,4 @@
-export type ActivityStatus =
-	| 'reading'
-	| 'finished'
-	| 'paused'
-	| 'abandoned'
-	| 'want-to-read'
+import type { ActivityStatus } from '#/constants/book-status'
 
 export type User = {
 	name: string

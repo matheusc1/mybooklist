@@ -1,18 +1,11 @@
 import { LucideStar } from 'lucide-react'
-import type { ActivityStatus, Book } from '#/types/types'
+import { BOOK_STATUS } from '#/constants/book-status'
+import type { Book } from '#/types/types'
 import { getPercent } from '#/utils/get-percent'
 
 interface BookCardProps {
 	book: Book
 	onClick?: () => void
-}
-
-const STATUS_COLORS: Record<ActivityStatus, string> = {
-	reading: 'bg-accent2',
-	'want-to-read': 'bg-mist',
-	paused: 'bg-parchment',
-	finished: 'bg-accent',
-	abandoned: 'bg-danger',
 }
 
 function Stars({ rating }: { rating: number }) {
@@ -52,7 +45,7 @@ export function BookCard({ book, onClick }: BookCardProps) {
 				/>
 
 				<span
-					className={`absolute top-2 right-2 size-2 rounded-full shadow-[0_0_0_2px_rgba(12,12,14,0.8)] ${STATUS_COLORS[book.status]}`}
+					className={`absolute top-2 right-2 size-2 rounded-full shadow-[0_0_0_2px_rgba(12,12,14,0.8)] ${BOOK_STATUS[book.status].color}`}
 				/>
 
 				{showProgress && (
