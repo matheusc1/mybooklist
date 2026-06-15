@@ -6,6 +6,8 @@ export const calendar = [
 				bookId: 'the-hobbit',
 				title: 'The Hobbit',
 				author: 'J.R.R. Tolkien',
+				bookCover:
+					'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
 				fromPage: 130,
 				toPage: 150,
 				duration: 32,
@@ -19,6 +21,8 @@ export const calendar = [
 				bookId: 'crime-and-punishment',
 				title: 'Crime and Punishment',
 				author: 'Fyodor Dostoevsky',
+				bookCover:
+					'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
 				fromPage: 80,
 				toPage: 104,
 				duration: 48,
@@ -32,6 +36,8 @@ export const calendar = [
 				bookId: 'the-hobbit',
 				title: 'The Hobbit',
 				author: 'J.R.R. Tolkien',
+				bookCover:
+					'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
 				fromPage: 150,
 				toPage: 168,
 				duration: 28,
@@ -40,6 +46,8 @@ export const calendar = [
 				bookId: 'sapiens',
 				title: 'Sapiens',
 				author: 'Yuval Noah Harari',
+				bookCover:
+					'https://m.media-amazon.com/images/I/71ZR6hn+GbL._SL1500_.jpg',
 				fromPage: 200,
 				toPage: 224,
 				duration: 40,
@@ -53,6 +61,8 @@ export const calendar = [
 				bookId: 'the-hobbit',
 				title: 'The Hobbit',
 				author: 'J.R.R. Tolkien',
+				bookCover:
+					'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
 				fromPage: 168,
 				toPage: 190,
 				duration: 35,
@@ -66,6 +76,8 @@ export const calendar = [
 				bookId: 'crime-and-punishment',
 				title: 'Crime and Punishment',
 				author: 'Fyodor Dostoevsky',
+				bookCover:
+					'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
 				fromPage: 104,
 				toPage: 122,
 				duration: 30,
@@ -79,6 +91,8 @@ export const calendar = [
 				bookId: 'sapiens',
 				title: 'Sapiens',
 				author: 'Yuval Noah Harari',
+				bookCover:
+					'https://m.media-amazon.com/images/I/71ZR6hn+GbL._SL1500_.jpg',
 				fromPage: 224,
 				toPage: 260,
 				duration: 55,
@@ -92,6 +106,8 @@ export const calendar = [
 				bookId: 'the-hobbit',
 				title: 'The Hobbit',
 				author: 'J.R.R. Tolkien',
+				bookCover:
+					'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
 				fromPage: 190,
 				toPage: 210,
 				duration: 32,
@@ -100,6 +116,8 @@ export const calendar = [
 				bookId: 'crime-and-punishment',
 				title: 'Crime and Punishment',
 				author: 'Fyodor Dostoevsky',
+				bookCover:
+					'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
 				fromPage: 122,
 				toPage: 140,
 				duration: 28,
@@ -113,6 +131,8 @@ export const calendar = [
 				bookId: 'the-hobbit',
 				title: 'The Hobbit',
 				author: 'J.R.R. Tolkien',
+				bookCover:
+					'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
 				fromPage: 210,
 				toPage: 230,
 				duration: 30,
@@ -126,6 +146,8 @@ export const calendar = [
 				bookId: 'crime-and-punishment',
 				title: 'Crime and Punishment',
 				author: 'Fyodor Dostoevsky',
+				bookCover:
+					'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
 				fromPage: 140,
 				toPage: 165,
 				duration: 44,
@@ -139,6 +161,8 @@ export const calendar = [
 				bookId: 'the-hobbit',
 				title: 'The Hobbit',
 				author: 'J.R.R. Tolkien',
+				bookCover:
+					'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
 				fromPage: 230,
 				toPage: 260,
 				duration: 50,
@@ -152,6 +176,8 @@ export const calendar = [
 				bookId: 'dune',
 				title: 'Dune',
 				author: 'Frank Herbert',
+				bookCover:
+					'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
 				fromPage: 1,
 				toPage: 40,
 				duration: 70,
@@ -165,6 +191,8 @@ export const calendar = [
 				bookId: 'dune',
 				title: 'Dune',
 				author: 'Frank Herbert',
+				bookCover:
+					'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
 				fromPage: 40,
 				toPage: 72,
 				duration: 55,
@@ -178,6 +206,8 @@ export const calendar = [
 				bookId: 'dune',
 				title: 'Dune',
 				author: 'Frank Herbert',
+				bookCover:
+					'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
 				fromPage: 72,
 				toPage: 98,
 				duration: 42,
@@ -186,6 +216,8 @@ export const calendar = [
 				bookId: 'crime-and-punishment',
 				title: 'Crime and Punishment',
 				author: 'Fyodor Dostoevsky',
+				bookCover:
+					'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
 				fromPage: 165,
 				toPage: 180,
 				duration: 25,
@@ -199,6 +231,8 @@ export const calendar = [
 				bookId: 'dune',
 				title: 'Dune',
 				author: 'Frank Herbert',
+				bookCover:
+					'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
 				fromPage: 98,
 				toPage: 130,
 				duration: 52,

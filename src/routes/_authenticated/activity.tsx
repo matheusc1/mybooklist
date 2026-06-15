@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import { Calendar } from '#/components/calendar'
+import { SessionModal } from '#/components/modals/session-modal'
 import { StatCard } from '#/components/stat-card'
 import { calendar } from '#/mocks/sessions'
 
@@ -28,6 +30,10 @@ const currentMonthLabel = new Intl.DateTimeFormat('en-US', {
 }).format(today)
 
 function Activity() {
+	const [selectedDate, setSelectedDate] = useState<string | null>(null)
+	const selectedSessions =
+		calendar.find((d) => d.date === selectedDate)?.sessions ?? []
+
 	return (
 		<div className="min-h-[calc(100vh-69px)] w-full max-w-250 mx-auto p-5 lg:p-10 space-y-10">
 			<div className="space-y-1.5 animate-fade-up [animation-delay:0.05s]">
@@ -43,8 +49,18 @@ function Activity() {
 			<ActivityStatsContent monthlyStats={monthlyStats} />
 
 			<div className="animate-fade-up [animation-delay:0.15s]">
-				<Calendar calendar={calendar} />
+				<Calendar
+					calendar={calendar}
+					onDayClick={(date) => setSelectedDate(date)}
+				/>
 			</div>
+
+			<SessionModal
+				open={selectedDate !== null}
+				onClose={() => setSelectedDate(null)}
+				date={selectedDate ?? ''}
+				sessions={selectedSessions}
+			/>
 		</div>
 	)
 }

@@ -23,9 +23,10 @@ type DayState = {
 
 type CalendarProps = {
 	calendar: ActivityResponse['calendar']
+	onDayClick: (date: string, sessions: Session[]) => void
 }
 
-export function Calendar({ calendar }: CalendarProps) {
+export function Calendar({ calendar, onDayClick }: CalendarProps) {
 	const today = new Date()
 
 	const [view, setView] = useState({
@@ -112,8 +113,10 @@ export function Calendar({ calendar }: CalendarProps) {
 						const state = getDayState(key, day)
 
 						return (
-							<div
+							<button
+								type="button"
 								key={key}
+								onClick={() => onDayClick(key, state.daySessions)}
 								className={cn(
 									'aspect-square rounded-lg flex flex-col items-center justify-center relative',
 									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150 cursor-pointer hover:border-border',
@@ -136,7 +139,7 @@ export function Calendar({ calendar }: CalendarProps) {
 										)}
 									/>
 								)}
-							</div>
+							</button>
 						)
 					})}
 				</div>

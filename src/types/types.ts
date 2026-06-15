@@ -41,6 +41,7 @@ export interface ActivityResponse {
 			bookId: string
 			title: string
 			author: string
+			bookCover: string | null
 			fromPage: number
 			toPage: number
 			duration: number
