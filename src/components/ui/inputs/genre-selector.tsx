@@ -27,7 +27,7 @@ export function GenreSelector({ ...props }: GenreSelectorProps) {
 		<Select.Root {...props}>
 			<Select.Trigger
 				aria-label="Genre"
-				className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-border bg-surface2 px-4 py-2.5 text-sm outline-none input-focus transition-[border-color,box-shadow] duration-150 data-placeholder:text-muted"
+				className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-border bg-surface2 px-4 py-2.5 text-sm outline-none input-focus transition-[border-color,box-shadow] duration-150 data-placeholder:text-muted disabled:disabled:text-text/70"
 			>
 				<Select.Value placeholder="Select a genre" />
 				<Select.Icon className="text-muted">
