@@ -366,7 +366,7 @@ function PreviewSection() {
 									className="bg-surface2 border border-border rounded-lg p-2.5"
 								>
 									<p
-										className={`font-serif font-bold leading-none mb-1 ${metric.color} text-sm}`}
+										className={`lining-nums font-serif font-bold leading-none mb-1 ${metric.color} text-sm`}
 									>
 										{metric.val}
 									</p>
