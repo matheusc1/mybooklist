@@ -1,8 +1,10 @@
 import { LucideArrowRight, LucideMoon, LucideTimer } from 'lucide-react'
+import { useState } from 'react'
 import type { ActivityResponse } from '#/types/types'
 import { formatBookDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
 import { Modal } from '../ui/modal'
+import { ActivityModal } from './activity-modal'
 
 type Session = ActivityResponse['calendar'][number]['sessions'][number]
 
@@ -19,22 +21,49 @@ export function SessionModal({
 	sessions,
 	onClose,
 }: SessionModalProps) {
+	const [selectedSession, setSelectedSession] = useState<Session | null>(null)
+	const [addOpen, setAddOpen] = useState(false)
+
 	return (
-		<Modal.Root open={open} onOpenChange={(v) => !v && onClose()} size="md">
-			<Modal.Header eyebrow="Reading sessions" title={formatBookDate(date)} />
+		<>
+			<Modal.Root open={open} onOpenChange={(v) => !v && onClose()} size="md">
+				<Modal.Header eyebrow="Reading sessions" title={formatBookDate(date)} />
 
-			<SessionModalBody sessions={sessions} />
+				<SessionModalBody
+					sessions={sessions}
+					onSessionClick={setSelectedSession}
+				/>
 
-			<Modal.Footer>
-				<Button variant="dashed" className="w-full text-sm">
-					Log a session for this day
-				</Button>
-			</Modal.Footer>
-		</Modal.Root>
+				<Modal.Footer>
+					<Button
+						variant="dashed"
+						className="w-full text-sm"
+						onClick={() => setAddOpen(true)}
+					>
+						Log a session for this day
+					</Button>
+				</Modal.Footer>
+			</Modal.Root>
+
+			<ActivityModal
+				open={!!selectedSession}
+				onOpenChange={(v) => !v && setSelectedSession(null)}
+				mode="view"
+				session={selectedSession ? { ...selectedSession, date } : undefined}
+			/>
+
+			<ActivityModal open={addOpen} onOpenChange={setAddOpen} mode="add" />
+		</>
 	)
 }
 
-function SessionModalBody({ sessions }: { sessions: Session[] }) {
+function SessionModalBody({
+	sessions,
+	onSessionClick,
+}: {
+	sessions: Session[]
+	onSessionClick: (session: Session) => void
+}) {
 	return (
 		<Modal.Body>
 			<div className="space-y-2.5">
@@ -44,6 +73,7 @@ function SessionModalBody({ sessions }: { sessions: Session[] }) {
 							key={session.bookId}
 							session={session}
 							index={index + 1}
+							onClick={onSessionClick}
 						/>
 					))
 				) : (
@@ -62,9 +92,21 @@ function SessionModalBody({ sessions }: { sessions: Session[] }) {
 	)
 }
 
-function SessionCard({ session, index }: { session: Session; index: number }) {
+function SessionCard({
+	session,
+	index,
+	onClick,
+}: {
+	session: Session
+	index: number
+	onClick: (session: Session) => void
+}) {
 	return (
-		<div className="group bg-surface2 border flex items-center gap-3 rounded-xl py-3 px-4 border-border hover:bg-surface3 hover:border-accent/30 hover:translate-x-0.75 cursor-pointer transition-all">
+		<button
+			type="button"
+			onClick={() => onClick(session)}
+			className="group bg-surface2 border flex items-center gap-3 rounded-xl py-3 px-4 border-border hover:bg-surface3 hover:border-accent/30 hover:translate-x-0.75 cursor-pointer transition-all w-full text-left appearance-none"
+		>
 			<img
 				src={session.bookCover ?? '/book-cover.jpg'}
 				alt={
@@ -96,6 +138,6 @@ function SessionCard({ session, index }: { session: Session; index: number }) {
 				#{index}
 			</sup>
 			<LucideArrowRight className="size-5 text-muted transition-transform group-hover:text-accent group-hover:translate-x-0.75" />
-		</div>
+		</button>
 	)
 }
