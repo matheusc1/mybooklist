@@ -1,10 +1,12 @@
 import { useForm } from '@tanstack/react-form'
 import { LucideTrash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import z from 'zod'
+import { books } from '#/mocks/books'
 import type { ActivityResponse, Mode } from '#/types/types'
 import { Button } from '../ui/button'
 import { FieldError, FieldLabel, Input } from '../ui/inputs'
+import { BookCombobox } from '../ui/inputs/book-combobox'
 import { Modal } from '../ui/modal'
 import { DeleteModal } from './delete-modal'
 
@@ -18,7 +20,7 @@ type ActivityModalProps = {
 }
 
 const activitySchema = z.object({
-	title: z.string().min(1, 'Title cannot be empty'),
+	bookId: z.string().min(1, 'Book is required'),
 	date: z.string().min(1, 'Date cannot be empty'),
 	fromPage: z.number({ error: 'Initial page is required' }).gte(0),
 	toPage: z.number({ error: 'Final page is required' }).gt(0),
@@ -38,10 +40,11 @@ export function ActivityModal({
 }: ActivityModalProps) {
 	const [currentMode, setCurrentMode] = useState<Mode>(mode)
 	const [deleteOpen, setDeleteOpen] = useState(false)
+	const containerRef = useRef<HTMLDivElement>(null)
 
 	const form = useForm({
 		defaultValues: {
-			title: session?.title ?? '',
+			bookId: session?.bookId ?? '',
 			date: session?.date ?? new Date().toISOString().split('T')[0],
 			fromPage: session?.fromPage ?? (undefined as number | undefined),
 			toPage: session?.toPage ?? (undefined as number | undefined),
@@ -78,29 +81,39 @@ export function ActivityModal({
 					}}
 				>
 					<Modal.Body>
+						<div ref={containerRef} />
 						<fieldset className="space-y-4" disabled={isView}>
-							<form.Field name="title">
-								{(field) => (
-									<div className="flex flex-col gap-2">
-										<FieldLabel htmlFor={field.name} required={!isView}>
-											Title
-										</FieldLabel>
-										<Input
-											id={field.name}
-											name={field.name}
-											value={field.state.value}
-											onBlur={field.handleBlur}
-											onChange={(e) => field.handleChange(e.target.value)}
-											placeholder="e.g. The Name of the Wind"
-											readOnly={isView}
-										/>
-										<FieldError
-											message={field.state.meta.errors[0]?.message}
-											className="-mt-1"
-										/>
-									</div>
-								)}
+							<form.Field name="bookId">
+								{(field) => {
+									const selectedBook =
+										books.find((b) => String(b.id) === field.state.value) ??
+										null
+
+									return (
+										<div className="flex flex-col gap-2">
+											<FieldLabel required={!isView}>Book</FieldLabel>
+											<BookCombobox
+												books={books}
+												value={selectedBook}
+												onValueChange={(book) => {
+													field.handleChange(book ? String(book.id) : '')
+													if (book) {
+														form.setFieldValue('fromPage', book.currentPage)
+													}
+												}}
+												disabled={isView}
+												readOnly={isView}
+												container={containerRef}
+											/>
+											<FieldError
+												message={field.state.meta.errors[0]?.message}
+												className="-mt-1"
+											/>
+										</div>
+									)
+								}}
 							</form.Field>
+
 							<form.Field name="date">
 								{(field) => (
 									<div className="flex flex-col gap-2">
@@ -119,6 +132,7 @@ export function ActivityModal({
 									</div>
 								)}
 							</form.Field>
+
 							<div className="flex gap-3">
 								<form.Field name="fromPage">
 									{(field) => (
@@ -181,18 +195,18 @@ export function ActivityModal({
 							>
 								{([fromPage, toPage]) => {
 									const bothFilled = fromPage != null && toPage != null
-									const totalPages = bothFilled ? toPage - fromPage : 0
+									const pagesRead = bothFilled ? toPage - fromPage : 0
 
 									return (
 										bothFilled &&
-										totalPages > 0 && (
+										pagesRead > 0 && (
 											<div className="flex flex-col gap-2">
-												<FieldLabel htmlFor="totalPages">Pages read</FieldLabel>
+												<FieldLabel htmlFor="pagesRead">Pages read</FieldLabel>
 												<Input
-													id="totalPages"
-													name="totalPages"
+													id="pagesRead"
+													name="pagesRead"
 													type="text"
-													value={totalPages}
+													value={pagesRead}
 													readOnly
 												/>
 											</div>

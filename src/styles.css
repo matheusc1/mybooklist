@@ -83,6 +83,11 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 8%, transparent);
   }
 
+  .input-focus-within:focus-within {
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 8%, transparent);
+  }
+
   .reveal {
     opacity: 0;
     transform: translateY(20px);
