@@ -244,7 +244,7 @@ function ResultContent({
 				Based on both passages, we calculated your average reading speed. This
 				will be used to estimate your session durations going forward.
 			</p>
-			<div className="bg-surface border border-white/12 rounded-2xl max-w-90 w-full py-7 px-10 mb-8">
+			<div className="bg-surface border border-border2 rounded-2xl max-w-90 w-full py-7 px-10 mb-8">
 				<p className="font-serif text-muted mb-1">
 					<span className="text-5xl font-bold text-accent mr-1">
 						{Math.floor(secondsPerPage / 60)}

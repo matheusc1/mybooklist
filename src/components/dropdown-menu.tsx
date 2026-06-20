@@ -87,7 +87,7 @@ export function UserDropdown({ user, goal, onSignOut }: UserDropdownProps) {
 		<DropdownMenu.Content
 			align="end"
 			sideOffset={8}
-			className="w-64 bg-surface border border-white/12 rounded-xl overflow-hidden z-50
+			className="w-64 bg-surface border border-border2 rounded-xl overflow-hidden z-50
 				shadow-[0_20px_60px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.04)]
 				data-[state=open]:animate-in data-[state=closed]:animate-out
 				data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0

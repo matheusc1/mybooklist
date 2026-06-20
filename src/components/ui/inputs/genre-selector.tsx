@@ -38,7 +38,7 @@ export function GenreSelector({ ...props }: GenreSelectorProps) {
 			<Select.Portal>
 				<Select.Content
 					position="item-aligned"
-					className="z-50 overflow-hidden rounded-lg border border-white/12 bg-surface2 shadow-[0_16px_40px_rgba(0,0,0,0.5)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
+					className="z-50 overflow-hidden rounded-lg border border-border2 bg-surface2 shadow-[0_16px_40px_rgba(0,0,0,0.5)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
 				>
 					<Select.Viewport className="p-1">
 						<Select.Group>

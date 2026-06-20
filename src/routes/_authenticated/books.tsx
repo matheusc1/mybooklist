@@ -170,7 +170,7 @@ function MyBooks() {
 									onClick={() => setActiveFilter(status)}
 									className={`py-2 px-3 gap-1.5 border-border ${
 										isActive
-											? 'bg-surface2 border-white/12 text-text hover:bg-surface2 hover:border-white/12 cursor-default'
+											? 'bg-surface2 border-border2 text-text hover:bg-surface2 hover:border-border2 cursor-default'
 											: ''
 									}`}
 								>

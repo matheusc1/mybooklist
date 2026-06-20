@@ -59,7 +59,7 @@ export function BookCombobox({
 					positionMethod="fixed"
 					className="z-1000 outline-none"
 				>
-					<Combobox.Popup className="w-(--anchor-width) rounded-lg border border-white/12 bg-surface2 shadow-[0_16px_40px_rgba(0,0,0,0.5)]">
+					<Combobox.Popup className="w-(--anchor-width) rounded-lg border border-border2 bg-surface2 shadow-[0_16px_40px_rgba(0,0,0,0.5)]">
 						<div className="px-3 pt-2 pb-1 font-mono text-xs font-medium uppercase tracking-[0.08em] text-muted">
 							Books
 						</div>

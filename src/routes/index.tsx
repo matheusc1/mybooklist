@@ -281,7 +281,7 @@ function PreviewSection() {
 
 			<div
 				ref={windowRef}
-				className="reveal max-w-240 mx-auto bg-surface border border-white/12 rounded-2xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)]"
+				className="reveal max-w-240 mx-auto bg-surface border border-border2 rounded-2xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)]"
 			>
 				<div className="flex items-center justify-between p-4 px-5 bg-surface2 border-b border-border">
 					<div className="flex gap-1.5">

@@ -70,7 +70,7 @@ export function BookStatusSelector({
 				<RadioGroup.Item
 					key={value}
 					value={value}
-					className={`select-none rounded-full border border-border bg-surface2 px-4 py-2 text-xs font-medium text-muted outline-none transition-all duration-150 data-[state=checked]:border-transparent data-[state=checked]:font-semibold data-[state=checked]:text-bg cursor-pointer hover:border-white/12 hover:text-text ${config.active}`}
+					className={`select-none rounded-full border border-border bg-surface2 px-4 py-2 text-xs font-medium text-muted outline-none transition-all duration-150 data-[state=checked]:border-transparent data-[state=checked]:font-semibold data-[state=checked]:text-bg cursor-pointer hover:border-border2 hover:text-text ${config.active}`}
 				>
 					{label}
 				</RadioGroup.Item>
