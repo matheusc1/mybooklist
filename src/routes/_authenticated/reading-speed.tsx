@@ -210,7 +210,9 @@ function ReadingContent({
 
 			<div className="-mt-2 bg-surface border border-border rounded-xl p-6 font-serif leading-loose text-text/85 space-y-3">
 				{passage.pages[page - 1].map((paragraph) => (
-					<p key={paragraph.slice(0, 20)}>{paragraph}</p>
+					<p key={paragraph.slice(0, 20)} className="lining-nums">
+						{paragraph}
+					</p>
 				))}
 			</div>
 
