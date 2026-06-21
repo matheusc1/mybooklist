@@ -27,7 +27,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 function Layout() {
 	const matches = useMatches()
-	const hideNav = matches.some((m) => (m.staticData as any)?.hideNav)
+	const hideNav = matches.some((m) => m.staticData?.hideNav)
 
 	return (
 		<div className="min-h-dvh flex flex-col">
