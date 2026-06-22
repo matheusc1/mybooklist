@@ -121,7 +121,7 @@ function Login() {
 						type="button"
 						className="group w-full bg-surface py-3.5 px-5 flex items-center gap-3 rounded-xl border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(234,67,53,0.3)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
-						<GoogleIcon />
+						<GoogleIcon aria-hidden="true" />
 						<span className="text-sm font-medium">Continue with Google</span>
 						<span className="text-xs transition-transform text-muted ml-auto group-hover:translate-x-0.5 group-hover:text-text">
 							→
@@ -132,7 +132,7 @@ function Login() {
 						type="button"
 						className="group w-full bg-surface py-3.5 gap-3 px-5 flex items-center rounded-xl border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(255,255,255,0.2)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
-						<GitHubIcon />
+						<GitHubIcon aria-hidden="true" />
 						<span className="text-sm font-medium">Continue with GitHub</span>
 						<span className="text-xs transition-transform text-muted ml-auto group-hover:translate-x-0.5 group-hover:text-text">
 							→

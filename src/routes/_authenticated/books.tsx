@@ -137,6 +137,7 @@ function MyBooks() {
 						<input
 							type="text"
 							placeholder="Search by title or author..."
+							aria-label="Search by title or author"
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
 							onKeyDown={(e) => {
@@ -168,6 +169,7 @@ function MyBooks() {
 									key={label}
 									variant="ghost"
 									onClick={() => setActiveFilter(status)}
+									aria-pressed={isActive}
 									className={`py-2 px-3 gap-1.5 border-border ${
 										isActive
 											? 'bg-surface2 border-border2 text-text hover:bg-surface2 hover:border-border2 cursor-default'

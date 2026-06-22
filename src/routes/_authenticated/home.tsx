@@ -10,6 +10,7 @@ import { Button, button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
 import { books } from '#/mocks/books'
 import { useGoalStore } from '#/stores/goal-store'
+import { getPercent } from '#/utils/get-percent'
 import { sortByDateDesc } from '#/utils/sort-by-date'
 
 export const Route = createFileRoute('/_authenticated/home')({
@@ -149,7 +150,7 @@ function Home() {
 }
 
 function CurrentBookCard({ book }: { book: Book }) {
-	const progress = (book.currentPage / book.totalPages) * 100
+	const progress = getPercent(book.currentPage, book.totalPages)
 
 	return (
 		<div className="bg-surface border border-border rounded-xl overflow-hidden">
@@ -178,12 +179,14 @@ function CurrentBookCard({ book }: { book: Book }) {
 							<span>
 								Page {book.currentPage} of {book.totalPages}
 							</span>
-							<span className="text-accent font-medium">
-								{Math.round(progress)}%
-							</span>
+							<span className="text-accent font-medium">{progress}%</span>
 						</div>
 						<div className="h-0.75 bg-surface2 rounded-full overflow-hidden">
 							<div
+								role="progressbar"
+								aria-valuenow={Math.round(progress)}
+								aria-valuemin={0}
+								aria-valuemax={100}
 								className="h-full bg-gradient-progress rounded-full"
 								style={{
 									width: `${progress}%`,
@@ -298,6 +301,7 @@ function WeeklyStatsEmptyState() {
 					{WEEK_DAYS.map((day, i) => (
 						<div key={day} className="flex flex-col items-center gap-2 flex-1">
 							<div
+								aria-hidden="true"
 								className="w-full h-10 rounded-t bg-surface2 animate-pulse"
 								style={{ animationDelay: `${i * 0.2}s` }}
 							/>
