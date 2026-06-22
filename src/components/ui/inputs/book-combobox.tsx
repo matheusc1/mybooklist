@@ -33,8 +33,10 @@ export function BookCombobox({
 		>
 			<Combobox.InputGroup className="relative flex w-full items-center rounded-lg border border-border bg-surface2 transition-[border-color,box-shadow] duration-150 input-focus-within">
 				<Combobox.Input
+					id="book-search"
 					placeholder={placeholder}
 					className="w-full bg-transparent py-2.5 pl-4 pr-16 text-sm outline-none placeholder:text-muted/50 disabled:text-text/70"
+					aria-label={placeholder}
 				/>
 				<div className="absolute right-0 flex h-full items-center gap-0.5 pr-3">
 					<Combobox.Clear

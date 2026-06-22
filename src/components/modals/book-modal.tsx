@@ -310,6 +310,10 @@ export function BookModal({
 								<div className="w-full h-1 bg-surface3 overflow-hidden rounded-full">
 									<div
 										className="h-full bg-gradient-progress rounded-full transition-all duration-300"
+										role="progressbar"
+										aria-valuenow={progress}
+										aria-valuemin={0}
+										aria-valuemax={100}
 										style={{ width: `${progress}%` }}
 									/>
 								</div>
@@ -379,6 +383,7 @@ export function BookModal({
 							variant="destructive"
 							size="icon"
 							type="button"
+							aria-label="Delete book"
 						>
 							<LucideTrash2 className="size-5" />
 						</Button>

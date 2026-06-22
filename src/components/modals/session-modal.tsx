@@ -105,6 +105,7 @@ function SessionCard({
 		<button
 			type="button"
 			onClick={() => onClick(session)}
+			aria-label={`${session.title} by ${session.author}, pages ${session.fromPage}-${session.toPage}, ${session.duration} minutes`}
 			className="group bg-surface2 border flex items-center gap-3 rounded-xl py-3 px-4 border-border hover:bg-surface3 hover:border-accent/30 hover:translate-x-0.75 cursor-pointer transition-all w-full text-left appearance-none"
 		>
 			<img

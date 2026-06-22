@@ -82,11 +82,21 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 				</h3>
 
 				<div className="flex gap-1.5">
-					<Button variant="icon" size="icon" onClick={prevMonth}>
+					<Button
+						variant="icon"
+						size="icon"
+						onClick={prevMonth}
+						aria-label="Previous month"
+					>
 						<LucideArrowLeft className="size-4" />
 					</Button>
 
-					<Button variant="icon" size="icon" onClick={nextMonth}>
+					<Button
+						variant="icon"
+						size="icon"
+						onClick={nextMonth}
+						aria-label="Next month"
+					>
 						<LucideArrowRight className="size-4" />
 					</Button>
 				</div>
@@ -111,12 +121,19 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 						}
 
 						const state = getDayState(key, day)
+						const dateLabel = new Intl.DateTimeFormat('en-US', {
+							weekday: 'long',
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						}).format(new Date(key))
 
 						return (
 							<button
 								type="button"
 								key={key}
 								onClick={() => onDayClick(key, state.daySessions)}
+								aria-label={`${dateLabel}${state.hasSession ? ', has reading session' : ''}`}
 								className={cn(
 									'aspect-square rounded-lg flex flex-col items-center justify-center relative',
 									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150 cursor-pointer hover:border-border',

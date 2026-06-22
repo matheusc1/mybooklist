@@ -128,6 +128,16 @@ export function ActivityModal({
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
 											readOnly={isView}
+											aria-describedby={
+												field.state.meta.errors.length > 0
+													? `${field.name}-error`
+													: undefined
+											}
+										/>
+										<FieldError
+											message={field.state.meta.errors[0]?.message}
+											className="-mt-1"
+											id={`${field.name}-error`}
 										/>
 									</div>
 								)}
@@ -225,6 +235,7 @@ export function ActivityModal({
 								variant="destructive"
 								size="icon"
 								type="button"
+								aria-label="Delete session"
 							>
 								<LucideTrash2 className="size-5" />
 							</Button>

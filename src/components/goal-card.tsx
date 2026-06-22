@@ -32,6 +32,10 @@ export function GoalCard({ goal }: { goal: Goal | null }) {
 				<div className="h-1.5 bg-surface2 rounded-full overflow-hidden">
 					<div
 						className="h-full bg-gradient-progress rounded-full"
+						role="progressbar"
+						aria-valuenow={percent}
+						aria-valuemin={0}
+						aria-valuemax={100}
 						style={{ width: `${percent}%` }}
 					/>
 				</div>

@@ -14,7 +14,7 @@ function UserMenuTrigger({ user }: { user: User }) {
 		'size-9 rounded-full cursor-pointer hover:ring-3 hover:ring-accent/40 transition-all'
 
 	return (
-		<DropdownMenu.Trigger asChild>
+		<DropdownMenu.Trigger asChild aria-label="User menu">
 			{user.avatar ? (
 				<img
 					src={user.avatar}
@@ -42,7 +42,9 @@ export function UserMenu() {
 					<p className="text-sm font-medium text-text">{user.name}</p>
 					<p className="text-xs text-muted">{user.email}</p>
 				</div>
-				<UserMenuTrigger user={user} />
+				<DropdownMenu.Trigger asChild>
+					<UserMenuTrigger user={user} />
+				</DropdownMenu.Trigger>
 			</div>
 
 			<DropdownMenu.Portal>
