@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { useStore } from '@tanstack/react-store'
 import { LucideTrash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import z from 'zod'
 import type { Book, Mode } from '#/types/types'
 import { getPercent } from '#/utils/get-percent'
@@ -86,9 +86,9 @@ export function BookModal({
 	const status = useStore(form.store, (s) => s.values.status)
 	const currentPage = useStore(form.store, (s) => s.values.currentPage)
 	const totalPages = useStore(form.store, (s) => s.values.totalPages)
+	const prevStatusRef = useRef<string | null>(null)
 
 	const progress = getPercent(currentPage ?? 0, totalPages ?? 0)
-
 	const headerTitle = headerTitleMap[currentMode]
 
 	function handlePageChange(
@@ -101,9 +101,14 @@ export function BookModal({
 		const total = fieldName === 'totalPages' ? value : (totalPages ?? 0)
 
 		if (total > 0 && current >= total) {
+			if (status !== 'finished') prevStatusRef.current = status
 			form.setFieldValue('status', 'finished')
 			const today = new Date().toISOString().split('T')[0]
 			form.setFieldValue('dateFinished', today)
+		} else if (prevStatusRef.current !== null) {
+			form.setFieldValue('status', prevStatusRef.current)
+			form.setFieldValue('dateFinished', '')
+			prevStatusRef.current = null
 		}
 	}
 
