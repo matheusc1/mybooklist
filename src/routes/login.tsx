@@ -10,23 +10,29 @@ export const Route = createFileRoute('/login')({
 function Login() {
 	return (
 		<div className="overflow-hidden flex md:grid grid-cols-[1fr_480px] min-h-dvh">
-			<div className="hidden relative bg-[#0a0a0c] overflow-hidden md:flex flex-col justify-between p-8 lg:p-[48px_52px] border-r border-border animate-fade-up [animation-delay:0.05s]">
+			<aside className="hidden relative bg-[#0a0a0c] overflow-hidden md:flex flex-col justify-between p-8 lg:p-[48px_52px] border-r border-border animate-fade-up [animation-delay:0.05s]">
 				<div
+					aria-hidden="true"
 					className="absolute inset-0 pointer-events-none z-0
         bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.025)_0px,rgba(255,255,255,0.025)_1px,transparent_1px,transparent_80px)]"
 				/>
 
 				<div
+					aria-hidden="true"
 					className="absolute -top-30 -left-20 w-125 h-125 pointer-events-none z-0
         bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.12)_0%,transparent_65%)]"
 				/>
 
 				<div
+					aria-hidden="true"
 					className="absolute -bottom-25 -right-15 w-105 h-105 pointer-events-none z-0
         bg-[radial-gradient(ellipse_at_center,rgba(139,184,168,0.09)_0%,transparent_65%)]"
 				/>
 
-				<div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+				<div
+					aria-hidden="true"
+					className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+				>
 					<div className="deco-title text-[9rem] -top-5 -left-7.5 rotate-[-4deg]">
 						Crime and Punishment
 					</div>
@@ -50,8 +56,11 @@ function Login() {
 
 				<Logo className="hidden md:flex" />
 
-				<div className="flex flex-col justify-center px-3">
-					<p className="font-serif text-accent/50 leading text-[80px]/[0.6] mb-5">
+				<blockquote className="flex flex-col justify-center px-3">
+					<p
+						aria-hidden="true"
+						className="font-serif text-accent/50 leading text-[80px]/[0.6] mb-5"
+					>
 						"
 					</p>
 					<p className="font-serif italic text-xl lg:text-2xl leading-[1.55] tracking-[-0.01em] text-text/85 mb-6">
@@ -61,47 +70,53 @@ function Login() {
 						</em>{' '}
 						before he dies. The man who never reads lives only one.
 					</p>
-					<div className="flex items-center gap-3">
-						<div className="w-6 h-px bg-accent/50" />
-						<p className="text-muted text-xs font-mono uppercase tracking-widest">
+					<footer className="flex items-center gap-3">
+						<div aria-hidden="true" className="w-6 h-px bg-accent/50" />
+						<cite className="text-muted text-xs font-mono uppercase tracking-widest not-italic">
 							George R. R. Martin
-						</p>
-					</div>
-				</div>
+						</cite>
+					</footer>
+				</blockquote>
 
-				<div className="flex items-center gap-6 lg:gap-8">
+				<dl className="flex items-center gap-6 lg:gap-8">
 					<div>
-						<p className="font-bold font-serif text-2xl">
+						<dd className="font-bold font-serif text-2xl">
 							12<span className="text-accent text-base">k+</span>
-						</p>
-						<p className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
+						</dd>
+						<dt className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
 							Books tracked
-						</p>
+						</dt>
 					</div>
 
-					<div className="w-px bg-border h-full hidden lg:block" />
+					<div
+						aria-hidden="true"
+						className="w-px bg-border h-full hidden lg:block"
+					/>
 
 					<div>
-						<p className="font-bold font-serif text-2xl">
+						<dd className="font-bold font-serif text-2xl">
 							3.4<span className="text-accent text-base">k</span>
-						</p>
-						<p className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
+						</dd>
+						<dt className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
 							Active readers
-						</p>
+						</dt>
 					</div>
 
-					<div className="w-px bg-border h-full hidden lg:block" />
+					<div
+						aria-hidden="true"
+						className="w-px bg-border h-full hidden lg:block"
+					/>
 
 					<div>
-						<p className="font-bold font-serif text-2xl">
+						<dd className="font-bold font-serif text-2xl">
 							98<span className="text-accent text-base">%</span>
-						</p>
-						<p className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
+						</dd>
+						<dt className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
 							Goals reached
-						</p>
+						</dt>
 					</div>
-				</div>
-			</div>
+				</dl>
+			</aside>
 
 			<main className="flex flex-col justify-center p-[40px_20px] md:p-[60px_32px] lg:p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
 				<Logo className="md:hidden mb-12" />
@@ -151,7 +166,9 @@ function Login() {
 				</div>
 
 				<div className="bg-surface border border-border rounded-xl p-[16px_18px] flex gap-3">
-					<span className="mt-px">🔒</span>
+					<span aria-hidden="true" className="mt-px">
+						🔒
+					</span>
 					<p className="text-xs/[1.6] text-muted">
 						MyBookList uses{' '}
 						<strong className="text-text/60 font-medium">OAuth 2.0</strong> — we

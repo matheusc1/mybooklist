@@ -45,30 +45,34 @@ function TermsOfService() {
 						<p className="font-mono text-xs tracking-wider">Back to app</p>
 					</button>
 				</nav>
-				<div className="w-full h-px bg-border" />
+				<div aria-hidden="true" className="w-full h-px bg-border" />
 			</div>
 
 			<div className="grid sm:grid-cols-[220px_1fr] max-w-240 mx-auto gap-10 md:gap-14 p-[56px_20px] md:p-[56px_40px] lg:p-14 pb-25 items-start">
 				<aside className="hidden sm:block sticky top-22 animate-fade-up [animation-delay:0.05s]">
-					<p className="font-mono uppercase text-xs tracking-widest text-muted mb-3">
-						On this page
-					</p>
-					<ul className="flex flex-col gap-0.5 text-sm text-muted">
-						{items.map((item) => (
-							<li key={item.id}>
-								<a
-									href={`#${item.id}`}
-									onClick={scrollTo(item.id)}
-									className={`block border-l-2 w-full py-1.5 px-3 rounded-md ${isActive(item.id)}`}
-									aria-current={activeSection === item.id ? 'true' : undefined}
-								>
-									{item.label}
-								</a>
-							</li>
-						))}
-					</ul>
+					<nav aria-label="On this page">
+						<p className="font-mono uppercase text-xs tracking-widest text-muted mb-3">
+							On this page
+						</p>
+						<ul className="flex flex-col gap-0.5 text-sm text-muted">
+							{items.map((item) => (
+								<li key={item.id}>
+									<a
+										href={`#${item.id}`}
+										onClick={scrollTo(item.id)}
+										className={`block border-l-2 w-full py-1.5 px-3 rounded-md ${isActive(item.id)}`}
+										aria-current={
+											activeSection === item.id ? 'true' : undefined
+										}
+									>
+										{item.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</nav>
 
-					<div className="w-full h-px my-4 bg-border" />
+					<div aria-hidden="true" className="w-full h-px my-4 bg-border" />
 
 					<div className="text-xs/[1.7] text-muted font-mono">
 						<p>
@@ -83,7 +87,7 @@ function TermsOfService() {
 					</div>
 				</aside>
 
-				<div className="animate-fade-up [animation-delay:0.1s]">
+				<main className="animate-fade-up [animation-delay:0.1s]">
 					<div className="space-y-2.5 mb-10">
 						<p className="text-xs uppercase font-mono text-accent tracking-widest">
 							Legal
@@ -103,7 +107,7 @@ function TermsOfService() {
 						carefully before using the service.
 					</div>
 
-					<main className="space-y-12">
+					<div className="space-y-12">
 						<section id="acceptance" className="scroll-mt-25">
 							<p className="font-mono text-accent uppercase text-xs tracking-widest mb-2">
 								Section 1
@@ -142,7 +146,10 @@ function TermsOfService() {
 								<ul className="flex flex-col gap-2 pl-1">
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent"
+											/>
 											<p>
 												Track books you are reading, have read, or want to read
 											</p>
@@ -150,19 +157,28 @@ function TermsOfService() {
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent"
+											/>
 											<p>Log reading sessions and monitor your progress</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent"
+											/>
 											<p>Set and manage personal reading goals</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent"
+											/>
 											<p>View statistics about your reading habits</p>
 										</div>
 									</li>
@@ -309,7 +325,7 @@ function TermsOfService() {
 								</p>
 							</div>
 						</section>
-					</main>
+					</div>
 
 					<footer className="mt-12 flex items-center justify-between pt-6 border-t border-border">
 						<p className="font-mono text-xs text-muted">
@@ -327,7 +343,7 @@ function TermsOfService() {
 							← Back to app
 						</button>
 					</footer>
-				</div>
+				</main>
 			</div>
 		</div>
 	)

@@ -45,30 +45,34 @@ function PrivacyPolicy() {
 						<p className="font-mono text-xs tracking-wider">Back to app</p>
 					</button>
 				</nav>
-				<div className="w-full h-px bg-border" />
+				<div aria-hidden="true" className="w-full h-px bg-border" />
 			</div>
 
 			<div className="grid sm:grid-cols-[220px_1fr] max-w-240 mx-auto gap-10 md:gap-14 p-[56px_20px] md:p-[56px_40px] lg:p-14 pb-25 items-start">
 				<aside className="hidden sm:block sticky top-22 animate-fade-up [animation-delay:0.05s]">
-					<p className="font-mono uppercase text-xs tracking-widest text-muted mb-3">
-						On this page
-					</p>
-					<ul className="flex flex-col gap-0.5 text-sm text-muted">
-						{items.map((item) => (
-							<li key={item.id}>
-								<a
-									href={`#${item.id}`}
-									onClick={scrollTo(item.id)}
-									className={`block border-l-2 w-full py-1.5 px-3 rounded-md ${isActive(item.id)}`}
-									aria-current={activeSection === item.id ? 'true' : undefined}
-								>
-									{item.label}
-								</a>
-							</li>
-						))}
-					</ul>
+					<nav aria-label="On this page">
+						<p className="font-mono uppercase text-xs tracking-widest text-muted mb-3">
+							On this page
+						</p>
+						<ul className="flex flex-col gap-0.5 text-sm text-muted">
+							{items.map((item) => (
+								<li key={item.id}>
+									<a
+										href={`#${item.id}`}
+										onClick={scrollTo(item.id)}
+										className={`block border-l-2 w-full py-1.5 px-3 rounded-md ${isActive(item.id)}`}
+										aria-current={
+											activeSection === item.id ? 'true' : undefined
+										}
+									>
+										{item.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</nav>
 
-					<div className="w-full h-px my-4 bg-border" />
+					<div aria-hidden="true" className="w-full h-px my-4 bg-border" />
 
 					<div className="text-xs/[1.7] text-muted font-mono">
 						<p>
@@ -83,7 +87,7 @@ function PrivacyPolicy() {
 					</div>
 				</aside>
 
-				<div className="animate-fade-up [animation-delay:0.1s]">
+				<main className="animate-fade-up [animation-delay:0.1s]">
 					<div className="space-y-2.5 mb-10">
 						<p className="text-xs uppercase font-mono text-accent2 tracking-widest">
 							Legal
@@ -103,7 +107,7 @@ function PrivacyPolicy() {
 						account at any time.
 					</div>
 
-					<main className="space-y-12">
+					<div className="space-y-12">
 						<section id="collect" className="scroll-mt-25">
 							<p className="font-mono text-accent2 uppercase text-xs tracking-widest mb-2">
 								Section 1
@@ -117,46 +121,46 @@ function PrivacyPolicy() {
 									the service:
 								</p>
 
-								<div className="bg-surface2 p-4 border border-border rounded-xl flex flex-col gap-2.5">
+								<dl className="bg-surface2 p-4 border border-border rounded-xl flex flex-col gap-2.5">
 									<div className="flex gap-3 items-start">
-										<p className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
+										<dt className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
 											Name
-										</p>
-										<p className="text-text/70 text-sm/[1.6]">
+										</dt>
+										<dd className="text-text/70 text-sm/[1.6]">
 											Your display name, provided by your OAuth provider (Google
 											or GitHub).
-										</p>
+										</dd>
 									</div>
 
 									<div className="flex gap-3 items-start">
-										<p className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
+										<dt className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
 											Email
-										</p>
-										<p className="text-text/70 text-sm/[1.6]">
+										</dt>
+										<dd className="text-text/70 text-sm/[1.6]">
 											Your email address, used solely to identify your account.
-										</p>
+										</dd>
 									</div>
 
 									<div className="flex gap-3 items-start">
-										<p className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
+										<dt className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
 											Profile photo
-										</p>
-										<p className="text-text/70 text-sm/[1.6]">
+										</dt>
+										<dd className="text-text/70 text-sm/[1.6]">
 											Your avatar URL from your OAuth provider, displayed in the
 											app interface.
-										</p>
+										</dd>
 									</div>
 
 									<div className="flex gap-3 items-start">
-										<p className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
+										<dt className="font-mono text-xs uppercase tracking-wider text-accent2 min-w-30 mt-0.5">
 											READING DATA
-										</p>
-										<p className="text-text/70 text-sm/[1.6]">
+										</dt>
+										<dd className="text-text/70 text-sm/[1.6]">
 											Books, sessions, goals, and progress that you manually add
 											to the app.
-										</p>
+										</dd>
 									</div>
-								</div>
+								</dl>
 
 								<p>
 									We do not collect browsing data, device fingerprints, or any
@@ -178,13 +182,19 @@ function PrivacyPolicy() {
 								<ul className="flex flex-col gap-2 pl-1">
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>Authenticate you and maintain your session</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>
 												Display your reading library, sessions, and statistics
 											</p>
@@ -192,13 +202,19 @@ function PrivacyPolicy() {
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>Associate your reading data with your account</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>Allow you to manage and delete your own data</p>
 										</div>
 									</li>
@@ -256,14 +272,20 @@ function PrivacyPolicy() {
 								<ul className="flex flex-col gap-2 pl-1">
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p className="font-medium text-text">Google/GitHub</p>
 											<p>— for authentication only, via OAuth 2.0</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p className="font-medium text-text">Neon</p>
 											<p>— for database hosting</p>
 										</div>
@@ -321,19 +343,28 @@ function PrivacyPolicy() {
 								<ul className="flex flex-col gap-2 pl-1">
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>Access all data associated with your account</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>Edit or delete any reading entry, session, or goal</p>
 										</div>
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>
 												Request complete deletion of your account and all
 												associated data
@@ -342,7 +373,10 @@ function PrivacyPolicy() {
 									</li>
 									<li>
 										<div className="flex gap-2.5 items-center">
-											<div className="h-px w-1.5 bg-accent2" />
+											<div
+												aria-hidden="true"
+												className="h-px w-1.5 bg-accent2"
+											/>
 											<p>
 												Revoke OAuth access through your provider's settings
 											</p>
@@ -398,7 +432,7 @@ function PrivacyPolicy() {
 								</p>
 							</div>
 						</section>
-					</main>
+					</div>
 
 					<footer className="mt-12 flex items-center justify-between pt-6 border-t border-border">
 						<p className="font-mono text-xs text-muted">
@@ -416,7 +450,7 @@ function PrivacyPolicy() {
 							← Back to app
 						</button>
 					</footer>
-				</div>
+				</main>
 			</div>
 		</div>
 	)

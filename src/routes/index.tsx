@@ -104,7 +104,7 @@ const features = [
 function LandingPage() {
 	return (
 		<div className="min-h-dvh">
-			<div className="sticky top-0 bg-bg/85 z-100 backdrop-blur-md">
+			<header className="sticky top-0 bg-bg/85 z-100 backdrop-blur-md">
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-15">
 					<Logo textClassName="hidden sm:block" />
 					<div className="flex gap-0.5 text-xs sm:text-sm text-muted uppercase tracking-wider transition-all">
@@ -129,15 +129,18 @@ function LandingPage() {
 						<LucideArrowRight className="size-4 hidden sm:block" />
 					</Link>
 				</nav>
-				<div className="w-full h-px bg-border" />
-			</div>
+				<div aria-hidden="true" className="w-full h-px bg-border" />
+			</header>
 
-			<HeroSection />
-			<StatsSection />
-			<PreviewSection />
-			<FeaturesSection />
-			<QuoteSection />
-			<CtaSection />
+			<main>
+				<HeroSection />
+				<StatsSection />
+				<PreviewSection />
+				<FeaturesSection />
+				<QuoteSection />
+				<CtaSection />
+			</main>
+
 			<FooterSection />
 		</div>
 	)
@@ -146,12 +149,24 @@ function LandingPage() {
 function HeroSection() {
 	return (
 		<section className="relative flex items-center justify-center min-h-[calc(100dvh-69px)] overflow-hidden px-5 sm:px-15">
-			<div className="absolute -top-25 -left-25 w-175 h-175 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.09)_0%,transparent_65%)]" />
-			<div className="absolute -bottom-20 -right-20 w-150 h-150 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(139,184,168,0.07)_0%,transparent_65%)]" />
+			<div
+				aria-hidden="true"
+				className="absolute -top-25 -left-25 w-175 h-175 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.09)_0%,transparent_65%)]"
+			/>
+			<div
+				aria-hidden="true"
+				className="absolute -bottom-20 -right-20 w-150 h-150 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(139,184,168,0.07)_0%,transparent_65%)]"
+			/>
 
-			<div className="absolute left-15 top-0 bottom-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(200,169,110,0.15),transparent)] hidden sm:block" />
+			<div
+				aria-hidden="true"
+				className="absolute left-15 top-0 bottom-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(200,169,110,0.15),transparent)] hidden sm:block"
+			/>
 
-			<div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex flex-col justify-center">
+			<div
+				aria-hidden="true"
+				className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex flex-col justify-center"
+			>
 				<div
 					className="deco-title text-white/2 static"
 					style={{ fontSize: 'clamp(80px, 12vw, 160px)', marginLeft: '-2%' }}
@@ -180,7 +195,7 @@ function HeroSection() {
 
 			<div className="relative z-10 max-w-4xl w-full flex flex-col items-start animate-fade-up [animation-delay:0.05s]">
 				<div className="inline-flex items-center gap-2 text-accent font-mono text-xxs uppercase tracking-[0.14em] bg-accent/8 border border-accent/20 px-3 py-1.5 rounded-full mb-7 animate-fade-up [animation-delay:0.1s]">
-					<div className="size-1.5 rounded-full bg-accent" />
+					<div aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
 					Personal reading tracker
 				</div>
 
@@ -221,7 +236,10 @@ function HeroSection() {
 				</p>
 			</div>
 
-			<div className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-up [animation-delay:0.6s]">
+			<div
+				aria-hidden="true"
+				className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-up [animation-delay:0.6s]"
+			>
 				<div className="w-px h-8 sm:h-10 bg-linear-to-b from-accent/80 to-transparent animate-pulse" />
 			</div>
 		</section>
@@ -229,11 +247,11 @@ function HeroSection() {
 }
 
 function StatsSection() {
-	const ref = useReveal()
+	const ref = useReveal<HTMLDListElement>()
 
 	return (
 		<section className="py-20 px-15 bg-surface border-t border-b border-border">
-			<div
+			<dl
 				ref={ref}
 				className="reveal max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-y-8"
 			>
@@ -246,16 +264,16 @@ function StatsSection() {
 								: ''
 						} ${i === 2 ? 'before:hidden sm:before:block' : ''}`}
 					>
-						<p className="font-serif text-4xl/[1.0] font-bold tracking-tight text-accent mb-1.5">
+						<dd className="font-serif text-4xl/[1.0] font-bold tracking-tight text-accent mb-1.5">
 							{stat.value}
 							<sup className="text-xl font-normal text-muted">{stat.sup}</sup>
-						</p>
-						<p className="font-mono text-xs text-muted uppercase tracking-widest">
+						</dd>
+						<dt className="font-mono text-xs text-muted uppercase tracking-widest">
 							{stat.label}
-						</p>
+						</dt>
 					</div>
 				))}
-			</div>
+			</dl>
 		</section>
 	)
 }
@@ -269,7 +287,10 @@ function PreviewSection() {
 			id="preview"
 			className="py-25 px-5 sm:px-15 overflow-hidden relative"
 		>
-			<div className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]" />
+			<div
+				aria-hidden="true"
+				className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]"
+			/>
 			<div ref={headerRef} className="reveal text-center mb-15 space-y-3">
 				<p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
 					The app
@@ -280,6 +301,7 @@ function PreviewSection() {
 			</div>
 
 			<div
+				aria-hidden="true"
 				ref={windowRef}
 				className="reveal max-w-240 mx-auto bg-surface border border-border2 rounded-2xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)]"
 			>
@@ -437,7 +459,10 @@ function FeaturesSection() {
 			id="features"
 			className="py-25 px-5 sm:px-15 overflow-hidden relative"
 		>
-			<div className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]" />
+			<div
+				aria-hidden="true"
+				className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)]"
+			/>
 
 			<div ref={headerRef} className="reveal text-center mb-15 space-y-3">
 				<p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
@@ -461,7 +486,7 @@ function FeaturesSection() {
 							className="bg-bg p-8 transition-colors duration-200 hover:bg-surface group"
 						>
 							<div className="size-9 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center mb-4 transition-colors group-hover:bg-accent/15">
-								<Icon className="size-4 text-accent" />
+								<Icon aria-hidden="true" className="size-4 text-accent" />
 							</div>
 							<p className="font-serif font-semibold tracking-[-0.01em] mb-3">
 								{feature.title}
@@ -485,30 +510,36 @@ function QuoteSection() {
 
 	return (
 		<section className="py-30 px-5 sm:px-15 text-center relative overflow-hidden">
-			<div className="w-200 h-100 absolute top-1/2 left-1/2 -translate-1/2 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.06)_0%,transparent_65%)] pointer-events-none" />
-			<p
-				ref={quoteMarkRef}
-				className="reveal font-serif text-accent leading text-8xl/[0.5] mb-5"
-			>
-				"
-			</p>
-			<p
-				ref={quoteTextRef}
-				className="reveal max-w-2xl mx-auto font-serif italic text-xl lg:text-2xl leading-[1.6] text-text/75 mb-6"
-			>
-				A reader lives a{' '}
-				<em className="font-normal not-italic text-accent">thousand lives</em>{' '}
-				before he dies. The man who never reads lives only one.
-			</p>
 			<div
-				ref={quoteAuthorRef}
-				className="reveal flex items-center justify-center gap-3"
-			>
-				<div className="w-6 h-px bg-accent/50" />
-				<p className="text-muted text-xs font-mono uppercase tracking-widest">
-					George R. R. Martin
+				aria-hidden="true"
+				className="w-200 h-100 absolute top-1/2 left-1/2 -translate-1/2 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.06)_0%,transparent_65%)] pointer-events-none"
+			/>
+			<blockquote>
+				<p
+					aria-hidden="true"
+					ref={quoteMarkRef}
+					className="reveal font-serif text-accent leading text-8xl/[0.5] mb-5"
+				>
+					"
 				</p>
-			</div>
+				<p
+					ref={quoteTextRef}
+					className="reveal max-w-2xl mx-auto font-serif italic text-xl lg:text-2xl leading-[1.6] text-text/75 mb-6"
+				>
+					A reader lives a{' '}
+					<em className="font-normal not-italic text-accent">thousand lives</em>{' '}
+					before he dies. The man who never reads lives only one.
+				</p>
+				<footer
+					ref={quoteAuthorRef}
+					className="reveal flex items-center justify-center gap-3"
+				>
+					<div aria-hidden="true" className="w-6 h-px bg-accent/50" />
+					<cite className="text-muted text-xs font-mono uppercase tracking-widest not-italic">
+						George R. R. Martin
+					</cite>
+				</footer>
+			</blockquote>
 		</section>
 	)
 }
@@ -521,8 +552,11 @@ function CtaSection() {
 	const noteRef = useReveal()
 
 	return (
-		<div className="py-25 px-5 sm:px-15 border-t border-border flex flex-col items-center text-center relative overflow-hidden">
-			<div className="absolute -top-50 left-1/2 -translate-x-1/2 size-150 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.08)_0%,transparent_65%)] pointer-events-none" />
+		<section className="py-25 px-5 sm:px-15 border-t border-border flex flex-col items-center text-center relative overflow-hidden">
+			<div
+				aria-hidden="true"
+				className="absolute -top-50 left-1/2 -translate-x-1/2 size-150 bg-[radial-gradient(ellipse_at_center,rgba(200,169,110,0.08)_0%,transparent_65%)] pointer-events-none"
+			/>
 			<p
 				ref={eyebrowRef}
 				className="reveal font-mono text-xs uppercase tracking-[0.14em] text-accent mb-4"
@@ -575,15 +609,18 @@ function CtaSection() {
 			>
 				No credit card. No password. Cancel anytime.
 			</p>
-		</div>
+		</section>
 	)
 }
 
 function FooterSection() {
 	return (
-		<div className="py-8 px-5 sm:px-15 border-t border-border flex items-center justify-between flex-wrap gap-4">
+		<footer className="py-8 px-5 sm:px-15 border-t border-border flex items-center justify-between flex-wrap gap-4">
 			<div className="flex items-center gap-2 font-serif font-semibold text-muted">
-				<div className="size-6 bg-accent/40 rounded-sm flex items-center justify-center text-xxs text-bg font-bold">
+				<div
+					aria-hidden="true"
+					className="size-6 bg-accent/40 rounded-sm flex items-center justify-center text-xxs text-bg font-bold"
+				>
 					M
 				</div>
 				MyBookList
@@ -599,6 +636,6 @@ function FooterSection() {
 			</div>
 
 			<p className="font-mono text-xs text-muted/40">&copy; 2026 MyBookList</p>
-		</div>
+		</footer>
 	)
 }

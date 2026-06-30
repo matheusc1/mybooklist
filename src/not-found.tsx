@@ -18,8 +18,14 @@ export function NotFound() {
 			<div className="w-full h-px bg-border" />
 
 			<main className="relative flex-1 flex items-center justify-center overflow-hidden px-5 sm:px-0 animate-fade-up [animation-delay:0.1s]">
-				<div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-[radial-gradient(ellipse,rgba(200,169,110,0.07)_0%,transparent_65%)] pointer-events-none" />
-				<p className="absolute font-serif font-bold italic text-[clamp(160px,22vw,280px)] text-white/2.5 tracking-[-0.04em] select-none pointer-events-none leading-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap">
+				<div
+					aria-hidden="true"
+					className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-[radial-gradient(ellipse,rgba(200,169,110,0.07)_0%,transparent_65%)] pointer-events-none"
+				/>
+				<p
+					aria-hidden="true"
+					className="absolute font-serif font-bold italic text-[clamp(160px,22vw,280px)] text-white/2.5 tracking-[-0.04em] select-none pointer-events-none leading-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap"
+				>
 					404
 				</p>
 
@@ -36,7 +42,10 @@ export function NotFound() {
 					</p>
 
 					<div className="flex gap-3 items-center">
-						<Link to="/home" className={button({ variant: 'primary', size: 'lg' })}>
+						<Link
+							to="/home"
+							className={button({ variant: 'primary', size: 'lg' })}
+						>
 							<LucideArrowLeft className="size-4" />
 							Back to Home
 						</Link>
@@ -49,23 +58,29 @@ export function NotFound() {
 						</Link>
 					</div>
 
-					<div className="w-px h-10 bg-border my-8 mx-auto" />
+					<div
+						aria-hidden="true"
+						className="w-px h-10 bg-border my-8 mx-auto"
+					/>
 
 					<p className="font-mono text-muted uppercase text-xs tracking-widest mb-3">
 						Where would you like to go?
 					</p>
 
-					<div className="flex gap-2 flex-wrap justify-center">
-						{links.map(({ label, to }) => (
-							<Link
-								key={to}
-								to={to}
-								className="p-[6px_12px] border border-border bg-surface text-xs text-muted transition-all rounded-full hover:border-accent/30 hover:text-accent"
-							>
-								{label}
-							</Link>
-						))}
-					</div>
+					<nav aria-label="Suggested pages">
+						<ul className="flex gap-2 flex-wrap justify-center">
+							{links.map(({ label, to }) => (
+								<li key={to}>
+									<Link
+										to={to}
+										className="p-[6px_12px] border border-border bg-surface text-xs text-muted transition-all rounded-full hover:border-accent/30 hover:text-accent"
+									>
+										{label}
+									</Link>
+								</li>
+							))}
+						</ul>
+					</nav>
 				</div>
 			</main>
 		</div>

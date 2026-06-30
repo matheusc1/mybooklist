@@ -129,6 +129,14 @@
   }
 }
 
+@layer base {
+  dl,
+  dt,
+  dd {
+    margin: 0;
+  }
+}
+
 *,
 *::before,
 *::after {
