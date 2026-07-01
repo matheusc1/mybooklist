@@ -35,7 +35,7 @@ function Activity() {
 		calendar.find((d) => d.date === selectedDate)?.sessions ?? []
 
 	return (
-		<div className="min-h-[calc(100vh-69px)] w-full max-w-250 mx-auto p-5 lg:p-10 space-y-10">
+		<main className="min-h-[calc(100vh-69px)] w-full max-w-250 mx-auto p-5 lg:p-10 space-y-10">
 			<div className="space-y-1.5 animate-fade-up [animation-delay:0.05s]">
 				<p className="font-mono text-xs text-accent uppercase tracking-widest">
 					History
@@ -61,7 +61,7 @@ function Activity() {
 				date={selectedDate ?? ''}
 				sessions={selectedSessions}
 			/>
-		</div>
+		</main>
 	)
 }
 

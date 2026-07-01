@@ -99,18 +99,18 @@ function MyBooks() {
 
 	const emptyState = isEmpty
 		? {
-				icon: <LucideLibrary className="size-12 text-muted" />,
+				icon: <LucideLibrary aria-hidden className="size-12 text-muted" />,
 				title: 'Your library is empty',
 				text: "Start building your collection by adding the first book you're reading or want to read.",
 			}
 		: {
-				icon: <LucideSearchX className="size-12 text-muted" />,
+				icon: <LucideSearchX aria-hidden className="size-12 text-muted" />,
 				title: 'No books here yet',
 				text: 'No books match your current filters.',
 			}
 
 	return (
-		<div className="min-h-[calc(100vh-69px)] w-full max-w-300 mx-auto p-5 lg:p-10 space-y-10">
+		<main className="min-h-[calc(100vh-69px)] w-full max-w-300 mx-auto p-5 lg:p-10 space-y-10">
 			<div className="flex items-center justify-between  animate-fade-up [animation-delay:0.05s]">
 				<div className="space-y-1.5">
 					<p className="font-mono text-xs text-accent uppercase tracking-widest">
@@ -125,7 +125,7 @@ function MyBooks() {
 				</div>
 
 				<Button onClick={() => setBookModal({ mode: 'add' })}>
-					<LucidePlus className="size-3" />
+					<LucidePlus aria-hidden="true" className="size-3" />
 					Add Book
 				</Button>
 			</div>
@@ -133,7 +133,10 @@ function MyBooks() {
 			<div className="space-y-8 animate-fade-up [animation-delay:0.1s]">
 				<div className="flex items-center gap-3 flex-wrap">
 					<div className="relative flex-1 max-w-75 min-w-50">
-						<LucideSearch className="absolute size-4 left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+						<LucideSearch
+							aria-hidden="true"
+							className="absolute size-4 left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none"
+						/>
 						<input
 							type="text"
 							placeholder="Search by title or author..."
@@ -154,12 +157,13 @@ function MyBooks() {
 								onClick={() => setSearch('')}
 								className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-muted hover:text-text hover:bg-surface2 transition-colors"
 							>
-								<LucideX className="size-3.5" />
+								<LucideX aria-hidden="true" className="size-3.5" />
 							</button>
 						)}
 					</div>
 
-					<div className="flex flex-wrap items-center justify-start gap-1">
+					<fieldset className="flex flex-wrap items-center justify-start gap-1">
+						<legend className="sr-only">Filter books by status</legend>
 						{filters.map(({ label, status, color, activeColor }) => {
 							const isActive = activeFilter === status
 							const dotColor = isActive ? activeColor : color
@@ -177,7 +181,10 @@ function MyBooks() {
 									}`}
 								>
 									{dotColor && (
-										<div className={`size-1.5 ${dotColor} rounded-full`} />
+										<div
+											aria-hidden="true"
+											className={`size-1.5 ${dotColor} rounded-full`}
+										/>
 									)}
 									{label}
 									<div className="px-2 py-px bg-white/8 rounded-xl text-xs">
@@ -186,29 +193,30 @@ function MyBooks() {
 								</Button>
 							)
 						})}
-					</div>
+					</fieldset>
 				</div>
 
 				{isEmpty || isFilterEmpty ? (
 					<div className="flex flex-col items-center justify-center gap-3 py-20 text-center animate-fade-up">
 						{emptyState.icon}
 						<div className="space-y-1">
-							<h3 className="font-serif text-lg font-semibold">
+							<h2 className="font-serif text-lg font-semibold">
 								{emptyState.title}
-							</h3>
+							</h2>
 							<p className="text-muted text-sm max-w-72">{emptyState.text}</p>
 						</div>
 					</div>
 				) : (
-					<div className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-5">
+					<ul className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-5">
 						{filteredBooks.map((book) => (
-							<BookCard
-								key={book.id}
-								book={book}
-								onClick={() => setBookModal({ book, mode: 'view' })}
-							/>
+							<li key={book.id}>
+								<BookCard
+									book={book}
+									onClick={() => setBookModal({ book, mode: 'view' })}
+								/>
+							</li>
 						))}
-					</div>
+					</ul>
 				)}
 			</div>
 
@@ -221,6 +229,6 @@ function MyBooks() {
 					book={bookModal.book}
 				/>
 			)}
-		</div>
+		</main>
 	)
 }

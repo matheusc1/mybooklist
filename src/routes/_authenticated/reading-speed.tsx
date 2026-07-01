@@ -80,7 +80,7 @@ function ReadingSpeed() {
 				<div className="w-full h-px bg-border" />
 			</div>
 
-			<div className="max-w-170 mx-auto py-10 px-5 sm:px-10 space-y-8 animate-fade-up [animation-delay:0.02s]">
+			<main className="max-w-170 mx-auto py-10 px-5 sm:px-10 space-y-8 animate-fade-up [animation-delay:0.02s]">
 				{step === 'intro' && <IntroContent onStart={handleStart} />}
 				{step === 'reading' && (
 					<ReadingContent
@@ -99,7 +99,7 @@ function ReadingSpeed() {
 						onRetake={() => setStep('intro')}
 					/>
 				)}
-			</div>
+			</main>
 		</div>
 	)
 }
@@ -128,7 +128,7 @@ function IntroContent({ onStart }: { onStart: () => void }) {
 						className="bg-surface p-4 rounded-xl border border-border text-xs group transition-colors hover:bg-surface2"
 					>
 						<div className="size-8 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center mb-3 transition-colors group-hover:bg-accent/15">
-							<Icon className="size-4 text-accent" />
+							<Icon aria-hidden="true" className="size-4 text-accent" />
 						</div>
 						<p className="font-medium mb-0.5">{label}</p>
 						<p className="text-xs/[1.75] text-muted">{description}</p>
@@ -137,7 +137,7 @@ function IntroContent({ onStart }: { onStart: () => void }) {
 			</div>
 
 			<Button onClick={onStart} size="lg">
-				Start Reading <LucideArrowRight className="size-4" />
+				Start Reading <LucideArrowRight aria-hidden="true" className="size-4" />
 			</Button>
 		</>
 	)
@@ -182,10 +182,13 @@ function ReadingContent({
 					<span className="font-mono tracking-[0.08em] text-muted text-xs uppercase">
 						{passage.title} · {passage.author}
 					</span>
-					<p className="font-serif font-semibold text-xl">Page {page} of 2</p>
+					<h1 className="font-serif font-semibold text-xl">Page {page} of 2</h1>
 				</div>
 				<div className="flex items-center bg-surface rounded-lg border border-border py-2 px-4 gap-2">
-					<div className="size-1.5 rounded-full bg-accent2 animate-pulse" />
+					<div
+						aria-hidden="true"
+						className="size-1.5 rounded-full bg-accent2 animate-pulse"
+					/>
 					<span className="font-mono text-sm min-w-10">{display}</span>
 					<span className="text-xxs uppercase text-muted tracking-wider">
 						Elapsed
@@ -195,13 +198,18 @@ function ReadingContent({
 
 			<div className="h-0.5 bg-surface2 rounded-full overflow-hidden">
 				<div
+					role="progressbar"
+					aria-label="Reading test progress"
+					aria-valuenow={page === 1 ? 50 : 100}
+					aria-valuemin={0}
+					aria-valuemax={100}
 					className="h-full bg-gradient-progress rounded-full transition-all duration-1000"
 					style={{ width: page === 1 ? '50%' : '100%' }}
 				/>
 			</div>
 
 			<div className="-mt-1 flex items-center gap-2 p-3 bg-surface border border-border border-l-2 border-l-accent rounded-lg">
-				<LucideLightbulb className="size-5 text-accent/80" />
+				<LucideLightbulb aria-hidden="true" className="size-5 text-accent/80" />
 				<p className="text-xs/normal text-muted">
 					Read at your usual pace — don't rush or slow down. This is about your
 					natural rhythm.
@@ -219,7 +227,7 @@ function ReadingContent({
 			<div className="-mt-1 flex justify-end">
 				<Button onClick={handleNextOrFinish} size="lg" className="ml-auto">
 					{page === 1 ? 'Next page' : 'Finish'}{' '}
-					<LucideArrowRight className="size-4" />
+					<LucideArrowRight aria-hidden="true" className="size-4" />
 				</Button>
 			</div>
 		</>
@@ -235,13 +243,16 @@ function ResultContent({
 }) {
 	return (
 		<div className="flex flex-col items-center justify-center text-center">
-			<LucideLibrary className="size-12 text-accent/80 mb-5" />
+			<LucideLibrary
+				aria-hidden="true"
+				className="size-12 text-accent/80 mb-5"
+			/>
 			<p className="text-xs uppercase font-mono text-accent tracking-widest">
 				Test complete
 			</p>
-			<h2 className="font-serif font-bold text-3xl tracking-tight mb-2">
+			<h1 className="font-serif font-bold text-3xl tracking-tight mb-2">
 				Here's your reading pace
-			</h2>
+			</h1>
 			<p className="max-w-95 text-muted text-sm/[1.6] mb-9">
 				Based on both passages, we calculated your average reading speed. This
 				will be used to estimate your session durations going forward.
@@ -256,7 +267,7 @@ function ResultContent({
 				<p className="font-mono text-xs uppercase text-muted tracking-widest mb-5">
 					Average per page
 				</p>
-				<div className="h-px bg-border mb-4" />
+				<div aria-hidden="true" className="h-px bg-border mb-4" />
 				<p className="text-xs/[1.6] text-muted">
 					Your stats will now reflect{' '}
 					<strong className="font-medium text-text/55">
@@ -272,7 +283,7 @@ function ResultContent({
 				</Button>
 				<Link to="/books" className={button()}>
 					Go to my library
-					<LucideArrowRight className="size-4" />
+					<LucideArrowRight aria-hidden="true" className="size-4" />
 				</Link>
 			</div>
 		</div>

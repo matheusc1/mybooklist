@@ -67,85 +67,112 @@ function Home() {
 	const hasStats = books.some((b) => b.currentPage > 0)
 
 	return (
-		<>
-			<div className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
-				<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.05s]">
-					<div className="w-full flex items-baseline justify-between">
-						<h2 className="font-serif font-semibold tracking-tight text-xl">
-							Bookshelf
-						</h2>
-						<Link
-							to="/books"
-							className="uppercase text-muted text-xs transition-colors tracking-[0.06em] hover:text-accent"
-						>
-							View all
-						</Link>
-					</div>
-
-					{currentBook ? (
-						<CurrentBookCard book={currentBook} />
-					) : (
-						<CurrentBookEmptyState />
-					)}
-
-					{recentActivity.length > 0 && (
-						<>
-							<p className="text-xs text-muted font-medium uppercase tracking-widest">
-								Recent Activity
-							</p>
-
-							<div className="-mt-3">
-								{recentActivity.map((book) => (
-									<BookActivityCard key={book.id} book={book} />
-								))}
-							</div>
-						</>
-					)}
-				</div>
-
-				<div className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.12s]">
-					<div className="w-full flex items-center justify-between">
-						<h2 className="font-serif font-semibold tracking-tight text-xl">
-							Weekly Stats
-						</h2>
-						<Button
-							variant="primary"
-							size="sm"
-							onClick={() => setActivityOpen(true)}
-						>
-							<LucidePlus className="size-3 md:hidden lg:block" />
-							Add Record
-						</Button>
-					</div>
-
-					{hasStats ? <WeeklyStatsContent /> : <WeeklyStatsEmptyState />}
-				</div>
-
-				<div className="flex gap-6 flex-col justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.19s]">
-					<h2 className="font-serif font-semibold tracking-tight text-xl">
-						Finished
+		<main className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
+			<section
+				aria-labelledby="bookshelf-heading"
+				className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.05s]"
+			>
+				<div className="w-full flex items-baseline justify-between">
+					<h2
+						id="bookshelf-heading"
+						className="font-serif font-semibold tracking-tight text-xl"
+					>
+						Bookshelf
 					</h2>
-
-					{recentFinishedBooks.length > 0 ? (
-						<div className="-mt-3">
-							{recentFinishedBooks.map((book) => (
-								<FinishedBookCard key={book.id} book={book} />
-							))}
-						</div>
-					) : (
-						<FinishedBooksEmptyState />
-					)}
-
-					<GoalCard goal={goal} />
+					<Link
+						to="/books"
+						aria-label="View all books"
+						className="uppercase text-muted text-xs transition-colors tracking-[0.06em] hover:text-accent"
+					>
+						View all
+					</Link>
 				</div>
-			</div>
+
+				{currentBook ? (
+					<CurrentBookCard book={currentBook} />
+				) : (
+					<CurrentBookEmptyState />
+				)}
+
+				{recentActivity.length > 0 && (
+					<>
+						<h3 className="text-xs text-muted font-medium uppercase tracking-widest">
+							Recent Activity
+						</h3>
+
+						<ul className="-mt-3">
+							{recentActivity.map((book) => (
+								<li
+									key={book.id}
+									className="border-b border-border last:border-b-0"
+								>
+									<BookActivityCard book={book} />
+								</li>
+							))}
+						</ul>
+					</>
+				)}
+			</section>
+
+			<section
+				aria-labelledby="weekly-stats-heading"
+				className="flex flex-col gap-6 justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.12s]"
+			>
+				<div className="w-full flex items-center justify-between">
+					<h2
+						id="weekly-stats-heading"
+						className="font-serif font-semibold tracking-tight text-xl"
+					>
+						Weekly Stats
+					</h2>
+					<Button
+						variant="primary"
+						size="sm"
+						onClick={() => setActivityOpen(true)}
+					>
+						<LucidePlus
+							aria-hidden="true"
+							className="size-3 md:hidden lg:block"
+						/>
+						Add Record
+					</Button>
+				</div>
+
+				{hasStats ? <WeeklyStatsContent /> : <WeeklyStatsEmptyState />}
+			</section>
+
+			<section
+				aria-labelledby="finished-heading"
+				className="flex gap-6 flex-col justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.19s]"
+			>
+				<h2
+					id="finished-heading"
+					className="font-serif font-semibold tracking-tight text-xl"
+				>
+					Finished
+				</h2>
+
+				{recentFinishedBooks.length > 0 ? (
+					<ul className="-mt-3">
+						{recentFinishedBooks.map((book) => (
+							<li key={book.id}>
+								<FinishedBookCard book={book} />
+							</li>
+						))}
+					</ul>
+				) : (
+					<FinishedBooksEmptyState />
+				)}
+
+				<GoalCard goal={goal} />
+			</section>
 
 			<ActivityModal
 				open={activityOpen}
 				onOpenChange={setActivityOpen}
 				mode="add"
 			/>
-		</>
+		</main>
 	)
 }
 
@@ -168,12 +195,12 @@ function CurrentBookCard({ book }: { book: Book }) {
 					/>
 
 					<div className="flex flex-col flex-1">
-						<span className="font-serif font-semibold leading-snug line-clamp-1">
+						<h3 className="font-serif font-semibold leading-snug line-clamp-1">
 							{book.title}
-						</span>
-						<span className="text-muted text-xs mt-0.5 mb-2.5 line-clamp-1">
+						</h3>
+						<p className="text-muted text-xs mt-0.5 mb-2.5 line-clamp-1">
 							{book.author}
-						</span>
+						</p>
 
 						<div className="flex justify-between text-xs text-muted mb-1.5">
 							<span>
@@ -184,13 +211,12 @@ function CurrentBookCard({ book }: { book: Book }) {
 						<div className="h-0.75 bg-surface2 rounded-full overflow-hidden">
 							<div
 								role="progressbar"
+								aria-label={`${book.title} reading progress`}
 								aria-valuenow={Math.round(progress)}
 								aria-valuemin={0}
 								aria-valuemax={100}
 								className="h-full bg-gradient-progress rounded-full"
-								style={{
-									width: `${progress}%`,
-								}}
+								style={{ width: `${progress}%` }}
 							/>
 						</div>
 					</div>
@@ -208,7 +234,7 @@ function CurrentBookEmptyState() {
 			</span>
 			<div className="flex gap-3.5 items-center">
 				<div className="w-13.5 h-19 rounded-md border border-dashed border-white/10 flex items-center justify-center shrink-0">
-					<LucideBookOpen className="size-5 text-white/15" />
+					<LucideBookOpen aria-hidden="true" className="size-5 text-white/15" />
 				</div>
 				<div className="flex flex-col flex-1 gap-2.5">
 					<p className="text-xs/normal text-muted">
@@ -287,7 +313,10 @@ function WeeklyStatsContent() {
 function WeeklyStatsEmptyState() {
 	return (
 		<>
-			<div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1">
+			<div
+				aria-hidden="true"
+				className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1"
+			>
 				<StatCard isEmpty label="Pages read" />
 				<StatCard isEmpty label="Hours read" />
 				<StatCard isEmpty label="Days streak" />
@@ -340,7 +369,7 @@ function WeeklyStatsEmptyState() {
 function FinishedBooksEmptyState() {
 	return (
 		<div className="flex flex-col items-center text-center py-7 px-4 pb-8 border-b border-border -mt-3">
-			<LucideLibrary className="size-12 text-muted mb-5" />
+			<LucideLibrary aria-hidden="true" className="size-12 text-muted mb-5" />
 			<p className="font-serif font-semibold text-sm lg:text-base text-text/50 mb-1.5">
 				No books finished yet
 			</p>
