@@ -10,11 +10,16 @@ interface BookCardProps {
 
 function Stars({ rating }: { rating: number }) {
 	return (
-		<span className="flex items-center gap-0.5 shrink-0">
+		<span
+			role="img"
+			aria-label={`${rating} out of 5 stars`}
+			className="flex items-center gap-0.5 shrink-0"
+		>
 			{Array.from({ length: 5 }, (_, i) => (
 				<LucideStar
 					// biome-ignore lint/suspicious/noArrayIndexKey: static array
 					key={i}
+					aria-hidden="true"
 					className={`size-3 ${i < rating ? 'fill-accent text-accent' : 'fill-transparent text-muted'}`}
 				/>
 			))}
@@ -37,6 +42,10 @@ export function BookCard({ book, onClick }: BookCardProps) {
 			className="group cursor-pointer animate-fade-up text-left w-full"
 			onClick={onClick}
 		>
+			<span className="sr-only">
+				{BOOK_STATUS[book.status].label}
+				{showProgress ? `, ${progress}% complete` : ''}
+			</span>
 			<div className="relative w-full aspect-2/3 rounded-lg overflow-hidden bg-surface2 shadow-[4px_6px_20px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-250 ease-out group-hover:-translate-y-1 group-hover:scale-[1.02] group-hover:shadow-[6px_12px_32px_rgba(0,0,0,0.6)] mb-3">
 				<img
 					src={book.bookCover ?? '/book-cover.jpg'}
@@ -57,7 +66,7 @@ export function BookCard({ book, onClick }: BookCardProps) {
 					</div>
 				)}
 
-				<div className="absolute inset-0 bg-linear-to-t from-black/75 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-250 flex items-end p-3">
+				<div className="absolute inset-0 bg-linear-to-t from-black/75 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-250 flex items-end p-3">
 					<span className="font-mono text-xs text-white/85 uppercase tracking-[0.08em]">
 						View details →
 					</span>

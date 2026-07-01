@@ -18,7 +18,7 @@ export function GoalCard({ goal }: { goal: Goal | null }) {
 	return (
 		<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
 			<p className="text-muted uppercase tracking-widest text-xs mb-3">
-				READING GOAL · {goal.year}
+				Reading Goal · {goal.year}
 			</p>
 
 			<div className="space-y-2">
@@ -33,6 +33,7 @@ export function GoalCard({ goal }: { goal: Goal | null }) {
 					<div
 						className="h-full bg-gradient-progress rounded-full"
 						role="progressbar"
+						aria-label={`Reading goal progress: ${goal.current} of ${goal.target} books`}
 						aria-valuenow={percent}
 						aria-valuemin={0}
 						aria-valuemax={100}
@@ -54,7 +55,7 @@ function EmptyCard({ year }: { year: number }) {
 	return (
 		<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
 			<p className="text-muted uppercase tracking-widest text-xs mb-3">
-				READING GOAL · {year}
+				Reading Goal · {year}
 			</p>
 
 			<div className="space-y-2">
@@ -84,11 +85,9 @@ export function GoalCardCompact({ goal }: { goal: Goal }) {
 
 	return (
 		<div className="px-4 py-3 border-b border-border">
-			<div className="flex items-center mb-2">
-				<span className="text-muted uppercase tracking-widest text-xs">
-					Reading Goal · {goal.year}
-				</span>
-			</div>
+			<p className="text-muted uppercase tracking-widest text-xs mb-2">
+				Reading goal · {goal.year}
+			</p>
 			<div className="flex justify-between items-baseline mb-2">
 				<p className="font-serif text-2xl font-semibold">
 					{goal.current}{' '}
@@ -101,6 +100,11 @@ export function GoalCardCompact({ goal }: { goal: Goal }) {
 			<div className="h-0.75 bg-surface2 rounded-full overflow-hidden">
 				<div
 					className="h-full rounded-full bg-gradient-progress"
+					role="progressbar"
+					aria-label={`Reading goal progress: ${goal.current} of ${goal.target} books`}
+					aria-valuenow={percent}
+					aria-valuemin={0}
+					aria-valuemax={100}
 					style={{ width: `${percent}%` }}
 				/>
 			</div>

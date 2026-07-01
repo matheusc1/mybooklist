@@ -9,26 +9,20 @@ const user: User = {
 	avatar: 'https://avatars.githubusercontent.com/u/117493813?v=4',
 }
 
-function UserMenuTrigger({ user }: { user: User }) {
-	const triggerClassName =
-		'size-9 rounded-full cursor-pointer hover:ring-3 hover:ring-accent/40 transition-all'
-
-	return (
-		<DropdownMenu.Trigger asChild aria-label="User menu">
-			{user.avatar ? (
-				<img
-					src={user.avatar}
-					alt={user.name}
-					className={`${triggerClassName} object-cover`}
-				/>
-			) : (
-				<div
-					className={`${triggerClassName} bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase`}
-				>
-					{user.name.charAt(0) || '?'}
-				</div>
-			)}
-		</DropdownMenu.Trigger>
+function UserMenuAvatar({ user }: { user: User }) {
+	return user.avatar ? (
+		<img
+			src={user.avatar}
+			alt={user.name}
+			className="size-9 rounded-full object-cover"
+		/>
+	) : (
+		<div
+			aria-hidden="true"
+			className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase"
+		>
+			{user.name.charAt(0) || '?'}
+		</div>
 	)
 }
 
@@ -42,8 +36,11 @@ export function UserMenu() {
 					<p className="text-sm font-medium text-text">{user.name}</p>
 					<p className="text-xs text-muted">{user.email}</p>
 				</div>
-				<DropdownMenu.Trigger asChild>
-					<UserMenuTrigger user={user} />
+				<DropdownMenu.Trigger
+					aria-label="Open user menu"
+					className="size-9 rounded-full cursor-pointer hover:ring-3 hover:ring-accent/40 transition-all"
+				>
+					<UserMenuAvatar user={user} />
 				</DropdownMenu.Trigger>
 			</div>
 

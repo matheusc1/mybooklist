@@ -21,7 +21,10 @@ function DropdownMenuUser({ user }: { user: User }) {
 					className="size-9 rounded-full object-cover"
 				/>
 			) : (
-				<div className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase">
+				<div
+					aria-hidden="true"
+					className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase"
+				>
 					{user.name.charAt(0) || '?'}
 				</div>
 			)}
@@ -49,9 +52,9 @@ function DropdownMenuActions({ onSignOut }: { onSignOut?: () => void }) {
 				onClick={() => openModal(goal ? 'edit' : 'add')}
 				className={`${itemClassName} hover:bg-surface2 hover:text-text data-highlighted:bg-surface2 data-highlighted:text-text`}
 			>
-				<span className={`${iconClassName} bg-accent/10 border-accent/15`}>
-					<LucideTarget className="size-4 text-accent" />
-				</span>
+				<div className={`${iconClassName} bg-accent/10 border-accent/15`}>
+					<LucideTarget aria-hidden="true" className="size-4 text-accent" />
+				</div>
 				Update reading goal
 			</DropdownMenu.Item>
 
@@ -60,9 +63,9 @@ function DropdownMenuActions({ onSignOut }: { onSignOut?: () => void }) {
 					to="/reading-speed"
 					className={`${itemClassName} hover:bg-surface2 hover:text-text data-highlighted:bg-surface2 data-highlighted:text-text`}
 				>
-					<span className={`${iconClassName} bg-accent/10 border-accent/15`}>
-						<LucideGauge className="size-4 text-accent" />
-					</span>
+					<div className={`${iconClassName} bg-accent/10 border-accent/15`}>
+						<LucideGauge aria-hidden="true" className="size-4 text-accent" />
+					</div>
 					Take reading speed test
 				</Link>
 			</DropdownMenu.Item>
@@ -73,9 +76,9 @@ function DropdownMenuActions({ onSignOut }: { onSignOut?: () => void }) {
 				onSelect={onSignOut}
 				className={`${itemClassName} hover:bg-danger/10 hover:text-danger data-highlighted:bg-danger/10 data-highlighted:text-danger`}
 			>
-				<span className={`${iconClassName} bg-danger/10 border-danger/15`}>
-					<LucideLogOut className="size-4 text-danger" />
-				</span>
+				<div className={`${iconClassName} bg-danger/10 border-danger/15`}>
+					<LucideLogOut aria-hidden="true" className="size-4 text-danger" />
+				</div>
 				Sign out
 			</DropdownMenu.Item>
 		</div>

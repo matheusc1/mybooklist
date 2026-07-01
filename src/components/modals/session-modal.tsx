@@ -79,9 +79,9 @@ function SessionModalBody({
 				) : (
 					<div className="flex flex-col items-center justify-center text-center">
 						<LucideMoon className="size-12 text-muted mb-4 stroke-1" />
-						<h2 className="font-serif font-semibold mb-1">
+						<h3 className="font-serif font-semibold mb-1">
 							No sessions logged
-						</h2>
+						</h3>
 						<p className="text-muted text-xs/relaxed max-w-50">
 							You didn't log any reading for this day.
 						</p>

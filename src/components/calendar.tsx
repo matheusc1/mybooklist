@@ -88,7 +88,7 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 						onClick={prevMonth}
 						aria-label="Previous month"
 					>
-						<LucideArrowLeft className="size-4" />
+						<LucideArrowLeft aria-hidden="true" className="size-4" />
 					</Button>
 
 					<Button
@@ -97,7 +97,7 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 						onClick={nextMonth}
 						aria-label="Next month"
 					>
-						<LucideArrowRight className="size-4" />
+						<LucideArrowRight aria-hidden="true" className="size-4" />
 					</Button>
 				</div>
 			</div>
@@ -133,7 +133,7 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 								type="button"
 								key={key}
 								onClick={() => onDayClick(key, state.daySessions)}
-								aria-label={`${dateLabel}${state.hasSession ? ', has reading session' : ''}`}
+								aria-label={`${dateLabel}${state.hasSession ? ', has reading session' : ', no sessions yet, click to add'}`}
 								className={cn(
 									'aspect-square rounded-lg flex flex-col items-center justify-center relative',
 									'font-mono text-sm text-muted/60 border border-transparent transition-all duration-150 cursor-pointer hover:border-border',
@@ -150,6 +150,7 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 
 								{state.hasSession && (
 									<span
+										aria-hidden="true"
 										className={cn(
 											'absolute bottom-1.5 size-1 sm:size-1.5 rounded-full',
 											state.isMulti ? 'bg-accent2' : 'bg-accent',
@@ -164,15 +165,23 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 
 			<div className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs text-muted uppercase tracking-wider">
 				<div className="flex items-center gap-1.5">
-					<div className="size-1.5 rounded-full bg-accent" /> Session logged
+					<div aria-hidden="true" className="size-1.5 rounded-full bg-accent" />{' '}
+					Session logged
 				</div>
 
 				<div className="flex items-center gap-1.5">
-					<div className="size-1.5 rounded-full bg-accent2" /> Multiple sessions
+					<div
+						aria-hidden="true"
+						className="size-1.5 rounded-full bg-accent2"
+					/>{' '}
+					Multiple sessions
 				</div>
 
 				<div className="flex items-center gap-1.5">
-					<div className="size-1.5 rounded-full bg-accent/40 border border-accent" />
+					<div
+						aria-hidden="true"
+						className="size-1.5 rounded-full bg-accent/40 border border-accent"
+					/>
 					Today
 				</div>
 			</div>

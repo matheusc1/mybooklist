@@ -25,11 +25,16 @@ export function FinishedBookCard({ book }: FinishedBookCardProps) {
 				</h3>
 				<p className="line-clamp-1 text-xs text-muted mb-2">{book.author}</p>
 
-				<div className="flex gap-0.5 mb-1">
+				<div
+					className="flex gap-0.5 mb-1"
+					role="img"
+					aria-label={`${book.rating ?? 0} out of 5 stars`}
+				>
 					{stars.map((isFilled, i) => (
 						<LucideStar
 							// biome-ignore lint/suspicious/noArrayIndexKey: stars is a static derived array; order never changes
 							key={i}
+							aria-hidden="true"
 							size={12}
 							className={isFilled ? 'fill-accent text-accent' : 'text-surface2'}
 						/>
