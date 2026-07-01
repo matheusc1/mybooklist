@@ -44,13 +44,16 @@ export function BookCombobox({
 						className="flex items-center justify-center rounded p-1 text-muted transition-colors duration-100 hover:text-text data-visible:opacity-100 opacity-0 bg-transparent border-none cursor-pointer"
 						aria-label="Clear"
 					>
-						<LucideX className="size-3.5" />
+						<LucideX aria-hidden="true" className="size-3.5" />
 					</Combobox.Clear>
 					<Combobox.Trigger
 						className="flex items-center justify-center p-1 text-muted bg-transparent border-none cursor-pointer"
 						aria-label="Open"
 					>
-						<LucideChevronDown className="size-4 transition-transform duration-150 data-popup-open:rotate-180" />
+						<LucideChevronDown
+							aria-hidden="true"
+							className="size-4 transition-transform duration-150 data-popup-open:rotate-180"
+						/>
 					</Combobox.Trigger>
 				</div>
 			</Combobox.InputGroup>
@@ -93,7 +96,10 @@ export function BookCombobox({
 									</div>
 
 									<Combobox.ItemIndicator className="shrink-0">
-										<LucideCheck className="size-4 text-accent" />
+										<LucideCheck
+											aria-hidden="true"
+											className="size-4 text-accent"
+										/>
 									</Combobox.ItemIndicator>
 								</Combobox.Item>
 							)}

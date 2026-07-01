@@ -20,6 +20,7 @@ export function NavBar() {
 							className="text-sm text-muted p-1.5 rounded-md transition-all uppercase tracking-wide hover:text-text hover:bg-surface2"
 							activeProps={{
 								className: '!text-accent bg-surface2 font-medium',
+								'aria-current': 'page',
 							}}
 							key={link.to}
 							to={link.to}
@@ -31,7 +32,7 @@ export function NavBar() {
 
 				<UserMenu />
 			</nav>
-			<div className="w-full h-px bg-border" />
+			<div aria-hidden="true" className="w-full h-px bg-border" />
 		</div>
 	)
 }

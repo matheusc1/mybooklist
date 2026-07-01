@@ -58,7 +58,10 @@ export function BookStatusSelector({
 			<div
 				className={`self-start inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold ${bg} ${text}`}
 			>
-				<span className={`size-1.5 rounded-full shrink-0 ${dot}`} />
+				<span
+					aria-hidden="true"
+					className={`size-1.5 rounded-full shrink-0 ${dot}`}
+				/>
 				{selected.label}
 			</div>
 		)

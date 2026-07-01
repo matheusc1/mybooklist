@@ -31,7 +31,7 @@ export function GenreSelector({ ...props }: GenreSelectorProps) {
 			>
 				<Select.Value placeholder="Select a genre" />
 				<Select.Icon className="text-muted">
-					<LucideChevronDown className="size-4" />
+					<LucideChevronDown aria-hidden="true" className="size-4" />
 				</Select.Icon>
 			</Select.Trigger>
 
@@ -54,7 +54,10 @@ export function GenreSelector({ ...props }: GenreSelectorProps) {
 								>
 									<Select.ItemText>{label}</Select.ItemText>
 									<Select.ItemIndicator>
-										<LucideCheck className="size-4 text-accent" />
+										<LucideCheck
+											aria-hidden="true"
+											className="size-4 text-accent"
+										/>
 									</Select.ItemIndicator>
 								</Select.Item>
 							))}

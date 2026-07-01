@@ -28,7 +28,7 @@ export function ModalHeader({
 
 			<Dialog.Close asChild>
 				<Button variant="icon" size="icon" aria-label="Close modal">
-					<LucideX className="size-4" />
+					<LucideX aria-hidden="true" className="size-4" />
 				</Button>
 			</Dialog.Close>
 		</header>

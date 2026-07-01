@@ -26,6 +26,7 @@ export function RatingStars({ value, onChange, disabled }: RatingStarsProps) {
 			onMouseLeave={() => setHovered(0)}
 			disabled={disabled}
 		>
+			<legend className="sr-only">Rating</legend>
 			{[1, 2, 3, 4, 5].map((star) => (
 				<button
 					key={star}
