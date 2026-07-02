@@ -133,6 +133,7 @@ export function BookModal({
 						}}
 					>
 						<fieldset className="space-y-4" disabled={isView}>
+							<legend className="sr-only">Book details</legend>
 							<form.Field name="title">
 								{(field) => (
 									<div className="flex flex-col gap-2">
@@ -147,8 +148,15 @@ export function BookModal({
 											onChange={(e) => field.handleChange(e.target.value)}
 											placeholder="e.g. The Name of the Wind"
 											readOnly={isView}
+											aria-describedby={
+												field.state.meta.errors[0]
+													? `${field.name}-error`
+													: undefined
+											}
+											aria-invalid={!!field.state.meta.errors[0]}
 										/>
 										<FieldError
+											id={`${field.name}-error`}
 											message={field.state.meta.errors[0]?.message}
 											className="-mt-1"
 										/>
@@ -170,8 +178,15 @@ export function BookModal({
 											onChange={(e) => field.handleChange(e.target.value)}
 											placeholder="e.g. Patrick Rothfuss"
 											readOnly={isView}
+											aria-describedby={
+												field.state.meta.errors[0]
+													? `${field.name}-error`
+													: undefined
+											}
+											aria-invalid={!!field.state.meta.errors[0]}
 										/>
 										<FieldError
+											id={`${field.name}-error`}
 											message={field.state.meta.errors[0]?.message}
 											className="-mt-1"
 										/>
@@ -191,8 +206,15 @@ export function BookModal({
 											onChange={(e) => field.handleChange(e.target.value)}
 											placeholder="e.g. https://covers.openlibrary.org/b/id/15143311-M.jpg"
 											readOnly={isView}
+											aria-describedby={
+												field.state.meta.errors[0]
+													? `${field.name}-error`
+													: undefined
+											}
+											aria-invalid={!!field.state.meta.errors[0]}
 										/>
 										<FieldError
+											id={`${field.name}-error`}
 											message={field.state.meta.errors[0]?.message}
 											className="-mt-1"
 										/>
@@ -258,8 +280,15 @@ export function BookModal({
 													}
 													placeholder="0"
 													readOnly={isView}
+													aria-describedby={
+														field.state.meta.errors[0]
+															? `${field.name}-error`
+															: undefined
+													}
+													aria-invalid={!!field.state.meta.errors[0]}
 												/>
 												<FieldError
+													id={`${field.name}-error`}
 													message={field.state.meta.errors[0]?.message}
 													className="-mt-1"
 												/>
@@ -287,8 +316,15 @@ export function BookModal({
 													}
 													placeholder="e.g. 622"
 													readOnly={isView}
+													aria-describedby={
+														field.state.meta.errors[0]
+															? `${field.name}-error`
+															: undefined
+													}
+													aria-invalid={!!field.state.meta.errors[0]}
 												/>
 												<FieldError
+													id={`${field.name}-error`}
 													message={field.state.meta.errors[0]?.message}
 													className="-mt-1"
 												/>
@@ -311,6 +347,7 @@ export function BookModal({
 									<div
 										className="h-full bg-gradient-progress rounded-full transition-all duration-300"
 										role="progressbar"
+										aria-label="Reading progress"
 										aria-valuenow={progress}
 										aria-valuemin={0}
 										aria-valuemax={100}
@@ -385,7 +422,7 @@ export function BookModal({
 							type="button"
 							aria-label="Delete book"
 						>
-							<LucideTrash2 className="size-5" />
+							<LucideTrash2 aria-hidden="true" className="size-5" />
 						</Button>
 					)}
 

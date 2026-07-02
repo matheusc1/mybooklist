@@ -51,7 +51,7 @@ export function GoalModal() {
 				<Modal.Body>
 					<form.Field name="target">
 						{(field) => (
-							<fieldset className="flex flex-col gap-2">
+							<div className="flex flex-col gap-2">
 								<FieldLabel required htmlFor={field.name}>
 									Books to read
 								</FieldLabel>
@@ -63,15 +63,21 @@ export function GoalModal() {
 									onChange={(e) => field.handleChange(e.target.valueAsNumber)}
 									type="number"
 									placeholder="e.g. 12"
+									aria-describedby={`${field.name}-hint${field.state.meta.errors[0] ? ` ${field.name}-error` : ''}`}
+									aria-invalid={!!field.state.meta.errors[0]}
 								/>
+								<span
+									id={`${field.name}-hint`}
+									className="font-medium text-xs text-muted -mt-1"
+								>
+									How many books do you want to read this year?
+								</span>
 								<FieldError
+									id={`${field.name}-error`}
 									message={field.state.meta.errors[0]?.message}
 									className="-mt-1"
 								/>
-								<span className="font-medium text-xs text-muted -mt-1">
-									How many books do you want to read this year?
-								</span>
-							</fieldset>
+							</div>
 						)}
 					</form.Field>
 				</Modal.Body>

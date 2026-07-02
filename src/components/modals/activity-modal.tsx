@@ -83,6 +83,7 @@ export function ActivityModal({
 					<Modal.Body>
 						<div ref={containerRef} />
 						<fieldset className="space-y-4" disabled={isView}>
+							<legend className="sr-only">Session details</legend>
 							<form.Field name="bookId">
 								{(field) => {
 									const selectedBook =
@@ -91,7 +92,9 @@ export function ActivityModal({
 
 									return (
 										<div className="flex flex-col gap-2">
-											<FieldLabel required={!isView}>Book</FieldLabel>
+											<FieldLabel htmlFor="book-search" required={!isView}>
+												Book
+											</FieldLabel>
 											<BookCombobox
 												books={books}
 												value={selectedBook}
@@ -106,6 +109,7 @@ export function ActivityModal({
 												container={containerRef}
 											/>
 											<FieldError
+												id="bookId-error"
 												message={field.state.meta.errors[0]?.message}
 												className="-mt-1"
 											/>
@@ -161,8 +165,15 @@ export function ActivityModal({
 												}
 												placeholder="0"
 												readOnly={isView}
+												aria-describedby={
+													field.state.meta.errors[0]
+														? `${field.name}-error`
+														: undefined
+												}
+												aria-invalid={!!field.state.meta.errors[0]}
 											/>
 											<FieldError
+												id={`${field.name}-error`}
 												message={field.state.meta.errors[0]?.message}
 												className="-mt-1"
 											/>
@@ -187,8 +198,15 @@ export function ActivityModal({
 												}
 												placeholder="e.g. 22"
 												readOnly={isView}
+												aria-describedby={
+													field.state.meta.errors[0]
+														? `${field.name}-error`
+														: undefined
+												}
+												aria-invalid={!!field.state.meta.errors[0]}
 											/>
 											<FieldError
+												id={`${field.name}-error`}
 												message={field.state.meta.errors[0]?.message}
 												className="-mt-1"
 											/>
@@ -237,7 +255,7 @@ export function ActivityModal({
 								type="button"
 								aria-label="Delete session"
 							>
-								<LucideTrash2 className="size-5" />
+								<LucideTrash2 aria-hidden="true" className="size-5" />
 							</Button>
 						)}
 

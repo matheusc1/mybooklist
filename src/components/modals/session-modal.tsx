@@ -78,7 +78,10 @@ function SessionModalBody({
 					))
 				) : (
 					<div className="flex flex-col items-center justify-center text-center">
-						<LucideMoon className="size-12 text-muted mb-4 stroke-1" />
+						<LucideMoon
+							aria-hidden="true"
+							className="size-12 text-muted mb-4 stroke-1"
+						/>
 						<h3 className="font-serif font-semibold mb-1">
 							No sessions logged
 						</h3>
@@ -129,7 +132,7 @@ function SessionCard({
 						PP. {session.fromPage}-{session.toPage}
 					</p>
 					<div className="flex items-center text-accent2 gap-1">
-						<LucideTimer className="size-3" />
+						<LucideTimer aria-hidden="true" className="size-3" />
 						{session.duration}min
 					</div>
 				</div>
@@ -138,7 +141,10 @@ function SessionCard({
 			<sup className="font-mono text-xxs self-start mt-0.5 text-text/50">
 				#{index}
 			</sup>
-			<LucideArrowRight className="size-5 text-muted transition-transform group-hover:text-accent group-hover:translate-x-0.75" />
+			<LucideArrowRight
+				aria-hidden="true"
+				className="size-5 text-muted transition-transform group-hover:text-accent group-hover:translate-x-0.75"
+			/>
 		</button>
 	)
 }
