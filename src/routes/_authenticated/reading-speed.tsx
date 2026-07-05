@@ -269,12 +269,11 @@ function ResultContent({
 				</p>
 				<div aria-hidden="true" className="h-px bg-border mb-4" />
 				<p className="text-xs/[1.6] text-muted">
-					Your stats will now reflect{' '}
+					Future sessions will reflect{' '}
 					<strong className="font-medium text-text/55">
-						~{formatPace(secondsPerPage)} per page
+						~{formatPace(secondsPerPage)} per page.
 					</strong>{' '}
-					for all past and future reading sessions. You can retake this test
-					anytime from your profile menu.
+					Past sessions are preserved with the speed recorded at the time.
 				</p>
 			</div>
 			<div className="flex items-center justify-center gap-3">
