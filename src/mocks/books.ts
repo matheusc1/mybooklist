@@ -2,7 +2,7 @@ import type { Book } from '#/types/types'
 
 export const books = [
 	{
-		id: 1,
+		id: 'the-hobbit',
 		title: 'The Hobbit',
 		author: 'J.R.R. Tolkien',
 		genre: 'fantasy',
@@ -14,7 +14,7 @@ export const books = [
 		updatedAt: '2026-05-29',
 	},
 	{
-		id: 2,
+		id: 'crime-and-punishment',
 		title: 'Crime and Punishment',
 		author: 'Fyodor Dostoevsky',
 		genre: 'literary-fiction',
@@ -26,7 +26,7 @@ export const books = [
 		updatedAt: '2026-05-31',
 	},
 	{
-		id: 3,
+		id: 'the-final-empire',
 		title: 'The Final Empire',
 		author: 'Brandon Sanderson',
 		genre: 'fantasy',
@@ -40,7 +40,7 @@ export const books = [
 		updatedAt: '2026-02-14',
 	},
 	{
-		id: 4,
+		id: 'brave-new-world',
 		title: 'Brave New World',
 		author: 'Aldous Huxley',
 		genre: 'sci-fi',
@@ -54,7 +54,7 @@ export const books = [
 		updatedAt: '2026-03-02',
 	},
 	{
-		id: 5,
+		id: '1984',
 		title: '1984',
 		author: 'George Orwell',
 		genre: 'literary-fiction',
@@ -68,7 +68,7 @@ export const books = [
 		updatedAt: '2026-03-20',
 	},
 	{
-		id: 6,
+		id: 'dune',
 		title: 'Dune',
 		author: 'Frank Herbert',
 		genre: 'sci-fi',
@@ -79,7 +79,7 @@ export const books = [
 		updatedAt: '2026-05-10',
 	},
 	{
-		id: 7,
+		id: 'the-way-of-kings',
 		title: 'The Way of Kings',
 		author: 'Brandon Sanderson',
 		genre: 'fantasy',
@@ -90,7 +90,7 @@ export const books = [
 		updatedAt: '2026-05-08',
 	},
 	{
-		id: 8,
+		id: 'sapiens',
 		title: 'Sapiens',
 		author: 'Yuval Noah Harari',
 		genre: 'non-fiction',
@@ -104,7 +104,7 @@ export const books = [
 		updatedAt: '2026-04-01',
 	},
 	{
-		id: 9,
+		id: 'the-brothers-karamazov',
 		title: 'The Brothers Karamazov',
 		author: 'Fyodor Dostoevsky',
 		genre: 'literary-fiction',
@@ -116,7 +116,7 @@ export const books = [
 		updatedAt: '2026-05-28',
 	},
 	{
-		id: 10,
+		id: 'neuromancer',
 		title: 'Neuromancer',
 		author: 'William Gibson',
 		genre: 'sci-fi',
@@ -129,7 +129,7 @@ export const books = [
 		updatedAt: '2026-04-15',
 	},
 	{
-		id: 11,
+		id: 'atomic-habits',
 		title: 'Atomic Habits',
 		author: 'James Clear',
 		genre: 'non-fiction',
@@ -143,7 +143,7 @@ export const books = [
 		updatedAt: '2026-04-18',
 	},
 	{
-		id: 12,
+		id: 'the-name-of-the-wind',
 		title: 'The Name of the Wind',
 		author: 'Patrick Rothfuss',
 		genre: 'fantasy',
@@ -154,7 +154,7 @@ export const books = [
 		updatedAt: '2026-05-15',
 	},
 	{
-		id: 13,
+		id: 'east-of-eden',
 		title: 'East of Eden',
 		author: 'John Steinbeck',
 		genre: 'literary-fiction',
@@ -168,7 +168,7 @@ export const books = [
 		updatedAt: '2026-05-12',
 	},
 	{
-		id: 14,
+		id: 'project-hail-mary',
 		title: 'Project Hail Mary',
 		author: 'Andy Weir',
 		genre: 'sci-fi',
