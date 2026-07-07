@@ -386,9 +386,14 @@ function PrivacyPolicy() {
 
 								<p>
 									To request account deletion, contact us at{' '}
-									<strong className="font-medium text-text">
-										cardoso.matheusbs@gmail.com
-									</strong>{' '}
+									<a
+										href="mailto:cardoso.matheusbs@gmail.com"
+										className="text-text hover:text-accent2 transition-colors"
+									>
+										<strong className="font-medium underline underline-offset-2">
+											cardoso.matheusbs@gmail.com
+										</strong>
+									</a>
 									and we will process your request within 7 days.
 								</p>
 							</div>
@@ -425,9 +430,14 @@ function PrivacyPolicy() {
 								<p>
 									If you have any questions or concerns about this Privacy
 									Policy or how your data is handled, please reach out at{' '}
-									<strong className="font-medium text-text">
-										cardoso.matheusbs@gmail.com
-									</strong>
+									<a
+										href="mailto:cardoso.matheusbs@gmail.com"
+										className="text-text hover:text-accent2 transition-colors"
+									>
+										<strong className="font-medium underline underline-offset-2">
+											cardoso.matheusbs@gmail.com
+										</strong>
+									</a>
 									. We will respond as soon as possible.
 								</p>
 							</div>

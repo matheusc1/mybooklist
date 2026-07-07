@@ -318,9 +318,14 @@ function TermsOfService() {
 								<p>
 									If you have any questions about these Terms of Service, you
 									can reach out at{' '}
-									<strong className="font-medium text-text">
-										cardoso.matheusbs@gmail.com
-									</strong>
+									<a
+										href="mailto:cardoso.matheusbs@gmail.com"
+										className="text-text hover:text-accent transition-colors"
+									>
+										<strong className="font-medium underline underline-offset-2">
+											cardoso.matheusbs@gmail.com
+										</strong>
+									</a>
 									.
 								</p>
 							</div>
