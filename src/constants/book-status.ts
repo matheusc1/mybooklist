@@ -15,12 +15,12 @@ export const BOOK_STATUS = {
 		color: 'bg-parchment',
 	},
 	finished: {
-		label: 'Finished',
-		shortLabel: 'Finished',
+		label: 'Completed',
+		shortLabel: 'Completed',
 		color: 'bg-accent',
 	},
-	abandoned: {
-		label: 'Abandoned',
+	dropped: {
+		label: 'Dropped',
 		shortLabel: 'Dropped',
 		color: 'bg-danger',
 	},

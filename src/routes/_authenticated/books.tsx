@@ -58,10 +58,10 @@ const filters: Filter[] = [
 		activeColor: BOOK_STATUS.paused.color,
 	},
 	{
-		label: BOOK_STATUS.abandoned.label,
-		status: 'abandoned',
+		label: BOOK_STATUS.dropped.label,
+		status: 'dropped',
 		color: 'bg-danger/50',
-		activeColor: BOOK_STATUS.abandoned.color,
+		activeColor: BOOK_STATUS.dropped.color,
 	},
 ]
 

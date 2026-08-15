@@ -30,7 +30,7 @@ const statusConfig = {
 		text: 'text-accent',
 		bg: 'bg-accent/15',
 	},
-	abandoned: {
+	dropped: {
 		active: 'data-[state=checked]:bg-danger',
 		dot: 'bg-danger',
 		text: 'text-danger',

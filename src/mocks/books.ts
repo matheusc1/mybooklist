@@ -120,7 +120,7 @@ export const books = [
 		title: 'Neuromancer',
 		author: 'William Gibson',
 		genre: 'sci-fi',
-		status: 'abandoned',
+		status: 'dropped',
 		currentPage: 104,
 		totalPages: 271,
 		rating: 2,
