@@ -1,11 +1,11 @@
 import { create } from 'zustand'
-import type { Goal } from '#/types/types'
+import type { GoalProgress } from '#/types/goal'
 
 type GoalModalMode = 'add' | 'edit'
 
 interface GoalStore {
 	// data
-	goal: Goal | null
+	goal: GoalProgress | null
 
 	// modal
 	open: boolean
@@ -18,8 +18,7 @@ interface GoalStore {
 	setGoal: (target: number) => void
 }
 
-const MOCKED_GOAL: Goal = {
-	id: '1',
+const MOCKED_GOAL: GoalProgress = {
 	year: new Date().getFullYear(),
 	current: 2,
 	target: 12,
@@ -38,7 +37,6 @@ export const useGoalStore = create<GoalStore>((set) => ({
 	setGoal: (target) =>
 		set((state) => ({
 			goal: {
-				id: state.goal?.id ?? crypto.randomUUID(),
 				year: new Date().getFullYear(),
 				current: state.goal?.current ?? 0,
 				target,

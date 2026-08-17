@@ -3,7 +3,8 @@ import { useStore } from '@tanstack/react-store'
 import { LucideTrash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import z from 'zod'
-import type { Book, Mode } from '#/types/types'
+import type { Book } from '#/types/book'
+import type { ModalMode } from '#/types/common'
 import { getPercent } from '#/utils/get-percent'
 import { Button } from '../ui/button'
 import {
@@ -17,17 +18,17 @@ import {
 import { Modal } from '../ui/modal'
 import { DeleteModal } from './delete-modal'
 
-type BookModalProps = {
+interface BookModalProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	mode?: Mode
+	mode?: ModalMode
 	book?: Book
 }
 
 const bookSchema = z.object({
 	title: z.string().min(1, 'Title cannot be empty'),
 	author: z.string().min(1, 'Author cannot be empty'),
-	bookCover: z.url({ message: 'Must be a valid URL' }).or(z.literal('')),
+	coverUrl: z.url({ message: 'Must be a valid URL' }).or(z.literal('')),
 	genre: z.string().min(1, 'Genre cannot be empty'),
 	status: z.string().min(1, 'Status cannot be empty'),
 	currentPage: z.union([
@@ -39,8 +40,8 @@ const bookSchema = z.object({
 		z.undefined(),
 	]),
 	rating: z.union([z.number(), z.undefined()]),
-	dateStarted: z.string(),
-	dateFinished: z.string(),
+	startedAt: z.string(),
+	completedAt: z.string(),
 })
 
 const headerTitleMap = {
@@ -55,7 +56,7 @@ export function BookModal({
 	mode = 'add',
 	book,
 }: BookModalProps) {
-	const [currentMode, setCurrentMode] = useState<Mode>(mode)
+	const [currentMode, setCurrentMode] = useState<ModalMode>(mode)
 	const [deleteOpen, setDeleteOpen] = useState(false)
 
 	const isView = currentMode === 'view'
@@ -65,14 +66,14 @@ export function BookModal({
 		defaultValues: {
 			title: book?.title ?? '',
 			author: book?.author ?? '',
-			bookCover: book?.bookCover ?? '',
+			coverUrl: book?.coverUrl ?? '',
 			genre: book?.genre ?? '',
 			status: book?.status ?? '',
 			currentPage: book?.currentPage ?? (undefined as number | undefined),
 			totalPages: book?.totalPages ?? (undefined as number | undefined),
 			rating: book?.rating ?? (undefined as number | undefined),
-			dateStarted: book?.startDate ?? '',
-			dateFinished: book?.endDate ?? '',
+			startedAt: book?.startedAt ?? '',
+			completedAt: book?.completedAt ?? '',
 		},
 		validators: {
 			onChange: bookSchema,
@@ -101,13 +102,13 @@ export function BookModal({
 		const total = fieldName === 'totalPages' ? value : (totalPages ?? 0)
 
 		if (total > 0 && current >= total) {
-			if (status !== 'finished') prevStatusRef.current = status
-			form.setFieldValue('status', 'finished')
+			if (status !== 'completed') prevStatusRef.current = status
+			form.setFieldValue('status', 'completed')
 			const today = new Date().toISOString().split('T')[0]
-			form.setFieldValue('dateFinished', today)
+			form.setFieldValue('completedAt', today)
 		} else if (prevStatusRef.current !== null) {
 			form.setFieldValue('status', prevStatusRef.current)
-			form.setFieldValue('dateFinished', '')
+			form.setFieldValue('completedAt', '')
 			prevStatusRef.current = null
 		}
 	}
@@ -194,7 +195,7 @@ export function BookModal({
 								)}
 							</form.Field>
 
-							<form.Field name="bookCover">
+							<form.Field name="coverUrl">
 								{(field) => (
 									<div className="flex flex-col gap-2">
 										<FieldLabel htmlFor={field.name}>Book Cover</FieldLabel>
@@ -258,7 +259,7 @@ export function BookModal({
 								)}
 							</form.Field>
 
-							{!(isView && status === 'finished') && (
+							{!(isView && status === 'completed') && (
 								<div className="flex gap-3">
 									<form.Field name="currentPage">
 										{(field) => (
@@ -370,7 +371,7 @@ export function BookModal({
 							</form.Field>
 
 							<div className="grid grid-cols-2 gap-3">
-								<form.Field name="dateStarted">
+								<form.Field name="startedAt">
 									{(field) => (
 										<div className="flex flex-col gap-2">
 											<FieldLabel htmlFor={field.name}>Date Started</FieldLabel>
@@ -387,12 +388,12 @@ export function BookModal({
 									)}
 								</form.Field>
 
-								{status === 'finished' && (
-									<form.Field name="dateFinished">
+								{status === 'completed' && (
+									<form.Field name="completedAt">
 										{(field) => (
 											<div className="flex flex-col gap-2">
 												<FieldLabel htmlFor={field.name}>
-													Date Finished
+													Date Completed
 												</FieldLabel>
 												<Input
 													id={field.name}

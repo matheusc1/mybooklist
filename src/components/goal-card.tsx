@@ -1,5 +1,5 @@
 import { useGoalStore } from '#/stores/goal-store'
-import type { Goal } from '#/types/types'
+import type { GoalProgress } from '#/types/goal'
 import { getPercent } from '#/utils/get-percent'
 
 function formatMonthsRemaining(months: number): string {
@@ -7,12 +7,12 @@ function formatMonthsRemaining(months: number): string {
 	return `${months} month${months === 1 ? '' : 's'} remaining`
 }
 
-export function GoalCard({ goal }: { goal: Goal | null }) {
+export function GoalCard({ goal }: { goal: GoalProgress | null }) {
 	const now = new Date()
 
 	if (!goal) return <EmptyCard year={now.getFullYear()} />
 
-	const percent = getPercent(goal.current, goal.target)
+	const percent = getPercent(goal.current, goal.target ?? 0)
 	const monthsRemaining = 11 - now.getMonth()
 
 	return (
@@ -80,8 +80,8 @@ function EmptyCard({ year }: { year: number }) {
 	)
 }
 
-export function GoalCardCompact({ goal }: { goal: Goal }) {
-	const percent = getPercent(goal.current, goal.target)
+export function GoalCardCompact({ goal }: { goal: GoalProgress }) {
+	const percent = getPercent(goal.current, goal.target ?? 0)
 
 	return (
 		<div className="px-4 py-3 border-b border-border">

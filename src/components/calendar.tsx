@@ -3,26 +3,19 @@ import { useMemo, useState } from 'react'
 import { cn } from 'tailwind-variants'
 import { Button } from '#/components/ui/button'
 import { getCalendarDays } from '#/hooks/get-calendar-days'
-import type { ActivityResponse } from '#/types/types'
+import type { Activity } from '#/types/activity'
 
-type Session = {
-	bookId: string
-	title: string
-	author: string
-	fromPage: number
-	toPage: number
-	duration: number
-}
+type Session = Activity['monthlyActivity'][number]['sessions'][number]
 
-type DayState = {
+interface DayState {
 	daySessions: Session[]
 	isToday: boolean
 	hasSession: boolean
 	isMulti: boolean
 }
 
-type CalendarProps = {
-	calendar: ActivityResponse['calendar']
+interface CalendarProps {
+	calendar: Activity['monthlyActivity']
 	onDayClick: (date: string, sessions: Session[]) => void
 }
 

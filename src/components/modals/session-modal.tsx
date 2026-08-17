@@ -1,12 +1,12 @@
 import { LucideArrowRight, LucideMoon, LucideTimer } from 'lucide-react'
 import { useState } from 'react'
-import type { ActivityResponse } from '#/types/types'
+import type { Activity } from '#/types/activity'
 import { formatBookDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
 import { Modal } from '../ui/modal'
 import { ActivityModal } from './activity-modal'
 
-type Session = ActivityResponse['calendar'][number]['sessions'][number]
+type Session = Activity['monthlyActivity'][number]['sessions'][number]
 
 interface SessionModalProps {
 	open: boolean
@@ -112,10 +112,8 @@ function SessionCard({
 			className="group bg-surface2 border flex items-center gap-3 rounded-xl py-3 px-4 border-border hover:bg-surface3 hover:border-accent/30 hover:translate-x-0.75 cursor-pointer transition-all w-full text-left appearance-none"
 		>
 			<img
-				src={session.bookCover ?? '/book-cover.jpg'}
-				alt={
-					session.bookCover ? `${session.title} cover` : 'Default Book Cover'
-				}
+				src={session.coverUrl ?? '/book-cover.jpg'}
+				alt={session.coverUrl ? `${session.title} cover` : 'Default Book Cover'}
 				className="w-10 h-15 object-cover rounded-sm"
 			/>
 

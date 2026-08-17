@@ -1,18 +1,18 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { useGoalStore } from '#/stores/goal-store'
-import type { User } from '#/types/types'
+import type { UserUI } from '#/types/user'
 import { UserDropdown } from './dropdown-menu'
 
-const user: User = {
+const user: UserUI = {
 	name: 'John Doe',
 	email: 'john.doe@example.com',
-	avatar: 'https://avatars.githubusercontent.com/u/117493813?v=4',
+	avatarUrl: 'https://avatars.githubusercontent.com/u/117493813?v=4',
 }
 
-function UserMenuAvatar({ user }: { user: User }) {
-	return user.avatar ? (
+function UserMenuAvatar({ user }: { user: UserUI }) {
+	return user.avatarUrl ? (
 		<img
-			src={user.avatar}
+			src={user.avatarUrl}
 			alt={user.name}
 			className="size-9 rounded-full object-cover"
 		/>

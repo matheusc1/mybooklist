@@ -1,6 +1,6 @@
 import { Combobox } from '@base-ui/react/combobox'
 import { LucideCheck, LucideChevronDown, LucideX } from 'lucide-react'
-import type { Book } from '#/types/types'
+import type { Book } from '#/types/book'
 
 interface BookComboboxProps {
 	books: Book[]
@@ -81,7 +81,7 @@ export function BookCombobox({
 									className="flex cursor-pointer select-none items-center gap-3 rounded-md px-3 py-1.5 text-sm outline-none transition-colors duration-100 data-highlighted:bg-surface3 data-selected:text-accent"
 								>
 									<img
-										src={book.bookCover ?? '/book-cover.jpg'}
+										src={book.coverUrl ?? '/book-cover.jpg'}
 										alt=""
 										className="h-11 w-7 shrink-0 rounded object-cover"
 									/>

@@ -2,21 +2,22 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Link } from '@tanstack/react-router'
 import { LucideGauge, LucideLogOut, LucideTarget } from 'lucide-react'
 import { useGoalStore } from '#/stores/goal-store'
-import type { Goal, User } from '#/types/types'
+import type { GoalProgress } from '#/types/goal'
+import type { UserUI } from '#/types/user'
 import { GoalCardCompact } from './goal-card'
 
-type UserDropdownProps = {
-	user: User
-	goal: Goal | null
+interface UserDropdownProps {
+	user: UserUI
+	goal: GoalProgress | null
 	onSignOut?: () => void
 }
 
-function DropdownMenuUser({ user }: { user: User }) {
+function DropdownMenuUser({ user }: { user: UserUI }) {
 	return (
 		<div className="flex items-center gap-3 px-4 py-3.5 border-b border-border">
-			{user.avatar ? (
+			{user.avatarUrl ? (
 				<img
-					src={user.avatar}
+					src={user.avatarUrl}
 					alt={user.name}
 					className="size-9 rounded-full object-cover"
 				/>

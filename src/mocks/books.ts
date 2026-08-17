@@ -1,4 +1,4 @@
-import type { Book } from '#/types/types'
+import type { Book } from '#/types/book'
 
 export const books = [
 	{
@@ -9,8 +9,8 @@ export const books = [
 		status: 'reading',
 		currentPage: 127,
 		totalPages: 310,
-		bookCover: 'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
-		startDate: '2026-05-01',
+		coverUrl: 'https://m.media-amazon.com/images/I/81mCE+uclxL._SL1500_.jpg',
+		startedAt: '2026-05-01',
 		updatedAt: '2026-05-29',
 	},
 	{
@@ -21,8 +21,8 @@ export const books = [
 		status: 'reading',
 		currentPage: 412,
 		totalPages: 671,
-		bookCover: 'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
-		startDate: '2026-04-10',
+		coverUrl: 'https://m.media-amazon.com/images/I/91Y6iPqpi2L._SL1500_.jpg',
+		startedAt: '2026-04-10',
 		updatedAt: '2026-05-31',
 	},
 	{
@@ -34,9 +34,9 @@ export const books = [
 		currentPage: 541,
 		totalPages: 541,
 		rating: 4,
-		bookCover: 'https://m.media-amazon.com/images/I/81NGmugxgSL._SL1500_.jpg',
-		startDate: '2026-01-05',
-		endDate: '2026-02-14',
+		coverUrl: 'https://m.media-amazon.com/images/I/81NGmugxgSL._SL1500_.jpg',
+		startedAt: '2026-01-05',
+		completedAt: '2026-02-14',
 		updatedAt: '2026-02-14',
 	},
 	{
@@ -48,9 +48,9 @@ export const books = [
 		currentPage: 288,
 		totalPages: 288,
 		rating: 5,
-		bookCover: 'https://m.media-amazon.com/images/I/618lb8MnrhL._SL1500_.jpg',
-		startDate: '2026-02-15',
-		endDate: '2026-03-02',
+		coverUrl: 'https://m.media-amazon.com/images/I/618lb8MnrhL._SL1500_.jpg',
+		startedAt: '2026-02-15',
+		completedAt: '2026-03-02',
 		updatedAt: '2026-03-02',
 	},
 	{
@@ -62,9 +62,9 @@ export const books = [
 		currentPage: 328,
 		totalPages: 328,
 		rating: 5,
-		bookCover: 'https://m.media-amazon.com/images/I/715WdnBHqYL._SL1500_.jpg',
-		startDate: '2026-03-03',
-		endDate: '2026-03-20',
+		coverUrl: 'https://m.media-amazon.com/images/I/715WdnBHqYL._SL1500_.jpg',
+		startedAt: '2026-03-03',
+		completedAt: '2026-03-20',
 		updatedAt: '2026-03-20',
 	},
 	{
@@ -75,7 +75,7 @@ export const books = [
 		status: 'want',
 		currentPage: 0,
 		totalPages: 688,
-		bookCover: 'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
+		coverUrl: 'https://m.media-amazon.com/images/I/913padSawdL._SL1500_.jpg',
 		updatedAt: '2026-05-10',
 	},
 	{
@@ -86,7 +86,7 @@ export const books = [
 		status: 'want',
 		currentPage: 0,
 		totalPages: 1007,
-		bookCover: 'https://m.media-amazon.com/images/I/81cO02Zz6VL._SL1500_.jpg',
+		coverUrl: 'https://m.media-amazon.com/images/I/81cO02Zz6VL._SL1500_.jpg',
 		updatedAt: '2026-05-08',
 	},
 	{
@@ -98,9 +98,9 @@ export const books = [
 		currentPage: 498,
 		totalPages: 498,
 		rating: 4,
-		bookCover: 'https://m.media-amazon.com/images/I/71ZR6hn+GbL._SL1500_.jpg',
-		startDate: '2026-03-21',
-		endDate: '2026-04-01',
+		coverUrl: 'https://m.media-amazon.com/images/I/71ZR6hn+GbL._SL1500_.jpg',
+		startedAt: '2026-03-21',
+		completedAt: '2026-04-01',
 		updatedAt: '2026-04-01',
 	},
 	{
@@ -111,8 +111,8 @@ export const books = [
 		status: 'paused',
 		currentPage: 780,
 		totalPages: 824,
-		bookCover: 'https://m.media-amazon.com/images/I/81IE8AwMvqL._SL1500_.jpg',
-		startDate: '2026-02-01',
+		coverUrl: 'https://m.media-amazon.com/images/I/81IE8AwMvqL._SL1500_.jpg',
+		startedAt: '2026-02-01',
 		updatedAt: '2026-05-28',
 	},
 	{
@@ -124,8 +124,8 @@ export const books = [
 		currentPage: 104,
 		totalPages: 271,
 		rating: 2,
-		bookCover: 'https://m.media-amazon.com/images/I/81XaGC5vEQL._SL1500_.jpg',
-		startDate: '2026-01-15',
+		coverUrl: 'https://m.media-amazon.com/images/I/81XaGC5vEQL._SL1500_.jpg',
+		startedAt: '2026-01-15',
 		updatedAt: '2026-04-15',
 	},
 	{
@@ -137,9 +137,9 @@ export const books = [
 		currentPage: 320,
 		totalPages: 320,
 		rating: 4,
-		bookCover: 'https://m.media-amazon.com/images/I/81kg51XRc1L._SL1500_.jpg',
-		startDate: '2026-04-02',
-		endDate: '2026-04-18',
+		coverUrl: 'https://m.media-amazon.com/images/I/81kg51XRc1L._SL1500_.jpg',
+		startedAt: '2026-04-02',
+		completedAt: '2026-04-18',
 		updatedAt: '2026-04-18',
 	},
 	{
@@ -150,7 +150,7 @@ export const books = [
 		status: 'want',
 		currentPage: 0,
 		totalPages: 662,
-		bookCover: 'https://m.media-amazon.com/images/I/91kBQf9rfqL._SL1500_.jpg',
+		coverUrl: 'https://m.media-amazon.com/images/I/91kBQf9rfqL._SL1500_.jpg',
 		updatedAt: '2026-05-15',
 	},
 	{
@@ -162,9 +162,9 @@ export const books = [
 		currentPage: 601,
 		totalPages: 601,
 		rating: 5,
-		bookCover: 'https://m.media-amazon.com/images/I/91jAiO8KNAL._SL1500_.jpg',
-		startDate: '2026-04-20',
-		endDate: '2026-05-12',
+		coverUrl: 'https://m.media-amazon.com/images/I/91jAiO8KNAL._SL1500_.jpg',
+		startedAt: '2026-04-20',
+		completedAt: '2026-05-12',
 		updatedAt: '2026-05-12',
 	},
 	{
@@ -175,7 +175,7 @@ export const books = [
 		status: 'want',
 		currentPage: 0,
 		totalPages: 496,
-		bookCover: 'https://m.media-amazon.com/images/I/81mpYNTj6SL._SL1500_.jpg',
+		coverUrl: 'https://m.media-amazon.com/images/I/81mpYNTj6SL._SL1500_.jpg',
 		updatedAt: '2026-05-20',
 	},
 ] satisfies Book[]

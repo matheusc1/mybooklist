@@ -1,4 +1,4 @@
-export type Passage = {
+export interface Passage {
 	id: string
 	title: string
 	author: string

@@ -4,17 +4,13 @@ import { Calendar } from '#/components/calendar'
 import { SessionModal } from '#/components/modals/session-modal'
 import { StatCard } from '#/components/stat-card'
 import { calendar } from '#/mocks/sessions'
+import type { Activity as ActivityType } from '#/types/activity'
 
 export const Route = createFileRoute('/_authenticated/activity')({
 	component: Activity,
 })
 
-interface Stats {
-	sessions: number
-	pages: number
-	readingTime: number
-	activeDays: number
-}
+type Stats = ActivityType['monthlyStats']
 
 const monthlyStats: Stats = {
 	sessions: 18,

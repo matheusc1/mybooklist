@@ -3,19 +3,20 @@ import { LucideTrash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import z from 'zod'
 import { books } from '#/mocks/books'
-import type { ActivityResponse, Mode } from '#/types/types'
+import type { Activity } from '#/types/activity'
+import type { ModalMode } from '#/types/common'
 import { Button } from '../ui/button'
 import { FieldError, FieldLabel, Input } from '../ui/inputs'
 import { BookCombobox } from '../ui/inputs/book-combobox'
 import { Modal } from '../ui/modal'
 import { DeleteModal } from './delete-modal'
 
-type Session = ActivityResponse['calendar'][number]['sessions'][number]
+type Session = Activity['monthlyActivity'][number]['sessions'][number]
 
-type ActivityModalProps = {
+interface ActivityModalProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	mode?: Mode
+	mode?: ModalMode
 	session?: { date: string } & Session
 }
 
@@ -38,7 +39,7 @@ export function ActivityModal({
 	session,
 	onOpenChange,
 }: ActivityModalProps) {
-	const [currentMode, setCurrentMode] = useState<Mode>(mode)
+	const [currentMode, setCurrentMode] = useState<ModalMode>(mode)
 	const [deleteOpen, setDeleteOpen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
 

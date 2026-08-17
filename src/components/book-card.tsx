@@ -1,6 +1,6 @@
 import { LucideStar } from 'lucide-react'
 import { BOOK_STATUS } from '#/constants/book-status'
-import type { Book } from '#/types/types'
+import type { Book } from '#/types/book'
 import { getPercent } from '#/utils/get-percent'
 
 interface BookCardProps {
@@ -48,8 +48,8 @@ export function BookCard({ book, onClick }: BookCardProps) {
 			</span>
 			<div className="relative w-full aspect-2/3 rounded-lg overflow-hidden bg-surface2 shadow-[4px_6px_20px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-250 ease-out group-hover:-translate-y-1 group-hover:scale-[1.02] group-hover:shadow-[6px_12px_32px_rgba(0,0,0,0.6)] mb-3">
 				<img
-					src={book.bookCover ?? '/book-cover.jpg'}
-					alt={book.bookCover ? `${book.title} cover` : 'Default Book Cover'}
+					src={book.coverUrl ?? '/book-cover.jpg'}
+					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 					className="w-full h-full object-cover"
 				/>
 

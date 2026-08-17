@@ -13,7 +13,8 @@ import { Button } from '#/components/ui/button'
 import type { ActivityStatus } from '#/constants/book-status'
 import { BOOK_STATUS } from '#/constants/book-status'
 import { books } from '#/mocks/books'
-import type { Book, Mode } from '#/types/types'
+import type { Book } from '#/types/book'
+import type { ModalMode } from '#/types/common'
 
 export const Route = createFileRoute('/_authenticated/books')({
 	component: MyBooks,
@@ -70,7 +71,7 @@ function MyBooks() {
 	const [search, setSearch] = useState('')
 	const [bookModal, setBookModal] = useState<{
 		book?: Book
-		mode: Mode
+		mode: ModalMode
 	} | null>(null)
 
 	const statusCounts = books.reduce(

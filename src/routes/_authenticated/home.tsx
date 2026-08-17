@@ -10,6 +10,7 @@ import { Button, button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
 import { books } from '#/mocks/books'
 import { useGoalStore } from '#/stores/goal-store'
+import type { Book } from '#/types/book'
 import { getPercent } from '#/utils/get-percent'
 import { sortByDateDesc } from '#/utils/sort-by-date'
 
@@ -22,8 +23,6 @@ interface WeeklyStats {
 	hoursRead: number
 	daysStreak: number
 }
-
-type Book = (typeof books)[number]
 
 const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -59,7 +58,7 @@ function Home() {
 		() =>
 			sortByDateDesc(
 				books.filter((b) => b.status === 'finished'),
-				(b) => b.endDate ?? '',
+				(b) => b.completedAt ?? '',
 			).slice(0, 3),
 		[],
 	)
@@ -189,8 +188,8 @@ function CurrentBookCard({ book }: { book: Book }) {
 
 				<div className="flex gap-3.5 items-start">
 					<img
-						src={book.bookCover ?? '/book-cover.jpg'}
-						alt={book.bookCover ? `${book.title} cover` : 'Default Book Cover'}
+						src={book.coverUrl ?? '/book-cover.jpg'}
+						alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 						className="w-13.5 h-19 rounded-md object-cover"
 					/>
 

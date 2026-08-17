@@ -1,5 +1,5 @@
 import { LucideStar } from 'lucide-react'
-import type { Book } from '#/types/types'
+import type { Book } from '#/types/book'
 import { formatBookDate } from '#/utils/format-date'
 
 interface FinishedBookCardProps {
@@ -13,8 +13,8 @@ export function FinishedBookCard({ book }: FinishedBookCardProps) {
 		<div className="group flex gap-3 py-3 border-b border-border transition-all duration-200 cursor-pointer hover:opacity-95">
 			<div className="relative w-13 h-19.5 shrink-0 bg-surface2 rounded overflow-hidden flex items-center justify-center shadow-[3px_3px_12px_rgba(0,0,0,0.4)]">
 				<img
-					src={book.bookCover ?? '/book-cover.jpg'}
-					alt={book.bookCover ? `${book.title} cover` : 'Default Book Cover'}
+					src={book.coverUrl ?? '/book-cover.jpg'}
+					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 					className="w-full h-full object-cover"
 				/>
 			</div>
@@ -42,7 +42,7 @@ export function FinishedBookCard({ book }: FinishedBookCardProps) {
 				</div>
 
 				<p className="text-xxs text-muted font-mono">
-					{formatBookDate(book.endDate ?? '')}
+					{formatBookDate(book.completedAt ?? '')}
 				</p>
 			</div>
 		</div>

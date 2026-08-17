@@ -1,5 +1,5 @@
 import { BOOK_STATUS } from '#/constants/book-status'
-import type { Book } from '#/types/types'
+import type { Book } from '#/types/book'
 import { formatBookDate } from '#/utils/format-date'
 
 interface BookActivityCardProps {
@@ -13,8 +13,8 @@ export function BookActivityCard({ book }: BookActivityCardProps) {
 		<div className="flex gap-3 py-3">
 			<div className="flex items-center justify-center w-10 h-15 bg-surface2 rounded-sm shadow-[2px_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
 				<img
-					src={book.bookCover ?? '/book-cover.jpg'}
-					alt={book.bookCover ? `${book.title} cover` : 'Default Book Cover'}
+					src={book.coverUrl ?? '/book-cover.jpg'}
+					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 					className="w-full h-full object-cover"
 				/>
 			</div>
