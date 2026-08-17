@@ -2,8 +2,8 @@ import { LucideArrowLeft, LucideArrowRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { cn } from 'tailwind-variants'
 import { Button } from '#/components/ui/button'
-import { getCalendarDays } from '#/hooks/get-calendar-days'
 import type { Activity } from '#/types/activity'
+import { getCalendarDays } from '#/utils/get-calendar-days'
 
 type Session = Activity['monthlyActivity'][number]['sessions'][number]
 
