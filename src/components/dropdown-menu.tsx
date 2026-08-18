@@ -9,7 +9,7 @@ import { GoalCardCompact } from './goal-card'
 interface UserDropdownProps {
 	user: UserUI
 	goal: GoalProgress | null
-	onSignOut?: () => void
+	onSignOut: () => void
 }
 
 function DropdownMenuUser({ user }: { user: UserUI }) {
