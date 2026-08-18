@@ -1,33 +1,13 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import { useMe } from '#/hooks/use-auth'
 import { useGoalStore } from '#/stores/goal-store'
-import type { UserUI } from '#/types/user'
 import { UserDropdown } from './dropdown-menu'
 
-const user: UserUI = {
-	name: 'John Doe',
-	email: 'john.doe@example.com',
-	avatarUrl: 'https://avatars.githubusercontent.com/u/117493813?v=4',
-}
-
-function UserMenuAvatar({ user }: { user: UserUI }) {
-	return user.avatarUrl ? (
-		<img
-			src={user.avatarUrl}
-			alt={user.name}
-			className="size-9 rounded-full object-cover"
-		/>
-	) : (
-		<div
-			aria-hidden="true"
-			className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase"
-		>
-			{user.name.charAt(0) || '?'}
-		</div>
-	)
-}
-
 export function UserMenu() {
+	const { data: user } = useMe()
 	const { goal } = useGoalStore()
+
+	if (!user) return null
 
 	return (
 		<DropdownMenu.Root>
@@ -40,7 +20,20 @@ export function UserMenu() {
 					aria-label="Open user menu"
 					className="size-9 rounded-full cursor-pointer hover:ring-3 hover:ring-accent/40 transition-all"
 				>
-					<UserMenuAvatar user={user} />
+					{user.avatarUrl ? (
+						<img
+							src={user.avatarUrl}
+							alt={user.name}
+							className="size-9 rounded-full object-cover"
+						/>
+					) : (
+						<div
+							aria-hidden="true"
+							className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase"
+						>
+							{user.name.charAt(0) || '?'}
+						</div>
+					)}
 				</DropdownMenu.Trigger>
 			</div>
 
