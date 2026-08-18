@@ -19,18 +19,18 @@ function DropdownMenuUser({ user }: { user: UserUI }) {
 				<img
 					src={user.avatarUrl}
 					alt={user.name}
-					className="size-9 rounded-full object-cover"
+					className="size-9 rounded-full object-cover shrink-0"
 				/>
 			) : (
 				<div
 					aria-hidden="true"
-					className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase"
+					className="size-9 rounded-full bg-gradient-avatar flex items-center justify-center text-xs font-semibold text-bg uppercase shrink-0"
 				>
 					{user.name.charAt(0) || '?'}
 				</div>
 			)}
 
-			<div>
+			<div className="min-w-0 flex-1">
 				<p className="text-sm font-medium truncate">{user.name}</p>
 				<p className="text-xs text-muted font-mono truncate">{user.email}</p>
 			</div>
