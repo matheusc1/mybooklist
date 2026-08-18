@@ -7,7 +7,7 @@ import {
 import { GoalModal } from '#/components/modals/goal-modal'
 import { NavBar } from '#/components/ui/nav-bar'
 import { getMe } from '#/http/auth'
-import { getMeServer } from '#/http/auth.server'
+import { getMeServer } from '#/http/auth-server'
 import { isHttpError } from '#/http/client'
 
 export const Route = createFileRoute('/_authenticated')({
