@@ -1,9 +1,28 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import {
+	createFileRoute,
+	isRedirect,
+	Link,
+	redirect,
+} from '@tanstack/react-router'
 import { GitHubIcon } from '#/components/ui/github-icon'
 import { GoogleIcon } from '#/components/ui/google-icon'
 import { Logo } from '#/components/ui/logo'
+import { getGithubLoginUrl, getGoogleLoginUrl, getMe } from '#/http/auth'
+import { getMeServer } from '#/http/auth-server'
 
 export const Route = createFileRoute('/login')({
+	beforeLoad: async ({ context }) => {
+		try {
+			await context.queryClient.ensureQueryData({
+				queryKey: ['auth', 'me'],
+				queryFn: () =>
+					typeof window === 'undefined' ? getMeServer() : getMe(),
+			})
+			throw redirect({ to: '/home' })
+		} catch (error) {
+			if (isRedirect(error)) throw error
+		}
+	},
 	component: Login,
 })
 
@@ -132,8 +151,8 @@ function Login() {
 				</p>
 
 				<div className="space-y-3">
-					<button
-						type="button"
+					<a
+						href={getGoogleLoginUrl()}
 						className="group w-full bg-surface py-3.5 px-5 flex items-center gap-3 rounded-xl border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(234,67,53,0.3)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
 						<GoogleIcon aria-hidden="true" />
@@ -141,10 +160,10 @@ function Login() {
 						<span className="text-xs transition-transform text-muted ml-auto group-hover:translate-x-0.5 group-hover:text-text">
 							→
 						</span>
-					</button>
+					</a>
 
-					<button
-						type="button"
+					<a
+						href={getGithubLoginUrl()}
 						className="group w-full bg-surface py-3.5 gap-3 px-5 flex items-center rounded-xl border border-border cursor-pointer transition-all hover:bg-surface2 hover:border-[rgba(255,255,255,0.2)] hover:-translate-y-px hover:shadow-lg hover:shadow-black/30"
 					>
 						<GitHubIcon aria-hidden="true" />
@@ -152,7 +171,7 @@ function Login() {
 						<span className="text-xs transition-transform text-muted ml-auto group-hover:translate-x-0.5 group-hover:text-text">
 							→
 						</span>
-					</button>
+					</a>
 				</div>
 
 				<div className="flex items-center gap-3 my-7">
