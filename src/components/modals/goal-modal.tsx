@@ -1,6 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
-import { useGoalStore } from '@/stores/goal-store'
+import { useUpsertGoal } from '#/hooks/use-goal'
+import { useGoalModalStore } from '@/stores/goal-store'
 import { Button } from '../ui/button'
 import { FieldError, FieldLabel, Input } from '../ui/inputs'
 import { Modal } from '../ui/modal'
@@ -14,7 +15,8 @@ const goalSchema = z.object({
 const year = new Date().getFullYear().toString()
 
 export function GoalModal() {
-	const { open, mode, closeModal, setGoal } = useGoalStore()
+	const { open, mode, closeModal } = useGoalModalStore()
+	const { mutate: setGoal } = useUpsertGoal()
 
 	const form = useForm({
 		defaultValues: {
@@ -26,7 +28,7 @@ export function GoalModal() {
 		onSubmit: async ({ value }) => {
 			if (value.target === undefined) return
 
-			setGoal(value.target)
+			setGoal({ target: value.target })
 			form.reset()
 			closeModal()
 		},
@@ -58,7 +60,7 @@ export function GoalModal() {
 								<Input
 									id={field.name}
 									name={field.name}
-									value={field.state.value}
+									value={field.state.value ?? ''}
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.valueAsNumber)}
 									type="number"
