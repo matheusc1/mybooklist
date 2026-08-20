@@ -8,8 +8,8 @@ import { ActivityModal } from '#/components/modals/activity-modal'
 import { StatCard } from '#/components/stat-card'
 import { Button, button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
+import { useGoal } from '#/hooks/use-goal'
 import { books } from '#/mocks/books'
-import { useGoalStore } from '#/stores/goal-store'
 import type { Book } from '#/types/book'
 import { getPercent } from '#/utils/get-percent'
 import { sortByDateDesc } from '#/utils/sort-by-date'
@@ -33,7 +33,7 @@ const weeklyStats: WeeklyStats = {
 }
 
 function Home() {
-	const { goal } = useGoalStore()
+	const { data: goal } = useGoal()
 	const [activityOpen, setActivityOpen] = useState(false)
 
 	const currentBook = useMemo(

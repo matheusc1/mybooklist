@@ -1,14 +1,14 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Link } from '@tanstack/react-router'
 import { LucideGauge, LucideLogOut, LucideTarget } from 'lucide-react'
-import { useGoalStore } from '#/stores/goal-store'
+import { useGoalModalStore } from '#/stores/goal-store'
 import type { GoalProgress } from '#/types/goal'
 import type { UserUI } from '#/types/user'
 import { GoalCardCompact } from './goal-card'
 
 interface UserDropdownProps {
 	user: UserUI
-	goal: GoalProgress | null
+	goal: GoalProgress | undefined
 	onSignOut: () => void
 }
 
@@ -38,8 +38,11 @@ function DropdownMenuUser({ user }: { user: UserUI }) {
 	)
 }
 
-function DropdownMenuActions({ onSignOut }: { onSignOut?: () => void }) {
-	const { openModal, goal } = useGoalStore()
+function DropdownMenuActions({
+	onSignOut,
+	goal,
+}: Omit<UserDropdownProps, 'user'>) {
+	const { openModal } = useGoalModalStore()
 
 	const itemClassName =
 		'flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-muted cursor-pointer outline-none transition-colors'
@@ -99,14 +102,14 @@ export function UserDropdown({ user, goal, onSignOut }: UserDropdownProps) {
 				data-[side=bottom]:slide-in-from-top-2"
 		>
 			<DropdownMenuUser user={user} />
-			{goal ? (
+			{goal?.target ? (
 				<GoalCardCompact goal={goal} />
 			) : (
-				<p className="px-4 py-3 text-xs text-muted border-b border-border">
+				<p className="px-4 py-3 text-sm text-muted border-b border-border">
 					No reading goal set.
 				</p>
 			)}
-			<DropdownMenuActions onSignOut={onSignOut} />
+			<DropdownMenuActions onSignOut={onSignOut} goal={goal} />
 		</DropdownMenu.Content>
 	)
 }

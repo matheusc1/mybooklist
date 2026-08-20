@@ -1,4 +1,4 @@
-import { useGoalStore } from '#/stores/goal-store'
+import { useGoalModalStore } from '#/stores/goal-store'
 import type { GoalProgress } from '#/types/goal'
 import { getPercent } from '#/utils/get-percent'
 
@@ -7,10 +7,10 @@ function formatMonthsRemaining(months: number): string {
 	return `${months} month${months === 1 ? '' : 's'} remaining`
 }
 
-export function GoalCard({ goal }: { goal: GoalProgress | null }) {
+export function GoalCard({ goal }: { goal: GoalProgress | undefined }) {
 	const now = new Date()
 
-	if (!goal) return <EmptyCard year={now.getFullYear()} />
+	if (!goal?.target) return <EmptyCard year={now.getFullYear()} />
 
 	const percent = getPercent(goal.current, goal.target ?? 0)
 	const monthsRemaining = 11 - now.getMonth()
@@ -50,7 +50,7 @@ export function GoalCard({ goal }: { goal: GoalProgress | null }) {
 }
 
 function EmptyCard({ year }: { year: number }) {
-	const { openModal } = useGoalStore()
+	const { openModal } = useGoalModalStore()
 
 	return (
 		<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
@@ -71,7 +71,7 @@ function EmptyCard({ year }: { year: number }) {
 				<button
 					onClick={() => openModal('add')}
 					type="button"
-					className="text-xs text-muted underline cursor-pointer"
+					className="text-left text-xs text-muted underline cursor-pointer"
 				>
 					Set a goal and start reading.
 				</button>

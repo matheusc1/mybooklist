@@ -1,11 +1,11 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { useLogout, useMe } from '#/hooks/use-auth'
-import { useGoalStore } from '#/stores/goal-store'
+import { useGoal } from '#/hooks/use-goal'
 import { UserDropdown } from './dropdown-menu'
 
 export function UserMenu() {
 	const { data: user } = useMe()
-	const { goal } = useGoalStore()
+	const { data: goal } = useGoal()
 	const { mutate: logout } = useLogout()
 
 	if (!user) return null
