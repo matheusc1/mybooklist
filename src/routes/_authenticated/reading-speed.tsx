@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import {
 	LucideArrowRight,
 	LucideBook,
@@ -8,9 +8,10 @@ import {
 	LucideTimer,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Button, button } from '#/components/ui/button'
+import { Button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
 import { type Passage, readingPassages } from '#/data/passages'
+import { useUpdateReadingSpeed } from '#/hooks/use-user'
 
 export const Route = createFileRoute('/_authenticated/reading-speed')({
 	staticData: { hideNav: true },
@@ -71,7 +72,13 @@ function ReadingSpeed() {
 		<div className="overflow-hidden min-h-dvh">
 			<div className="sticky top-0 bg-bg z-10">
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-10">
-					<Logo />
+					<Link
+						to="/home"
+						aria-label="Back to home"
+						className="transition-transform active:scale-95"
+					>
+						<Logo />
+					</Link>
 
 					<p className="font-mono tracking-widest text-muted text-xs uppercase">
 						Step <span className="text-accent">{stepNumber[step]}</span> of 3
@@ -241,6 +248,16 @@ function ResultContent({
 	secondsPerPage: number
 	onRetake: () => void
 }) {
+	const router = useRouter()
+	const { mutate: updateReadingSpeed, isPending } = useUpdateReadingSpeed()
+
+	function handleSave() {
+		updateReadingSpeed(
+			{ readingSpeed: secondsPerPage },
+			{ onSuccess: () => router.navigate({ to: '/home' }) },
+		)
+	}
+
 	return (
 		<div className="flex flex-col items-center justify-center text-center">
 			<LucideLibrary
@@ -276,15 +293,30 @@ function ResultContent({
 					Past sessions are preserved with the speed recorded at the time.
 				</p>
 			</div>
-			<div className="flex items-center justify-center gap-3">
-				<Button variant="ghost" onClick={onRetake}>
+			<div className="flex items-center justify-center flex-wrap gap-3">
+				<Button
+					variant="ghost"
+					className="w-full sm:w-auto"
+					onClick={onRetake}
+					disabled={isPending}
+				>
 					Retake Test
 				</Button>
-				<Link to="/books" className={button()}>
-					Go to my library
+				<Button
+					className="w-full sm:w-auto"
+					onClick={handleSave}
+					disabled={isPending}
+				>
+					{isPending ? 'Saving...' : 'Update reading pace'}
 					<LucideArrowRight aria-hidden="true" className="size-4" />
-				</Link>
+				</Button>
 			</div>
+			<Link
+				to="/home"
+				className="mt-4 text-xs text-muted hover:text-text underline"
+			>
+				Skip and go to home
+			</Link>
 		</div>
 	)
 }
