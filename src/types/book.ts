@@ -20,6 +20,7 @@ export interface Book {
 export interface CreateBook {
 	title: string
 	author: string
+	genre: string
 	coverUrl?: string
 	totalPages: number
 	currentPage?: number
