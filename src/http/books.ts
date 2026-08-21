@@ -10,7 +10,8 @@ export function createBook(book: CreateBook): Promise<Book> {
 }
 
 export function updateBook(book: UpdateBook): Promise<Book> {
-	return httpClient.patch(`/books/${book.id}`, book)
+	const { id, ...data } = book
+	return httpClient.patch(`/books/${id}`, data)
 }
 
 export function deleteBook(bookId: string) {
