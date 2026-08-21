@@ -3,7 +3,9 @@ import { useStore } from '@tanstack/react-store'
 import { LucideTrash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import z from 'zod'
-import type { Book } from '#/types/book'
+import type { ActivityStatus } from '#/constants/book-status'
+import { useCreateBook, useDeleteBook, useUpdateBook } from '#/hooks/use-books'
+import type { Book, CreateBook } from '#/types/book'
 import type { ModalMode } from '#/types/common'
 import { getPercent } from '#/utils/get-percent'
 import { Button } from '../ui/button'
@@ -35,10 +37,7 @@ const bookSchema = z.object({
 		z.number().gte(0, 'Current page cannot be less than 0'),
 		z.undefined(),
 	]),
-	totalPages: z.union([
-		z.number().gt(0, 'Total pages cannot be less than 1'),
-		z.undefined(),
-	]),
+	totalPages: z.number().gt(0, 'Total pages cannot be less than 1'),
 	rating: z.union([z.number(), z.undefined()]),
 	startedAt: z.string(),
 	completedAt: z.string(),
@@ -62,6 +61,10 @@ export function BookModal({
 	const isView = currentMode === 'view'
 	const secondaryLabel = isView ? 'Close' : 'Cancel'
 
+	const { mutate: createBook, isPending: isCreating } = useCreateBook()
+	const { mutate: updateBook, isPending: isUpdating } = useUpdateBook()
+	const { mutate: deleteBook, isPending: isDeleting } = useDeleteBook()
+
 	const form = useForm({
 		defaultValues: {
 			title: book?.title ?? '',
@@ -79,8 +82,30 @@ export function BookModal({
 			onChange: bookSchema,
 		},
 		onSubmit: async ({ value }) => {
-			console.log(value)
-			onOpenChange(false)
+			const payload: CreateBook = {
+				title: value.title,
+				author: value.author,
+				genre: value.genre,
+				status: value.status as ActivityStatus,
+				totalPages: value.totalPages as number,
+				currentPage: value.currentPage,
+				coverUrl: value.coverUrl || undefined,
+				rating: value.rating,
+				startedAt: value.startedAt || undefined,
+				completedAt: value.completedAt || undefined,
+			}
+
+			if (currentMode === 'add') {
+				createBook(payload, { onSuccess: () => onOpenChange(false) })
+				return
+			}
+
+			if (book) {
+				updateBook(
+					{ id: book.id, ...payload },
+					{ onSuccess: () => onOpenChange(false) },
+				)
+			}
 		},
 	})
 
@@ -422,42 +447,47 @@ export function BookModal({
 							size="icon"
 							type="button"
 							aria-label="Delete book"
+							disabled={isDeleting}
 						>
 							<LucideTrash2 aria-hidden="true" className="size-5" />
 						</Button>
 					)}
 
 					<form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
-						{([canSubmit, isSubmitting]) => (
-							<>
-								<Button
-									form="book-form"
-									type="reset"
-									variant="ghost"
-									onClick={handleCancel}
-								>
-									{secondaryLabel}
-								</Button>
-								{isView ? (
+						{([canSubmit, isSubmitting]) => {
+							const isPending = isCreating || isUpdating || isSubmitting
+							return (
+								<>
 									<Button
-										key="edit"
-										type="button"
-										onClick={() => setCurrentMode('edit')}
-									>
-										Edit Book
-									</Button>
-								) : (
-									<Button
-										key="save"
 										form="book-form"
-										type="submit"
-										disabled={!canSubmit || isSubmitting}
+										type="reset"
+										variant="ghost"
+										onClick={handleCancel}
+										disabled={isPending}
 									>
-										Save
+										{secondaryLabel}
 									</Button>
-								)}
-							</>
-						)}
+									{isView ? (
+										<Button
+											key="edit"
+											type="button"
+											onClick={() => setCurrentMode('edit')}
+										>
+											Edit Book
+										</Button>
+									) : (
+										<Button
+											key="save"
+											form="book-form"
+											type="submit"
+											disabled={!canSubmit || isPending}
+										>
+											{isPending ? 'Saving...' : 'Save'}
+										</Button>
+									)}
+								</>
+							)
+						}}
 					</form.Subscribe>
 				</Modal.Footer>
 			</Modal.Root>
@@ -467,7 +497,15 @@ export function BookModal({
 				onOpenChange={setDeleteOpen}
 				type="book"
 				bookTitle={book?.title ?? ''}
-				onConfirm={() => {}}
+				onConfirm={() => {
+					if (!book) return
+					deleteBook(book.id, {
+						onSuccess: () => {
+							setDeleteOpen(false)
+							onOpenChange(false)
+						},
+					})
+				}}
 			/>
 		</>
 	)
