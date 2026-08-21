@@ -12,7 +12,7 @@ import { BookModal } from '#/components/modals/book-modal'
 import { Button } from '#/components/ui/button'
 import type { ActivityStatus } from '#/constants/book-status'
 import { BOOK_STATUS } from '#/constants/book-status'
-import { books } from '#/mocks/books'
+import { useBooks } from '#/hooks/use-books'
 import type { Book } from '#/types/book'
 import type { ModalMode } from '#/types/common'
 
@@ -67,6 +67,7 @@ const filters: Filter[] = [
 ]
 
 function MyBooks() {
+	const { data: books } = useBooks()
 	const [activeFilter, setActiveFilter] = useState<ActivityStatus | null>(null) // null = All
 	const [search, setSearch] = useState('')
 	const [bookModal, setBookModal] = useState<{
@@ -74,7 +75,7 @@ function MyBooks() {
 		mode: ModalMode
 	} | null>(null)
 
-	const statusCounts = books.reduce(
+	const statusCounts = books?.reduce(
 		(acc, book) => {
 			acc[book.status] = (acc[book.status] ?? 0) + 1
 			return acc
@@ -84,7 +85,7 @@ function MyBooks() {
 
 	const normalizedSearch = search.trim().toLowerCase()
 
-	const filteredBooks = books.filter((book) => {
+	const filteredBooks = books?.filter((book) => {
 		const matchesStatus = activeFilter === null || book.status === activeFilter
 
 		const matchesSearch =
@@ -95,8 +96,8 @@ function MyBooks() {
 		return matchesStatus && matchesSearch
 	})
 
-	const isEmpty = books.length === 0
-	const isFilterEmpty = !isEmpty && filteredBooks.length === 0
+	const isEmpty = books?.length === 0
+	const isFilterEmpty = !isEmpty && filteredBooks?.length === 0
 
 	const emptyState = isEmpty
 		? {
@@ -121,7 +122,7 @@ function MyBooks() {
 						My Books
 					</h1>
 					<p className="text-muted text-xs tracking-wider">
-						{books.length} books
+						{books?.length} books
 					</p>
 				</div>
 
@@ -189,7 +190,7 @@ function MyBooks() {
 									)}
 									{label}
 									<div className="px-2 py-px bg-white/8 rounded-xl text-xs">
-										{status ? statusCounts[status] : books.length}
+										{status ? statusCounts?.[status] : books?.length}
 									</div>
 								</Button>
 							)
@@ -209,7 +210,7 @@ function MyBooks() {
 					</div>
 				) : (
 					<ul className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-5">
-						{filteredBooks.map((book) => (
+						{filteredBooks?.map((book) => (
 							<li key={book.id}>
 								<BookCard
 									book={book}

@@ -33,7 +33,7 @@ export function BookCard({ book, onClick }: BookCardProps) {
 		book.status === 'finished' && !!book.rating && book.rating > 0
 
 	const progress = showProgress
-		? getPercent(book.currentPage, book.totalPages)
+		? getPercent(book.currentPage ?? 0, book.totalPages)
 		: 0
 
 	return (

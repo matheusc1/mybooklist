@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { LucideTrash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import z from 'zod'
-import { books } from '#/mocks/books'
+import { useBooks } from '#/hooks/use-books'
 import type { Activity } from '#/types/activity'
 import type { ModalMode } from '#/types/common'
 import { Button } from '../ui/button'
@@ -39,6 +39,7 @@ export function ActivityModal({
 	session,
 	onOpenChange,
 }: ActivityModalProps) {
+	const { data: books } = useBooks()
 	const [currentMode, setCurrentMode] = useState<ModalMode>(mode)
 	const [deleteOpen, setDeleteOpen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -88,7 +89,7 @@ export function ActivityModal({
 							<form.Field name="bookId">
 								{(field) => {
 									const selectedBook =
-										books.find((b) => String(b.id) === field.state.value) ??
+										books?.find((b) => String(b.id) === field.state.value) ??
 										null
 
 									return (
@@ -97,12 +98,15 @@ export function ActivityModal({
 												Book
 											</FieldLabel>
 											<BookCombobox
-												books={books}
+												books={books ?? []}
 												value={selectedBook}
 												onValueChange={(book) => {
 													field.handleChange(book ? String(book.id) : '')
 													if (book) {
-														form.setFieldValue('fromPage', book.currentPage)
+														form.setFieldValue(
+															'fromPage',
+															book.currentPage ?? 0,
+														)
 													}
 												}}
 												disabled={isView}
