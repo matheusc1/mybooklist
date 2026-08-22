@@ -16,4 +16,6 @@ export interface CreateReadingSession {
 	readAt?: string
 }
 
-export type UpdateReadingSession = Partial<Omit<CreateReadingSession, 'bookId'>>
+export type UpdateReadingSession = Partial<
+	Omit<CreateReadingSession, 'bookId'>
+> & { id: string }
