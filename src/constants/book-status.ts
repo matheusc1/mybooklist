@@ -14,7 +14,7 @@ export const BOOK_STATUS = {
 		shortLabel: 'Paused',
 		color: 'bg-parchment',
 	},
-	finished: {
+	completed: {
 		label: 'Completed',
 		shortLabel: 'Completed',
 		color: 'bg-accent',

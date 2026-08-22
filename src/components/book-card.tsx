@@ -30,7 +30,7 @@ function Stars({ rating }: { rating: number }) {
 export function BookCard({ book, onClick }: BookCardProps) {
 	const showProgress = book.status === 'reading' || book.status === 'paused'
 	const showRating =
-		book.status === 'finished' && !!book.rating && book.rating > 0
+		book.status === 'completed' && !!book.rating && book.rating > 0
 
 	const progress = showProgress
 		? getPercent(book.currentPage ?? 0, book.totalPages)

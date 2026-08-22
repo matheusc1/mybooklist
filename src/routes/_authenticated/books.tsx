@@ -47,10 +47,10 @@ const filters: Filter[] = [
 		activeColor: BOOK_STATUS.want.color,
 	},
 	{
-		label: BOOK_STATUS.finished.label,
-		status: 'finished',
+		label: BOOK_STATUS.completed.label,
+		status: 'completed',
 		color: 'bg-accent/50',
-		activeColor: BOOK_STATUS.finished.color,
+		activeColor: BOOK_STATUS.completed.color,
 	},
 	{
 		label: BOOK_STATUS.paused.label,
