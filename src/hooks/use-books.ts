@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createBook, deleteBook, getBooks, updateBook } from '#/http/books'
+import { invalidateDomain, queryKeys } from '#/utils/query-keys'
 
 export function useBooks() {
 	return useQuery({
-		queryKey: ['books'],
+		queryKey: queryKeys.books,
 		queryFn: getBooks,
 	})
 }
@@ -13,9 +14,7 @@ export function useCreateBook() {
 
 	return useMutation({
 		mutationFn: createBook,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['books'] })
-		},
+		onSuccess: () => invalidateDomain(queryClient, 'books'),
 	})
 }
 
@@ -24,9 +23,7 @@ export function useUpdateBook() {
 
 	return useMutation({
 		mutationFn: updateBook,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['books'] })
-		},
+		onSuccess: () => invalidateDomain(queryClient, 'books'),
 	})
 }
 
@@ -35,8 +32,6 @@ export function useDeleteBook() {
 
 	return useMutation({
 		mutationFn: deleteBook,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['books'] })
-		},
+		onSuccess: () => invalidateDomain(queryClient, 'books'),
 	})
 }
