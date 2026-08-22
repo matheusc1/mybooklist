@@ -8,6 +8,7 @@ export interface Activity {
 	monthlyActivity: {
 		date: string
 		sessions: {
+			id: string
 			bookId: string
 			title: string
 			author: string

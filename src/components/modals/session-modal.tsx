@@ -4,7 +4,7 @@ import type { Activity } from '#/types/activity'
 import { formatBookDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
 import { Modal } from '../ui/modal'
-import { ActivityModal } from './activity-modal'
+import { ReadingSessionModal } from './reading-session-modal'
 
 type Session = Activity['monthlyActivity'][number]['sessions'][number]
 
@@ -45,14 +45,18 @@ export function SessionModal({
 				</Modal.Footer>
 			</Modal.Root>
 
-			<ActivityModal
+			<ReadingSessionModal
 				open={!!selectedSession}
 				onOpenChange={(v) => !v && setSelectedSession(null)}
 				mode="view"
 				session={selectedSession ? { ...selectedSession, date } : undefined}
 			/>
 
-			<ActivityModal open={addOpen} onOpenChange={setAddOpen} mode="add" />
+			<ReadingSessionModal
+				open={addOpen}
+				onOpenChange={setAddOpen}
+				mode="add"
+			/>
 		</>
 	)
 }
@@ -70,7 +74,7 @@ function SessionModalBody({
 				{sessions.length > 0 ? (
 					sessions.map((session, index) => (
 						<SessionCard
-							key={session.bookId}
+							key={session.id}
 							session={session}
 							index={index + 1}
 							onClick={onSessionClick}
