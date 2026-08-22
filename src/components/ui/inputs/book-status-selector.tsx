@@ -24,7 +24,7 @@ const statusConfig = {
 		text: 'text-parchment',
 		bg: 'bg-parchment/15',
 	},
-	finished: {
+	completed: {
 		active: 'data-[state=checked]:bg-accent',
 		dot: 'bg-accent',
 		text: 'text-accent',
