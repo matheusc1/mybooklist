@@ -1,69 +1,38 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LucideBookOpen, LucideLibrary, LucidePlus } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { BookActivityCard } from '#/components/book-activity-card'
-import { FinishedBookCard } from '#/components/finished-book-card'
+import { CompletedBookCard } from '#/components/completed-book-card'
 import { GoalCard } from '#/components/goal-card'
-import { ActivityModal } from '#/components/modals/activity-modal'
+import { ReadingSessionModal } from '#/components/modals/reading-session-modal'
 import { StatCard } from '#/components/stat-card'
 import { Button, button } from '#/components/ui/button'
 import { WeeklyChart } from '#/components/weekly-chart'
+import { useDashboard } from '#/hooks/use-dashboard'
 import { useGoal } from '#/hooks/use-goal'
-import { books } from '#/mocks/books'
 import type { Book } from '#/types/book'
+import type { WeeklyStats } from '#/types/dashboard'
 import { getPercent } from '#/utils/get-percent'
-import { sortByDateDesc } from '#/utils/sort-by-date'
 
 export const Route = createFileRoute('/_authenticated/home')({
 	component: Home,
 })
 
-interface WeeklyStats {
-	pagesRead: number
-	hoursRead: number
-	daysStreak: number
+interface WeeklyStatsContentProps {
+	weeklyStats: WeeklyStats
 }
 
 const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-const weeklyStats: WeeklyStats = {
-	pagesRead: 148,
-	hoursRead: 126, // minutes
-	daysStreak: 7,
-}
-
 function Home() {
+	const { data: dashboard } = useDashboard()
 	const { data: goal } = useGoal()
 	const [activityOpen, setActivityOpen] = useState(false)
 
-	const currentBook = useMemo(
-		() =>
-			sortByDateDesc(
-				books.filter((b) => b.status === 'reading'),
-				(b) => b.updatedAt,
-			)[0],
-		[],
-	)
-
-	const recentActivity = useMemo(
-		() =>
-			sortByDateDesc(
-				books.filter((b) => b.id !== currentBook?.id),
-				(b) => b.updatedAt,
-			).slice(0, 3),
-		[currentBook],
-	)
-
-	const recentFinishedBooks = useMemo(
-		() =>
-			sortByDateDesc(
-				books.filter((b) => b.status === 'finished'),
-				(b) => b.completedAt ?? '',
-			).slice(0, 3),
-		[],
-	)
-
-	const hasStats = books.some((b) => b.currentPage > 0)
+	const currentlyReading = dashboard?.currentlyReading
+	const recentActivity = dashboard?.recentActivity
+	const lastCompletedBooks = dashboard?.lastCompleted
+	const weeklyStats = dashboard?.weeklyStats
 
 	return (
 		<main className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
@@ -87,20 +56,20 @@ function Home() {
 					</Link>
 				</div>
 
-				{currentBook ? (
-					<CurrentBookCard book={currentBook} />
+				{currentlyReading ? (
+					<CurrentBookCard book={currentlyReading} />
 				) : (
 					<CurrentBookEmptyState />
 				)}
 
-				{recentActivity.length > 0 && (
+				{recentActivity && (
 					<>
 						<h3 className="text-xs text-muted font-medium uppercase tracking-widest">
 							Recent Activity
 						</h3>
 
 						<ul className="-mt-3">
-							{recentActivity.map((book) => (
+							{recentActivity?.map((book) => (
 								<li
 									key={book.id}
 									className="border-b border-border last:border-b-0"
@@ -137,36 +106,40 @@ function Home() {
 					</Button>
 				</div>
 
-				{hasStats ? <WeeklyStatsContent /> : <WeeklyStatsEmptyState />}
+				{weeklyStats ? (
+					<WeeklyStatsContent weeklyStats={weeklyStats} />
+				) : (
+					<WeeklyStatsEmptyState />
+				)}
 			</section>
 
 			<section
-				aria-labelledby="finished-heading"
+				aria-labelledby="completed-heading"
 				className="flex gap-6 flex-col justify-start px-5 lg:px-7 py-6 animate-fade-up [animation-delay:0.19s]"
 			>
 				<h2
-					id="finished-heading"
+					id="completed-heading"
 					className="font-serif font-semibold tracking-tight text-xl"
 				>
-					Finished
+					Completed
 				</h2>
 
-				{recentFinishedBooks.length > 0 ? (
+				{lastCompletedBooks ? (
 					<ul className="-mt-3">
-						{recentFinishedBooks.map((book) => (
+						{lastCompletedBooks?.map((book) => (
 							<li key={book.id}>
-								<FinishedBookCard book={book} />
+								<CompletedBookCard book={book} />
 							</li>
 						))}
 					</ul>
 				) : (
-					<FinishedBooksEmptyState />
+					<CompletedBooksEmptyState />
 				)}
 
 				<GoalCard goal={goal} />
 			</section>
 
-			<ActivityModal
+			<ReadingSessionModal
 				open={activityOpen}
 				onOpenChange={setActivityOpen}
 				mode="add"
@@ -176,7 +149,7 @@ function Home() {
 }
 
 function CurrentBookCard({ book }: { book: Book }) {
-	const progress = getPercent(book.currentPage, book.totalPages)
+	const progress = getPercent(book.currentPage ?? 0, book.totalPages)
 
 	return (
 		<div className="bg-surface border border-border rounded-xl overflow-hidden">
@@ -254,24 +227,25 @@ function CurrentBookEmptyState() {
 	)
 }
 
-function WeeklyStatsContent() {
-	const hours = Math.floor(weeklyStats.hoursRead / 60)
+export function WeeklyStatsContent({ weeklyStats }: WeeklyStatsContentProps) {
+	const hours = Math.floor(weeklyStats.totalReadingMinutes / 60)
+	const minutes = weeklyStats.totalReadingMinutes % 60
 	const readingTime = hours === 0 ? '~1h' : `~${hours}h`
 
 	return (
 		<>
 			<div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3 mb-1 [&>*:last-child]:md:col-span-2 [&>*:last-child]:lg:col-span-1">
 				<StatCard
-					value={weeklyStats.pagesRead}
+					value={weeklyStats.totalPagesRead}
 					label="Pages read"
 					textColor="text-accent"
-					isEmpty={!weeklyStats.pagesRead}
+					isEmpty={!weeklyStats.totalPagesRead}
 				/>
 				<StatCard
 					value={readingTime}
 					label="Hours read"
 					textColor="text-accent2"
-					isEmpty={!weeklyStats.hoursRead}
+					isEmpty={!weeklyStats.totalReadingMinutes}
 				/>
 				<StatCard
 					value={weeklyStats.daysStreak}
@@ -284,7 +258,10 @@ function WeeklyStatsContent() {
 				<p className="text-xs text-muted font-medium uppercase tracking-widest">
 					Pages per day
 				</p>
-				<WeeklyChart />
+				<WeeklyChart
+					pagesByDay={weeklyStats.pagesByDay}
+					mostActiveDay={weeklyStats.mostActiveDay}
+				/>
 			</div>
 
 			<div className="flex items-center justify-between bg-surface rounded-xl border border-border py-5 px-4 lg:px-6">
@@ -293,15 +270,18 @@ function WeeklyStatsContent() {
 						This week
 					</p>
 					<p className="text-sm font-serif text-muted lining-nums">
-						<strong className="text-xl text-text">2 </strong>
-						hrs <strong className="text-xl text-text">02 </strong>
+						<strong className="text-xl text-text">{hours} </strong>
+						hrs{' '}
+						<strong className="text-xl text-text">
+							{String(minutes).padStart(2, '0')}{' '}
+						</strong>
 						min
 					</p>
 				</div>
 				<div className="flex flex-col text-right">
 					<p className="text-xs text-muted">Most active day</p>
 					<p className="text-sm font-mono text-accent2 font-medium">
-						Tuesday ↑
+						{weeklyStats.mostActiveDay ? `${weeklyStats.mostActiveDay} ↑` : '—'}
 					</p>
 				</div>
 			</div>
@@ -365,12 +345,12 @@ function WeeklyStatsEmptyState() {
 	)
 }
 
-function FinishedBooksEmptyState() {
+function CompletedBooksEmptyState() {
 	return (
 		<div className="flex flex-col items-center text-center py-7 px-4 pb-8 border-b border-border -mt-3">
 			<LucideLibrary aria-hidden="true" className="size-12 text-muted mb-5" />
 			<p className="font-serif font-semibold text-sm lg:text-base text-text/50 mb-1.5">
-				No books finished yet
+				No books completed yet
 			</p>
 			<p className="text-xs/relaxed text-muted max-w-47.5">
 				Your completed reads will appear here. Every great library starts with

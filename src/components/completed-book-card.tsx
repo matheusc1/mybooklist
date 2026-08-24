@@ -2,11 +2,11 @@ import { LucideStar } from 'lucide-react'
 import type { Book } from '#/types/book'
 import { formatBookDate } from '#/utils/format-date'
 
-interface FinishedBookCardProps {
+interface CompletedBookCardProps {
 	book: Book
 }
 
-export function FinishedBookCard({ book }: FinishedBookCardProps) {
+export function CompletedBookCard({ book }: CompletedBookCardProps) {
 	const stars = Array.from({ length: 5 }, (_, i) => i < (book.rating ?? 0))
 
 	return (
