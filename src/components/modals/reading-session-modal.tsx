@@ -9,6 +9,7 @@ import {
 	useUpdateReadingSession,
 } from '#/hooks/use-reading-sessions'
 import type { ModalMode } from '#/types/common'
+import { getTodayDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
 import { FieldError, FieldLabel, Input } from '../ui/inputs'
 import { BookCombobox } from '../ui/inputs/book-combobox'
@@ -67,7 +68,7 @@ export function ReadingSessionModal({
 	const form = useForm({
 		defaultValues: {
 			bookId: session?.bookId ?? '',
-			readAt: session?.date ?? new Date().toISOString().split('T')[0],
+			readAt: session?.date ?? getTodayDate(),
 			fromPage: session?.fromPage ?? (undefined as number | undefined),
 			toPage: session?.toPage ?? (undefined as number | undefined),
 		},
@@ -83,7 +84,12 @@ export function ReadingSessionModal({
 						toPage: value.toPage,
 						readAt: value.readAt,
 					},
-					{ onSuccess: () => onOpenChange(false) },
+					{
+						onSuccess: () => {
+							form.reset()
+							onOpenChange(false)
+						},
+					},
 				)
 				return
 			}
@@ -95,7 +101,12 @@ export function ReadingSessionModal({
 					toPage: value.toPage ?? 0,
 					readAt: value.readAt,
 				},
-				{ onSuccess: () => onOpenChange(false) },
+				{
+					onSuccess: () => {
+						form.reset()
+						onOpenChange(false)
+					},
+				},
 			)
 		},
 	})
