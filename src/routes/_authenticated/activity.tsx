@@ -5,6 +5,7 @@ import { SessionModal } from '#/components/modals/session-modal'
 import { StatCard } from '#/components/stat-card'
 import { useActivity } from '#/hooks/use-activity'
 import type { Activity as ActivityType } from '#/types/activity'
+import { formatReadingTime } from '#/utils/format-reading-time'
 
 export const Route = createFileRoute('/_authenticated/activity')({
 	component: Activity,
@@ -69,8 +70,7 @@ function Activity() {
 }
 
 function ActivityStatsContent({ monthlyStats }: { monthlyStats?: Stats }) {
-	const hours = Math.floor((monthlyStats?.readingTime ?? 0) / 60)
-	const readingTime = hours === 0 ? '~1h' : `~${hours}h`
+	const readingTime = formatReadingTime(monthlyStats?.readingTime ?? 0)
 
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3 animate-fade-up [animation-delay:0.1s]">

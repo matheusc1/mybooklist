@@ -12,6 +12,7 @@ import { useDashboard } from '#/hooks/use-dashboard'
 import { useGoal } from '#/hooks/use-goal'
 import type { Book } from '#/types/book'
 import type { WeeklyStats } from '#/types/dashboard'
+import { formatReadingTime } from '#/utils/format-reading-time'
 import { getPercent } from '#/utils/get-percent'
 
 export const Route = createFileRoute('/_authenticated/home')({
@@ -230,7 +231,10 @@ function CurrentBookEmptyState() {
 export function WeeklyStatsContent({ weeklyStats }: WeeklyStatsContentProps) {
 	const hours = Math.floor(weeklyStats.totalReadingMinutes / 60)
 	const minutes = weeklyStats.totalReadingMinutes % 60
-	const readingTime = hours === 0 ? '~1h' : `~${hours}h`
+	const readingTime = formatReadingTime(
+		weeklyStats.totalReadingMinutes,
+		'hours',
+	)
 
 	return (
 		<>
