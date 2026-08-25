@@ -1,5 +1,5 @@
 import { LucideArrowLeft, LucideArrowRight } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { cn } from 'tailwind-variants'
 import { Button } from '#/components/ui/button'
 import type { Activity } from '#/types/activity'
@@ -16,35 +16,39 @@ interface DayState {
 
 interface CalendarProps {
 	calendar: Activity['monthlyActivity']
+	year: number
+	month: number
+	onMonthChange: (year: number, month: number) => void
 	onDayClick: (date: string, sessions: Session[]) => void
 }
 
-export function Calendar({ calendar, onDayClick }: CalendarProps) {
+export function Calendar({
+	calendar,
+	year,
+	month,
+	onMonthChange,
+	onDayClick,
+}: CalendarProps) {
 	const today = new Date()
-
-	const [view, setView] = useState({
-		year: today.getFullYear(),
-		month: today.getMonth(),
-	})
 
 	const sessionsByDate = useMemo(
 		() => Object.fromEntries(calendar.map((day) => [day.date, day.sessions])),
 		[calendar],
 	)
 
-	const calendarDays = getCalendarDays(view.year, view.month)
+	const calendarDays = getCalendarDays(year, month)
 
 	const viewMonthLabel = new Intl.DateTimeFormat('en-US', {
 		month: 'long',
 		year: 'numeric',
-	}).format(new Date(view.year, view.month))
+	}).format(new Date(year, month))
 
 	function getDayState(key: string, day: number): DayState {
 		const daySessions = sessionsByDate[key] ?? []
 
 		const isToday =
-			today.getFullYear() === view.year &&
-			today.getMonth() === view.month &&
+			today.getFullYear() === year &&
+			today.getMonth() === month &&
 			today.getDate() === day
 
 		return {
@@ -56,15 +60,13 @@ export function Calendar({ calendar, onDayClick }: CalendarProps) {
 	}
 
 	function prevMonth() {
-		setView(({ year, month }) =>
-			month === 0 ? { year: year - 1, month: 11 } : { year, month: month - 1 },
-		)
+		if (month === 0) onMonthChange(year - 1, 11)
+		else onMonthChange(year, month - 1)
 	}
 
 	function nextMonth() {
-		setView(({ year, month }) =>
-			month === 11 ? { year: year + 1, month: 0 } : { year, month: month + 1 },
-		)
+		if (month === 11) onMonthChange(year + 1, 0)
+		else onMonthChange(year, month + 1)
 	}
 
 	return (
