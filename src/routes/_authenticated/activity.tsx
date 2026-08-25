@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Calendar } from '#/components/calendar'
 import { SessionModal } from '#/components/modals/session-modal'
 import { StatCard } from '#/components/stat-card'
-import { calendar } from '#/mocks/sessions'
+import { useActivity } from '#/hooks/use-activity'
 import type { Activity as ActivityType } from '#/types/activity'
 
 export const Route = createFileRoute('/_authenticated/activity')({
@@ -12,23 +12,27 @@ export const Route = createFileRoute('/_authenticated/activity')({
 
 type Stats = ActivityType['monthlyStats']
 
-const monthlyStats: Stats = {
-	sessions: 18,
-	pages: 342,
-	readingTime: 842, // minutes
-	activeDays: 12,
-}
-
 const today = new Date()
-const currentMonthLabel = new Intl.DateTimeFormat('en-US', {
-	month: 'long',
-	year: 'numeric',
-}).format(today)
 
 function Activity() {
+	const [view, setView] = useState({
+		year: today.getFullYear(),
+		month: today.getMonth(),
+	})
 	const [selectedDate, setSelectedDate] = useState<string | null>(null)
+
+	const monthParam = `${view.year}-${String(view.month + 1).padStart(2, '0')}`
+	const { data: activity } = useActivity(monthParam)
+
+	const monthlyStats = activity?.monthlyStats
+	const calendar = activity?.monthlyActivity ?? []
 	const selectedSessions =
 		calendar.find((d) => d.date === selectedDate)?.sessions ?? []
+
+	const currentMonthLabel = new Intl.DateTimeFormat('en-US', {
+		month: 'long',
+		year: 'numeric',
+	}).format(new Date(view.year, view.month))
 
 	return (
 		<main className="min-h-[calc(100vh-69px)] w-full max-w-250 mx-auto p-5 lg:p-10 space-y-10">
@@ -47,6 +51,9 @@ function Activity() {
 			<div className="animate-fade-up [animation-delay:0.15s]">
 				<Calendar
 					calendar={calendar}
+					year={view.year}
+					month={view.month}
+					onMonthChange={(year, month) => setView({ year, month })}
 					onDayClick={(date) => setSelectedDate(date)}
 				/>
 			</div>
@@ -61,8 +68,8 @@ function Activity() {
 	)
 }
 
-function ActivityStatsContent({ monthlyStats }: { monthlyStats: Stats }) {
-	const hours = Math.floor(monthlyStats.readingTime / 60)
+function ActivityStatsContent({ monthlyStats }: { monthlyStats?: Stats }) {
+	const hours = Math.floor((monthlyStats?.readingTime ?? 0) / 60)
 	const readingTime = hours === 0 ? '~1h' : `~${hours}h`
 
 	return (
