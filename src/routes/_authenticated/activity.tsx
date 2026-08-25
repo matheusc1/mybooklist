@@ -1,17 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Calendar } from '#/components/calendar'
+import { Calendar } from '#/components/activity/calendar'
+import { MonthlyStats } from '#/components/activity/monthly-stats'
 import { SessionModal } from '#/components/modals/session-modal'
-import { StatCard } from '#/components/stat-card'
 import { useActivity } from '#/hooks/use-activity'
-import type { Activity as ActivityType } from '#/types/activity'
-import { formatReadingTime } from '#/utils/format-reading-time'
 
 export const Route = createFileRoute('/_authenticated/activity')({
 	component: Activity,
 })
-
-type Stats = ActivityType['monthlyStats']
 
 const today = new Date()
 
@@ -47,7 +43,7 @@ function Activity() {
 				<p className="text-muted text-xs tracking-wider">{currentMonthLabel}</p>
 			</div>
 
-			<ActivityStatsContent monthlyStats={monthlyStats} />
+			<MonthlyStats monthlyStats={monthlyStats} />
 
 			<div className="animate-fade-up [animation-delay:0.15s]">
 				<Calendar
@@ -66,36 +62,5 @@ function Activity() {
 				sessions={selectedSessions}
 			/>
 		</main>
-	)
-}
-
-function ActivityStatsContent({ monthlyStats }: { monthlyStats?: Stats }) {
-	const readingTime = formatReadingTime(monthlyStats?.readingTime ?? 0)
-
-	return (
-		<div className="grid grid-cols-2 md:grid-cols-4 gap-2 lg:gap-3 animate-fade-up [animation-delay:0.1s]">
-			<StatCard
-				value={monthlyStats?.sessions}
-				isEmpty={!monthlyStats?.sessions}
-				label="Sessions this month"
-				textColor="text-accent"
-			/>
-			<StatCard
-				value={monthlyStats?.pages}
-				isEmpty={!monthlyStats?.pages}
-				label="Pages this month"
-			/>
-			<StatCard
-				value={readingTime}
-				isEmpty={!monthlyStats?.readingTime}
-				label="Reading time"
-				textColor="text-accent2"
-			/>
-			<StatCard
-				value={monthlyStats?.activeDays}
-				isEmpty={!monthlyStats?.activeDays}
-				label="Active Days"
-			/>
-		</div>
 	)
 }
