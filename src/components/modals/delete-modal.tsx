@@ -10,6 +10,7 @@ interface DeleteModalProps {
 	type: DeleteTarget
 	bookTitle: string
 	isLastSession?: boolean
+	pending?: boolean
 	onConfirm: (resetToPlanned: boolean) => void
 }
 
@@ -30,6 +31,7 @@ export function DeleteModal({
 	type,
 	bookTitle,
 	isLastSession,
+	pending,
 	onConfirm,
 }: DeleteModalProps) {
 	const { eyebrow, desc } = deleteConfig[type]
@@ -62,6 +64,7 @@ export function DeleteModal({
 							type="checkbox"
 							checked={resetToPlanned}
 							onChange={(e) => setResetToPlanned(e.target.checked)}
+							disabled={pending}
 							className="mt-0.5 size-4 accent-accent"
 						/>
 						<span className="text-text/80">
@@ -80,11 +83,19 @@ export function DeleteModal({
 			</Modal.Body>
 
 			<Modal.Footer>
-				<Button variant="ghost" onClick={() => handleOpenChange(false)}>
+				<Button
+					variant="ghost"
+					onClick={() => handleOpenChange(false)}
+					disabled={pending}
+				>
 					Cancel
 				</Button>
-				<Button variant="danger" onClick={() => onConfirm(resetToPlanned)}>
-					Delete
+				<Button
+					variant="danger"
+					onClick={() => onConfirm(resetToPlanned)}
+					disabled={pending}
+				>
+					{pending ? 'Deleting...' : 'Delete'}
 				</Button>
 			</Modal.Footer>
 		</Modal.Root>

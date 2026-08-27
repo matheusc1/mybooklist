@@ -144,6 +144,16 @@ export function BookModal({
 		onOpenChange(false)
 	}
 
+	function handleDeleteConfirm() {
+		if (!book) return
+		deleteBook(book.id, {
+			onSuccess: () => {
+				setDeleteOpen(false)
+				onOpenChange(false)
+			},
+		})
+	}
+
 	return (
 		<>
 			<Modal.Root open={open} onOpenChange={onOpenChange}>
@@ -497,15 +507,8 @@ export function BookModal({
 				onOpenChange={setDeleteOpen}
 				type="book"
 				bookTitle={book?.title ?? ''}
-				onConfirm={() => {
-					if (!book) return
-					deleteBook(book.id, {
-						onSuccess: () => {
-							setDeleteOpen(false)
-							onOpenChange(false)
-						},
-					})
-				}}
+				pending={isDeleting}
+				onConfirm={handleDeleteConfirm}
 			/>
 		</>
 	)

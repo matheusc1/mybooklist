@@ -369,6 +369,7 @@ export function ReadingSessionModal({
 				bookTitle={
 					books?.find((b) => String(b.id) === session?.bookId)?.title ?? ''
 				}
+				pending={isDeleting}
 				onConfirm={handleDeleteConfirm}
 			/>
 		</>
