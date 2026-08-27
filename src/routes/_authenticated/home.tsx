@@ -27,7 +27,7 @@ export const Route = createFileRoute('/_authenticated/home')({
 function Home() {
 	const { data: dashboard } = useDashboard()
 	const { data: goal } = useGoal()
-	const [activityOpen, setActivityOpen] = useState(false)
+	const [addSessionOpen, setAddSessionOpen] = useState(false)
 
 	const currentlyReading = dashboard?.currentlyReading
 	const recentActivity = dashboard?.recentActivity
@@ -96,7 +96,7 @@ function Home() {
 					<Button
 						variant="primary"
 						size="sm"
-						onClick={() => setActivityOpen(true)}
+						onClick={() => setAddSessionOpen(true)}
 					>
 						<LucidePlus
 							aria-hidden="true"
@@ -139,11 +139,14 @@ function Home() {
 				<GoalCard goal={goal} />
 			</section>
 
-			<ReadingSessionModal
-				open={activityOpen}
-				onOpenChange={setActivityOpen}
-				mode="add"
-			/>
+			{addSessionOpen && (
+				<ReadingSessionModal
+					key="add"
+					open={addSessionOpen}
+					onOpenChange={setAddSessionOpen}
+					mode="add"
+				/>
+			)}
 		</main>
 	)
 }

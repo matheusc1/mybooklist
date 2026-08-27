@@ -1,6 +1,7 @@
 import { LucideArrowRight, LucideMoon, LucideTimer } from 'lucide-react'
 import { useState } from 'react'
 import type { Activity } from '#/types/activity'
+import type { ModalMode } from '#/types/common'
 import { formatBookDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
 import { Modal } from '../ui/modal'
@@ -21,8 +22,10 @@ export function SessionModal({
 	sessions,
 	onClose,
 }: SessionModalProps) {
-	const [selectedSession, setSelectedSession] = useState<Session | null>(null)
-	const [addOpen, setAddOpen] = useState(false)
+	const [sessionModal, setSessionModal] = useState<{
+		session?: Session
+		mode: ModalMode
+	} | null>(null)
 
 	return (
 		<>
@@ -31,32 +34,33 @@ export function SessionModal({
 
 				<SessionModalBody
 					sessions={sessions}
-					onSessionClick={setSelectedSession}
+					onSessionClick={(session) =>
+						setSessionModal({ session, mode: 'view' })
+					}
 				/>
 
 				<Modal.Footer>
 					<Button
 						variant="dashed"
 						className="w-full text-sm"
-						onClick={() => setAddOpen(true)}
+						onClick={() => setSessionModal({ mode: 'add' })}
 					>
 						Log a session for this day
 					</Button>
 				</Modal.Footer>
 			</Modal.Root>
 
-			<ReadingSessionModal
-				open={!!selectedSession}
-				onOpenChange={(v) => !v && setSelectedSession(null)}
-				mode="view"
-				session={selectedSession ? { ...selectedSession, date } : undefined}
-			/>
-
-			<ReadingSessionModal
-				open={addOpen}
-				onOpenChange={setAddOpen}
-				mode="add"
-			/>
+			{sessionModal && (
+				<ReadingSessionModal
+					key={sessionModal.session?.id ?? 'add'}
+					open={!!sessionModal}
+					onOpenChange={(v) => !v && setSessionModal(null)}
+					mode={sessionModal.mode}
+					session={
+						sessionModal.session ? { ...sessionModal.session, date } : undefined
+					}
+				/>
+			)}
 		</>
 	)
 }

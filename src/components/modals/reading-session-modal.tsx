@@ -29,12 +29,17 @@ interface ReadingSessionModalProps {
 	}
 }
 
-const readingSessionSchema = z.object({
-	bookId: z.string().min(1, 'Book is required'),
-	readAt: z.string().min(1, 'Date cannot be empty'),
-	fromPage: z.number({ error: 'Initial page is required' }).gte(0),
-	toPage: z.number({ error: 'Final page is required' }).gt(0),
-})
+const readingSessionSchema = z
+	.object({
+		bookId: z.string().min(1, 'Book is required'),
+		readAt: z.string().min(1, 'Date cannot be empty'),
+		fromPage: z.number({ error: 'Initial page is required' }).gte(0),
+		toPage: z.number({ error: 'Final page is required' }).gt(0),
+	})
+	.refine((data) => data.toPage >= data.fromPage, {
+		message: 'To page cannot be less than from page',
+		path: ['toPage'],
+	})
 
 const headerTitleMap = {
 	add: 'Add Session',
@@ -84,12 +89,7 @@ export function ReadingSessionModal({
 						toPage: value.toPage,
 						readAt: value.readAt,
 					},
-					{
-						onSuccess: () => {
-							form.reset()
-							onOpenChange(false)
-						},
-					},
+					{ onSuccess: () => onOpenChange(false) },
 				)
 				return
 			}
@@ -101,12 +101,7 @@ export function ReadingSessionModal({
 					toPage: value.toPage ?? 0,
 					readAt: value.readAt,
 				},
-				{
-					onSuccess: () => {
-						form.reset()
-						onOpenChange(false)
-					},
-				},
+				{ onSuccess: () => onOpenChange(false) },
 			)
 		},
 	})
