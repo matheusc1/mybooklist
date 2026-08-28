@@ -34,6 +34,12 @@ function Home() {
 	const lastCompletedBooks = dashboard?.lastCompleted
 	const weeklyStats = dashboard?.weeklyStats
 
+	const hasRecentActivity = (recentActivity?.length ?? 0) > 0
+	const hasCompletedBooks = (lastCompletedBooks?.length ?? 0) > 0
+	const hasWeeklyActivity = weeklyStats
+		? weeklyStats.totalPagesRead > 0 || weeklyStats.totalReadingMinutes > 0
+		: false
+
 	return (
 		<main className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
 			<section
@@ -62,7 +68,7 @@ function Home() {
 					<CurrentBookEmptyState />
 				)}
 
-				{recentActivity && (
+				{hasRecentActivity && (
 					<>
 						<h3 className="text-xs text-muted font-medium uppercase tracking-widest">
 							Recent Activity
@@ -106,7 +112,7 @@ function Home() {
 					</Button>
 				</div>
 
-				{weeklyStats ? (
+				{hasWeeklyActivity && weeklyStats ? (
 					<WeeklyStatsContent weeklyStats={weeklyStats} />
 				) : (
 					<WeeklyStatsEmptyState />
@@ -124,7 +130,7 @@ function Home() {
 					Completed
 				</h2>
 
-				{lastCompletedBooks ? (
+				{hasCompletedBooks ? (
 					<ul className="-mt-3">
 						{lastCompletedBooks?.map((book) => (
 							<li key={book.id}>

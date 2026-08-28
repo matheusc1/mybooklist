@@ -51,9 +51,9 @@ export function CompletedBookCard({ book }: CompletedBookCardProps) {
 
 export function CompletedBooksEmptyState() {
 	return (
-		<div className="flex flex-col items-center text-center py-7 px-4 pb-8 border-b border-border -mt-3">
-			<LucideLibrary aria-hidden="true" className="size-12 text-muted mb-5" />
-			<p className="font-serif font-semibold text-sm lg:text-base text-text/50 mb-1.5">
+		<div className="flex flex-col items-center text-center py-5 px-4 pb-8 border-b border-border -mt-3">
+			<LucideLibrary aria-hidden="true" className="size-12 text-text/70 mb-5" />
+			<p className="font-serif font-semibold text-sm lg:text-base text-text/60 mb-1.5">
 				No books completed yet
 			</p>
 			<p className="text-xs/relaxed text-muted max-w-47.5">
