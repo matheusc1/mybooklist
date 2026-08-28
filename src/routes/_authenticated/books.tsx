@@ -41,10 +41,10 @@ const filters: Filter[] = [
 		activeColor: BOOK_STATUS.reading.color,
 	},
 	{
-		label: BOOK_STATUS.want.label,
-		status: 'want',
+		label: BOOK_STATUS.planned.label,
+		status: 'planned',
 		color: 'bg-mist/50',
-		activeColor: BOOK_STATUS.want.color,
+		activeColor: BOOK_STATUS.planned.color,
 	},
 	{
 		label: BOOK_STATUS.completed.label,

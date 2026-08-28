@@ -4,7 +4,7 @@ export const BOOK_STATUS = {
 		shortLabel: 'Reading',
 		color: 'bg-accent2',
 	},
-	want: {
+	planned: {
 		label: 'Want to read',
 		shortLabel: 'Planned',
 		color: 'bg-mist',

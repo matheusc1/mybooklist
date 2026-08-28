@@ -12,7 +12,7 @@ const statusConfig = {
 		text: 'text-accent2',
 		bg: 'bg-accent2/15',
 	},
-	want: {
+	planned: {
 		active: 'data-[state=checked]:bg-mist',
 		dot: 'bg-mist',
 		text: 'text-mist',
