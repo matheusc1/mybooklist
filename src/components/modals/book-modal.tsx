@@ -27,21 +27,30 @@ interface BookModalProps {
 	book?: Book
 }
 
-const bookSchema = z.object({
-	title: z.string().min(1, 'Title cannot be empty'),
-	author: z.string().min(1, 'Author cannot be empty'),
-	coverUrl: z.url({ message: 'Must be a valid URL' }).or(z.literal('')),
-	genre: z.string().min(1, 'Genre cannot be empty'),
-	status: z.string().min(1, 'Status cannot be empty'),
-	currentPage: z.union([
-		z.number().gte(0, 'Current page cannot be less than 0'),
-		z.undefined(),
-	]),
-	totalPages: z.number().gt(0, 'Total pages cannot be less than 1'),
-	rating: z.union([z.number(), z.undefined()]),
-	startedAt: z.string(),
-	completedAt: z.string(),
-})
+const bookSchema = z
+	.object({
+		title: z.string().min(1, 'Title cannot be empty'),
+		author: z.string().min(1, 'Author cannot be empty'),
+		coverUrl: z.url({ message: 'Must be a valid URL' }).or(z.literal('')),
+		genre: z.string().min(1, 'Genre cannot be empty'),
+		status: z.string().min(1, 'Status cannot be empty'),
+		currentPage: z.union([
+			z.number().gte(0, 'Current page cannot be less than 0'),
+			z.undefined(),
+		]),
+		totalPages: z.number().gt(0, 'Total pages cannot be less than 1'),
+		rating: z.union([z.number(), z.undefined()]),
+		startedAt: z.string(),
+		completedAt: z.string(),
+	})
+	.refine(
+		(data) =>
+			data.currentPage === undefined || data.currentPage <= data.totalPages,
+		{
+			message: 'Current page cannot be greater than total pages',
+			path: ['currentPage'],
+		},
+	)
 
 const headerTitleMap = {
 	add: 'Add Book',
