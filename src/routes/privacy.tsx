@@ -455,6 +455,7 @@ function PrivacyPolicy() {
 
 						<button
 							type="button"
+							onClick={() => router.history.back()}
 							className="px-4 py-2 bg-surface border border-border rounded-lg text-xs text-accent2 cursor-pointer hover:text-text hover:border-white/20 hover:underline"
 						>
 							← Back to app
