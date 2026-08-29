@@ -10,6 +10,7 @@ import {
 	CurrentBookCard,
 	CurrentBookEmptyState,
 } from '#/components/dashboard/current-book-card'
+import { DashboardSkeleton } from '#/components/dashboard/dashboard-skeleton'
 import {
 	WeeklyStatsContent,
 	WeeklyStatsEmptyState,
@@ -25,7 +26,7 @@ export const Route = createFileRoute('/_authenticated/home')({
 })
 
 function Home() {
-	const { data: dashboard } = useDashboard()
+	const { data: dashboard, isLoading } = useDashboard()
 	const { data: goal } = useGoal()
 	const [addSessionOpen, setAddSessionOpen] = useState(false)
 
@@ -39,6 +40,8 @@ function Home() {
 	const hasWeeklyActivity = weeklyStats
 		? weeklyStats.totalPagesRead > 0 || weeklyStats.totalReadingMinutes > 0
 		: false
+
+	if (isLoading) return <DashboardSkeleton />
 
 	return (
 		<main className="min-h-[calc(100vh-69px)] overflow-hidden grid md:grid-cols-[268px_1fr_224px] lg:grid-cols-[300px_1fr_280px] md:divide-x divide-border">
