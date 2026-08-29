@@ -10,7 +10,7 @@ import {
 	CurrentBookCard,
 	CurrentBookEmptyState,
 } from '#/components/dashboard/current-book-card'
-import { DashboardSkeleton } from '#/components/dashboard/dashboard-skeleton'
+import { DashboardSkeleton } from '#/components/dashboard/skeleton'
 import {
 	WeeklyStatsContent,
 	WeeklyStatsEmptyState,
