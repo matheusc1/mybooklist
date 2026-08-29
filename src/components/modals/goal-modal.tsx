@@ -16,7 +16,7 @@ const year = new Date().getFullYear().toString()
 
 export function GoalModal() {
 	const { open, mode, closeModal } = useGoalModalStore()
-	const { mutate: setGoal } = useUpsertGoal()
+	const { mutate: setGoal, isPending } = useUpsertGoal()
 
 	const form = useForm({
 		defaultValues: {
@@ -28,9 +28,15 @@ export function GoalModal() {
 		onSubmit: async ({ value }) => {
 			if (value.target === undefined) return
 
-			setGoal({ target: value.target })
-			form.reset()
-			closeModal()
+			setGoal(
+				{ target: value.target },
+				{
+					onSuccess: () => {
+						form.reset()
+						closeModal()
+					},
+				},
+			)
 		},
 	})
 
@@ -65,6 +71,7 @@ export function GoalModal() {
 									onChange={(e) => field.handleChange(e.target.valueAsNumber)}
 									type="number"
 									placeholder="e.g. 12"
+									readOnly={isPending}
 									aria-describedby={`${field.name}-hint${field.state.meta.errors[0] ? ` ${field.name}-error` : ''}`}
 									aria-invalid={!!field.state.meta.errors[0]}
 								/>
@@ -88,16 +95,28 @@ export function GoalModal() {
 					<form.Subscribe
 						selector={(state) => [state.canSubmit, state.isSubmitting]}
 					>
-						{([canSubmit, isSubmitting]) => (
-							<>
-								<Button type="reset" variant="ghost" onClick={handleCancel}>
-									Cancel
-								</Button>
-								<Button type="submit" disabled={!canSubmit || isSubmitting}>
-									{mode === 'add' ? 'Set Goal' : 'Save'}
-								</Button>
-							</>
-						)}
+						{([canSubmit, isSubmitting]) => {
+							const pending = isPending || isSubmitting
+							return (
+								<>
+									<Button
+										type="reset"
+										variant="ghost"
+										onClick={handleCancel}
+										disabled={pending}
+									>
+										Cancel
+									</Button>
+									<Button type="submit" disabled={!canSubmit || pending}>
+										{pending
+											? 'Saving...'
+											: mode === 'add'
+												? 'Set Goal'
+												: 'Save'}
+									</Button>
+								</>
+							)
+						}}
 					</form.Subscribe>
 				</Modal.Footer>
 			</form>
