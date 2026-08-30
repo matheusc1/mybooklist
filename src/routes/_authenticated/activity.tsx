@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Calendar } from '#/components/activity/calendar'
 import { MonthlyStats } from '#/components/activity/monthly-stats'
+import { ActivitySkeleton } from '#/components/activity/skeleton'
 import { SessionModal } from '#/components/modals/session-modal'
 import { useActivity } from '#/hooks/use-activity'
 
@@ -19,7 +20,7 @@ function Activity() {
 	const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
 	const monthParam = `${view.year}-${String(view.month + 1).padStart(2, '0')}`
-	const { data: activity } = useActivity(monthParam)
+	const { data: activity, isLoading } = useActivity(monthParam)
 
 	const monthlyStats = activity?.monthlyStats
 	const calendar = activity?.monthlyActivity ?? []
@@ -30,6 +31,8 @@ function Activity() {
 		month: 'long',
 		year: 'numeric',
 	}).format(new Date(view.year, view.month))
+
+	if (isLoading) return <ActivitySkeleton />
 
 	return (
 		<main className="min-h-[calc(100vh-69px)] w-full max-w-250 mx-auto p-5 lg:p-10 space-y-10">
