@@ -2,6 +2,7 @@ import { LucideStar } from 'lucide-react'
 import { BOOK_STATUS } from '#/constants/book-status'
 import type { Book } from '#/types/book'
 import { getPercent } from '#/utils/get-percent'
+import { Skeleton } from './ui/skeleton'
 
 interface BookCardProps {
 	book: Book
@@ -86,5 +87,16 @@ export function BookCard({ book, onClick }: BookCardProps) {
 				</div>
 			</div>
 		</button>
+	)
+}
+
+export function BookCardSkeleton() {
+	return (
+		<div className="w-full">
+			<Skeleton className="w-full aspect-2/3 rounded-lg mb-3" />
+			<Skeleton className="h-4 w-4/5 rounded-full mb-1.5" />
+			<Skeleton className="h-3.5 w-1/2 rounded-full mb-1.5" />
+			<Skeleton className="h-3 w-1/3 rounded-full" />
+		</div>
 	)
 }

@@ -7,7 +7,7 @@ import {
 	LucideX,
 } from 'lucide-react'
 import { useState } from 'react'
-import { BookCard } from '#/components/book-card'
+import { BookCard, BookCardSkeleton } from '#/components/book-card'
 import { BookModal } from '#/components/modals/book-modal'
 import { Button } from '#/components/ui/button'
 import type { ActivityStatus } from '#/constants/book-status'
@@ -67,7 +67,7 @@ const filters: Filter[] = [
 ]
 
 function MyBooks() {
-	const { data: books } = useBooks()
+	const { data: books, isLoading } = useBooks()
 	const [activeFilter, setActiveFilter] = useState<ActivityStatus | null>(null) // null = All
 	const [search, setSearch] = useState('')
 	const [bookModal, setBookModal] = useState<{
@@ -198,7 +198,16 @@ function MyBooks() {
 					</fieldset>
 				</div>
 
-				{isEmpty || isFilterEmpty ? (
+				{isLoading ? (
+					<ul className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-5">
+						{Array.from({ length: 10 }).map((_, index) => (
+							// biome-ignore lint/suspicious/noArrayIndexKey: static skeleton placeholders
+							<li key={index}>
+								<BookCardSkeleton />
+							</li>
+						))}
+					</ul>
+				) : isEmpty || isFilterEmpty ? (
 					<div className="flex flex-col items-center justify-center gap-3 py-20 text-center animate-fade-up">
 						{emptyState.icon}
 						<div className="space-y-1">
