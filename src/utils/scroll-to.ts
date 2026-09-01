@@ -4,7 +4,7 @@ export const scrollTo = (id: string) => (e: React.MouseEvent) => {
 	const el = document.getElementById(id)
 	if (!el) return
 
-	const top = el.getBoundingClientRect().top + window.scrollY - 88 // 88 = altura do header
+	const top = el.getBoundingClientRect().top + window.scrollY - 88 // 88 = header height
 
 	window.scrollTo({ top, behavior: 'smooth' })
 
