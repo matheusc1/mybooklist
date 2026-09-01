@@ -8,7 +8,7 @@ export interface Book {
 	genre: string
 	coverUrl: string | null
 	totalPages: number
-	currentPage: number | null
+	currentPage: number
 	status: ActivityStatus
 	rating: number | null
 	startedAt: string | null

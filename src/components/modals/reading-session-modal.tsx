@@ -158,10 +158,7 @@ export function ReadingSessionModal({
 												onValueChange={(book) => {
 													field.handleChange(book ? String(book.id) : '')
 													if (book && currentMode === 'add') {
-														form.setFieldValue(
-															'fromPage',
-															book.currentPage ?? 0,
-														)
+														form.setFieldValue('fromPage', book.currentPage)
 													}
 												}}
 												disabled={isView || isEdit}

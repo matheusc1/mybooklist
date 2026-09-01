@@ -5,7 +5,7 @@ import { getPercent } from '#/utils/get-percent'
 import { button } from '../ui/button'
 
 export function CurrentBookCard({ book }: { book: Book }) {
-	const progress = getPercent(book.currentPage ?? 0, book.totalPages)
+	const progress = getPercent(book.currentPage, book.totalPages)
 
 	return (
 		<div className="bg-surface border border-border rounded-xl overflow-hidden">

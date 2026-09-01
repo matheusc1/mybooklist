@@ -9,7 +9,7 @@ export interface WeeklyStats {
 }
 
 export interface Dashboard {
-	currentlyReading: Book | null
+	currentlyReading?: Book
 	recentActivity: Book[]
 	lastCompleted: Book[]
 	weeklyStats: WeeklyStats
