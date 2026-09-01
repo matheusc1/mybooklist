@@ -26,6 +26,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				name: 'viewport',
 				content: 'width=device-width, initial-scale=1',
 			},
+			{ property: 'og:title', content: 'MyBookList' },
+			{
+				property: 'og:description',
+				content:
+					'Acompanhe suas leituras, defina metas e monitore seu progresso de leitura.',
+			},
+			{
+				property: 'og:image',
+				content: `${import.meta.env.VITE_SITE_URL ?? ''}/og-image.png`,
+			},
+			{ property: 'og:type', content: 'website' },
+			{ name: 'twitter:card', content: 'summary_large_image' },
 			{
 				title: 'MyBookList',
 			},
