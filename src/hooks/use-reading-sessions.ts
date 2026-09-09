@@ -30,7 +30,7 @@ export function useDeleteReadingSession() {
 	return useMutation({
 		mutationFn: ({
 			id,
-			resetToPlanned,
+			resetToPlanned = false,
 		}: {
 			id: string
 			resetToPlanned?: boolean

@@ -1,5 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render } from '@testing-library/react'
+import {
+	type RenderHookOptions,
+	render,
+	renderHook,
+} from '@testing-library/react'
 import type { ReactElement } from 'react'
 
 function createTestQueryClient() {
@@ -18,6 +22,21 @@ export function renderWithProviders(ui: ReactElement) {
 			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 		),
 	})
+}
+
+export function renderHookWithProviders<Result, Props = undefined>(
+	callback: (props: Props) => Result,
+	options?: Omit<RenderHookOptions<Props>, 'wrapper'>,
+) {
+	const queryClient = createTestQueryClient()
+	const renderResult = renderHook(callback, {
+		...options,
+		wrapper: ({ children }) => (
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		),
+	})
+
+	return { ...renderResult, queryClient }
 }
 
 export * from '@testing-library/react'
