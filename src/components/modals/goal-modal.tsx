@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { useUpsertGoal } from '#/hooks/use-goal'
-import { useGoalModalStore } from '@/stores/goal-store'
+import { useGoalModalStore } from '#/stores/goal-store'
 import { Button } from '../ui/button'
 import { FieldError, FieldLabel, Input } from '../ui/inputs'
 import { Modal } from '../ui/modal'
@@ -24,6 +24,7 @@ export function GoalModal() {
 		},
 		validators: {
 			onChange: goalSchema,
+			onMount: goalSchema,
 		},
 		onSubmit: async ({ value }) => {
 			if (value.target === undefined) return
