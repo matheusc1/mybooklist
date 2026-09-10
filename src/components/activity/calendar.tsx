@@ -121,7 +121,7 @@ export function Calendar({
 							year: 'numeric',
 							month: 'long',
 							day: 'numeric',
-						}).format(new Date(key))
+						}).format(new Date(year, month, day))
 
 						return (
 							<button
