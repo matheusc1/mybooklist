@@ -12,13 +12,21 @@ import {
 import { CurrentBookCard, CurrentBookEmptyState } from './current-book-card'
 import { WeeklyStatsContent, WeeklyStatsEmptyState } from './weekly-stats'
 
-vi.mock('@tanstack/react-router', () => ({
-	Link: ({ children, to, ...props }: ComponentProps<'a'> & { to?: string }) => (
-		<a {...props} href={to}>
-			{children}
-		</a>
-	),
-}))
+vi.mock('@tanstack/react-router', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@tanstack/react-router')>()
+	return {
+		...actual,
+		Link: ({
+			children,
+			to,
+			...props
+		}: ComponentProps<'a'> & { to?: string }) => (
+			<a {...props} href={to}>
+				{children}
+			</a>
+		),
+	}
+})
 
 const book: Book = {
 	id: 'book-1',
