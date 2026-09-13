@@ -79,4 +79,31 @@ describe('Home', () => {
 			0,
 		)
 	})
+
+	it('renders empty states for the current book, completed books, and weekly stats', () => {
+		mocks.dashboard.mockReturnValue({
+			data: {
+				currentlyReading: null,
+				recentActivity: [],
+				lastCompleted: [],
+				weeklyStats: {
+					pagesByDay: [],
+					totalPagesRead: 0,
+					totalReadingMinutes: 0,
+					mostActiveDay: null,
+					daysStreak: 0,
+				},
+			},
+			isLoading: false,
+		})
+		renderWithRouter(<Home />)
+
+		expect(
+			screen.getByText("You're not tracking any book right now."),
+		).toBeInTheDocument()
+		expect(screen.getByText('No books completed yet')).toBeInTheDocument()
+		expect(
+			screen.getByText('Add your first reading record to see stats here.'),
+		).toBeInTheDocument()
+	})
 })

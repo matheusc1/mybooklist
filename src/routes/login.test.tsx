@@ -21,5 +21,8 @@ describe('Login', () => {
 		expect(
 			screen.getByRole('link', { name: 'Terms of Service' }),
 		).toHaveAttribute('href', '/terms')
+		expect(
+			screen.getByRole('link', { name: 'Privacy Policy' }),
+		).toHaveAttribute('href', '/privacy')
 	})
 })

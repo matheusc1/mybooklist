@@ -28,6 +28,19 @@ const book = {
 	updatedAt: '2026-09-01',
 }
 
+const plannedBook = {
+	...book,
+	id: 'book-2',
+	title: 'Dune',
+	status: 'planned' as const,
+}
+const completedBook = {
+	...book,
+	id: 'book-3',
+	title: '1984',
+	status: 'completed' as const,
+}
+
 beforeEach(() => {
 	vi.clearAllMocks()
 	books.mockReturnValue({ data: [book], isLoading: false })
@@ -56,5 +69,85 @@ describe('MyBooks', () => {
 		expect(
 			screen.getByText(/Start building your collection/),
 		).toBeInTheDocument()
+	})
+
+	it('filters books by status', async () => {
+		const user = userEvent.setup()
+		books.mockReturnValue({
+			data: [book, plannedBook, completedBook],
+			isLoading: false,
+		})
+		renderWithRouter(<MyBooks />)
+
+		await user.click(screen.getByRole('button', { name: /Want to read 1/ }))
+
+		expect(screen.getByText('Dune')).toBeInTheDocument()
+		expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument()
+		expect(screen.queryByText('1984')).not.toBeInTheDocument()
+	})
+
+	it('matches trimmed search text without case sensitivity', async () => {
+		const user = userEvent.setup()
+		books.mockReturnValue({ data: [book, plannedBook], isLoading: false })
+		renderWithRouter(<MyBooks />)
+
+		await user.type(
+			screen.getByRole('textbox', { name: 'Search by title or author' }),
+			'  dUnE  ',
+		)
+
+		expect(screen.getByText('Dune')).toBeInTheDocument()
+		expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument()
+	})
+
+	it('clears search with Escape and restores the full list', async () => {
+		const user = userEvent.setup()
+		books.mockReturnValue({ data: [book, plannedBook], isLoading: false })
+		renderWithRouter(<MyBooks />)
+		const search = screen.getByRole('textbox', {
+			name: 'Search by title or author',
+		})
+
+		await user.type(search, 'Dune')
+		expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument()
+		await user.keyboard('{Escape}')
+
+		expect(screen.getByText('The Hobbit')).toBeInTheDocument()
+		expect(screen.getByText('Dune')).toBeInTheDocument()
+	})
+
+	it('shows a distinct empty state when filters match no books', async () => {
+		const user = userEvent.setup()
+		renderWithRouter(<MyBooks />)
+
+		await user.type(
+			screen.getByRole('textbox', { name: 'Search by title or author' }),
+			'Unknown book',
+		)
+
+		expect(screen.getByText('No books here yet')).toBeInTheDocument()
+		expect(
+			screen.getByText('No books match your current filters.'),
+		).toBeInTheDocument()
+		expect(screen.queryByText('Your library is empty')).not.toBeInTheDocument()
+	})
+
+	it('opens the add-book modal in add mode', async () => {
+		const user = userEvent.setup()
+		renderWithRouter(<MyBooks />)
+
+		await user.click(screen.getByRole('button', { name: 'Add Book' }))
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('Book modal: add')
+	})
+
+	it('renders book loading skeletons', () => {
+		books.mockReturnValue({ data: undefined, isLoading: true })
+		renderWithRouter(<MyBooks />)
+
+		expect(document.querySelectorAll('.animate-pulse').length).toBeGreaterThan(
+			0,
+		)
+		expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument()
 	})
 })

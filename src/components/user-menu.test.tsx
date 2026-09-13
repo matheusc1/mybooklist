@@ -1,5 +1,6 @@
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { useGoalModalStore } from '#/stores/goal-store'
 import { renderWithRouter, screen } from '#/test/test-utils'
 import { UserMenu } from './user-menu'
 
@@ -8,13 +9,17 @@ const mocks = vi.hoisted(() => ({
 	goal: vi.fn(),
 	logoutHook: vi.fn(),
 	logoutMutation: vi.fn(),
+	upsertGoal: vi.fn(),
 }))
 
 vi.mock('#/hooks/use-auth', () => ({
 	useMe: mocks.me,
 	useLogout: mocks.logoutHook,
 }))
-vi.mock('#/hooks/use-goal', () => ({ useGoal: mocks.goal }))
+vi.mock('#/hooks/use-goal', () => ({
+	useGoal: mocks.goal,
+	useUpsertGoal: () => ({ mutate: mocks.upsertGoal, isPending: false }),
+}))
 
 beforeEach(() => {
 	vi.clearAllMocks()
@@ -23,6 +28,10 @@ beforeEach(() => {
 	})
 	mocks.goal.mockReturnValue({ data: undefined })
 	mocks.logoutHook.mockReturnValue({ mutate: mocks.logoutMutation })
+})
+
+afterEach(() => {
+	useGoalModalStore.setState({ open: false, mode: 'add' })
 })
 
 describe('UserMenu', () => {
@@ -45,6 +54,25 @@ describe('UserMenu', () => {
 		await user.click(screen.getByText('Sign out'))
 
 		expect(mocks.logoutMutation).toHaveBeenCalledOnce()
+	})
+
+	it('shows the current reading goal and opens its modal in edit mode', async () => {
+		const user = userEvent.setup()
+		mocks.goal.mockReturnValue({
+			data: { year: 2026, target: 12, current: 3 },
+		})
+		renderWithRouter(<UserMenu />)
+
+		await user.click(screen.getByRole('button', { name: 'Open user menu' }))
+
+		expect(screen.getByText('3')).toBeInTheDocument()
+		expect(screen.getByText(/of 12 books/)).toBeInTheDocument()
+		expect(screen.queryByText('No reading goal set.')).not.toBeInTheDocument()
+		await user.click(screen.getByText('Update reading goal'))
+
+		expect(useGoalModalStore.getState()).toEqual(
+			expect.objectContaining({ open: true, mode: 'edit' }),
+		)
 	})
 
 	it('renders nothing without an authenticated user', () => {

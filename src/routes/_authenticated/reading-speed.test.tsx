@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { renderWithRouter, screen } from '#/test/test-utils'
 import { ReadingSpeed } from './reading-speed'
 
+const state = vi.hoisted(() => ({ isPending: false }))
 const updateMutation = vi.hoisted(() =>
 	vi.fn((_input, options) => options?.onSuccess?.()),
 )
@@ -10,7 +11,7 @@ const updateMutation = vi.hoisted(() =>
 vi.mock('#/hooks/use-user', () => ({
 	useUpdateReadingSpeed: () => ({
 		mutate: updateMutation,
-		isPending: false,
+		isPending: state.isPending,
 	}),
 }))
 
@@ -32,5 +33,18 @@ describe('ReadingSpeed', () => {
 			{ readingSpeed: 60 },
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
+	})
+
+	it('disables saving while the update is pending', async () => {
+		state.isPending = true
+		renderWithRouter(<ReadingSpeed />)
+
+		const user = userEvent.setup()
+		await user.click(screen.getByRole('button', { name: /Start Reading/i }))
+		await user.click(screen.getByRole('button', { name: /Next page/i }))
+		await user.click(screen.getByRole('button', { name: /Finish/i }))
+
+		expect(screen.getByRole('button', { name: /Saving\.\.\./i })).toBeDisabled()
+		state.isPending = false
 	})
 })
