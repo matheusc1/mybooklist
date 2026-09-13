@@ -78,4 +78,26 @@ export function renderHookWithProviders<Result, Props = undefined>(
 	return { ...renderResult, queryClient }
 }
 
+export function renderHookWithRouter<Result, Props = undefined>(
+	callback: (props: Props) => Result,
+	options?: Omit<RenderHookOptions<Props>, 'wrapper'> & {
+		initialEntries?: string[]
+	},
+) {
+	const { initialEntries, ...renderOptions } = options ?? {}
+	const { router, queryClient } = createTestRouter(initialEntries)
+	const renderResult = renderHook(callback, {
+		...renderOptions,
+		wrapper: ({ children }) => (
+			<QueryClientProvider client={queryClient}>
+				<RouterContextProvider router={router}>
+					{children}
+				</RouterContextProvider>
+			</QueryClientProvider>
+		),
+	})
+
+	return { ...renderResult, router, queryClient }
+}
+
 export * from '@testing-library/react'
