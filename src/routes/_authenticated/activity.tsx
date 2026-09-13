@@ -12,7 +12,7 @@ export const Route = createFileRoute('/_authenticated/activity')({
 
 const today = new Date()
 
-function Activity() {
+export function Activity() {
 	const [view, setView] = useState({
 		year: today.getFullYear(),
 		month: today.getMonth(),

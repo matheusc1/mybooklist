@@ -25,7 +25,7 @@ export const Route = createFileRoute('/_authenticated/home')({
 	component: Home,
 })
 
-function Home() {
+export function Home() {
 	const { data: dashboard, isLoading } = useDashboard()
 	const { data: goal } = useGoal()
 	const [addSessionOpen, setAddSessionOpen] = useState(false)

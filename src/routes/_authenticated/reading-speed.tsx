@@ -54,7 +54,7 @@ function formatPace(seconds: number) {
 	return s === 0 ? `${m} min` : `${m} min ${s} sec`
 }
 
-function ReadingSpeed() {
+export function ReadingSpeed() {
 	const [step, setStep] = useState<Step>('intro')
 	const [secondsPerPage, setSecondsPerPage] = useState(0)
 	const [lastPassageId, setLastPassageId] = useState<string>()
