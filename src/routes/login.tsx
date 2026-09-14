@@ -7,16 +7,15 @@ import {
 import { GitHubIcon } from '#/components/ui/github-icon'
 import { GoogleIcon } from '#/components/ui/google-icon'
 import { Logo } from '#/components/ui/logo'
-import { getGithubLoginUrl, getGoogleLoginUrl, getMe } from '#/http/auth'
-import { getMeServer } from '#/http/auth-server'
+import { getGithubLoginUrl, getGoogleLoginUrl } from '#/http/auth'
+import { resolveCurrentUser } from '#/utils/resolve-current-user'
 
 export const Route = createFileRoute('/login')({
 	beforeLoad: async ({ context }) => {
 		try {
 			await context.queryClient.ensureQueryData({
 				queryKey: ['auth', 'me'],
-				queryFn: () =>
-					typeof window === 'undefined' ? getMeServer() : getMe(),
+				queryFn: resolveCurrentUser,
 			})
 			throw redirect({ to: '/home' })
 		} catch (error) {

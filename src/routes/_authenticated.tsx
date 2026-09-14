@@ -6,22 +6,15 @@ import {
 } from '@tanstack/react-router'
 import { GoalModal } from '#/components/modals/goal-modal'
 import { NavBar } from '#/components/ui/nav-bar'
-import { getMe } from '#/http/auth'
-import { getMeServer } from '#/http/auth-server'
 import { isHttpError } from '#/http/client'
+import { resolveCurrentUser } from '#/utils/resolve-current-user'
 
 export const Route = createFileRoute('/_authenticated')({
 	beforeLoad: async ({ location, context }) => {
 		try {
 			await context.queryClient.ensureQueryData({
 				queryKey: ['auth', 'me'],
-				queryFn: () => {
-					if (typeof window === 'undefined') {
-						return getMeServer()
-					}
-
-					return getMe()
-				},
+				queryFn: resolveCurrentUser,
 			})
 		} catch (error) {
 			if (isHttpError(error) && error.status === 401) {
