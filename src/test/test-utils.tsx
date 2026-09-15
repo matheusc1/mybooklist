@@ -3,6 +3,7 @@ import {
 	createMemoryHistory,
 	createRouter,
 	RouterContextProvider,
+	RouterProvider,
 } from '@tanstack/react-router'
 import {
 	type RenderHookOptions,
@@ -11,6 +12,7 @@ import {
 } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { routeTree } from '#/routeTree.gen'
+import { authQueryKey } from '#/utils/query-keys'
 
 export function createTestQueryClient() {
 	return new QueryClient({
@@ -59,6 +61,39 @@ export function renderWithRouter(
 			</QueryClientProvider>
 		),
 	})
+
+	return { ...renderResult, router, queryClient }
+}
+
+const authenticatedTestUser = {
+	id: 'test-user',
+	email: 'test@example.com',
+	name: 'Test User',
+	avatarUrl: null,
+	readingSpeed: null,
+}
+
+export async function renderWithRoute(
+	to: string,
+	options: {
+		authenticated?: boolean
+	} = {},
+) {
+	const { router, queryClient } = createTestRouter([to])
+
+	if (options.authenticated) {
+		// Pre-populating this auth query lets ensureQueryData skip the
+		// real auth check without mocking getMe/getMeServer.
+		queryClient.setQueryData(authQueryKey, authenticatedTestUser)
+	}
+
+	await router.load()
+
+	const renderResult = render(
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>,
+	)
 
 	return { ...renderResult, router, queryClient }
 }
