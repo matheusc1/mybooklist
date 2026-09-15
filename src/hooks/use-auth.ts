@@ -2,10 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { getMe, logout } from '#/http/auth'
 import { isHttpError } from '#/http/client'
+import { authQueryKey } from '#/utils/query-keys'
 
 export function useMe() {
 	return useQuery({
-		queryKey: ['auth', 'me'],
+		queryKey: authQueryKey,
 		queryFn: getMe,
 		retry: (failureCount, error) => {
 			if (isHttpError(error) && error.status === 401) return false

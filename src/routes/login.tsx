@@ -8,13 +8,14 @@ import { GitHubIcon } from '#/components/ui/github-icon'
 import { GoogleIcon } from '#/components/ui/google-icon'
 import { Logo } from '#/components/ui/logo'
 import { getGithubLoginUrl, getGoogleLoginUrl } from '#/http/auth'
+import { authQueryKey } from '#/utils/query-keys'
 import { resolveCurrentUser } from '#/utils/resolve-current-user'
 
 export const Route = createFileRoute('/login')({
 	beforeLoad: async ({ context }) => {
 		try {
 			await context.queryClient.ensureQueryData({
-				queryKey: ['auth', 'me'],
+				queryKey: authQueryKey,
 				queryFn: resolveCurrentUser,
 			})
 			throw redirect({ to: '/home' })

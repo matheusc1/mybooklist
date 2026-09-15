@@ -1,5 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query'
 
+export const authQueryKey = ['auth', 'me'] as const
+
 export const queryKeys = {
 	books: ['books'],
 	readingSessions: ['reading-sessions'],

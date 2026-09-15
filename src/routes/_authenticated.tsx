@@ -7,13 +7,14 @@ import {
 import { GoalModal } from '#/components/modals/goal-modal'
 import { NavBar } from '#/components/ui/nav-bar'
 import { isHttpError } from '#/http/client'
+import { authQueryKey } from '#/utils/query-keys'
 import { resolveCurrentUser } from '#/utils/resolve-current-user'
 
 export const Route = createFileRoute('/_authenticated')({
 	beforeLoad: async ({ location, context }) => {
 		try {
 			await context.queryClient.ensureQueryData({
-				queryKey: ['auth', 'me'],
+				queryKey: authQueryKey,
 				queryFn: resolveCurrentUser,
 			})
 		} catch (error) {

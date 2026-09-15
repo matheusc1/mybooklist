@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateReadingSpeed } from '#/http/users'
+import { authQueryKey } from '#/utils/query-keys'
 
 export function useUpdateReadingSpeed() {
 	const queryClient = useQueryClient()
@@ -7,7 +8,7 @@ export function useUpdateReadingSpeed() {
 	return useMutation({
 		mutationFn: updateReadingSpeed,
 		onSuccess: (user) => {
-			queryClient.setQueryData(['auth', 'me'], user)
+			queryClient.setQueryData(authQueryKey, user)
 		},
 	})
 }
