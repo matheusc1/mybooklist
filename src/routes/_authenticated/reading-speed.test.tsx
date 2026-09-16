@@ -1,7 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { renderWithRouter, screen } from '#/test/test-utils'
-import { ReadingSpeed } from './reading-speed'
+import { renderWithRoute, screen } from '#/test/test-utils'
 
 const state = vi.hoisted(() => ({ isPending: false }))
 const updateMutation = vi.hoisted(() =>
@@ -18,7 +17,7 @@ vi.mock('#/hooks/use-user', () => ({
 describe('ReadingSpeed', () => {
 	it('moves through both passages and saves the measured result', async () => {
 		const user = userEvent.setup()
-		renderWithRouter(<ReadingSpeed />)
+		await renderWithRoute('/reading-speed', { authenticated: true })
 
 		await user.click(screen.getByRole('button', { name: /Start Reading/i }))
 		expect(screen.getByText('Page 1 of 2')).toBeInTheDocument()
@@ -37,7 +36,7 @@ describe('ReadingSpeed', () => {
 
 	it('disables saving while the update is pending', async () => {
 		state.isPending = true
-		renderWithRouter(<ReadingSpeed />)
+		await renderWithRoute('/reading-speed', { authenticated: true })
 
 		const user = userEvent.setup()
 		await user.click(screen.getByRole('button', { name: /Start Reading/i }))

@@ -1,7 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { renderWithRouter, screen } from '#/test/test-utils'
-import { MyBooks } from './books'
+import { renderWithRoute, screen } from '#/test/test-utils'
 
 const books = vi.hoisted(() => vi.fn())
 
@@ -49,7 +48,7 @@ beforeEach(() => {
 describe('MyBooks', () => {
 	it('filters books by search and opens a book in view mode', async () => {
 		const user = userEvent.setup()
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		await user.type(
 			screen.getByRole('textbox', { name: 'Search by title or author' }),
@@ -61,9 +60,9 @@ describe('MyBooks', () => {
 		expect(screen.getByRole('dialog')).toHaveTextContent('Book modal: view')
 	})
 
-	it('renders the empty library state', () => {
+	it('renders the empty library state', async () => {
 		books.mockReturnValue({ data: [], isLoading: false })
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		expect(screen.getByText('Your library is empty')).toBeInTheDocument()
 		expect(
@@ -77,7 +76,7 @@ describe('MyBooks', () => {
 			data: [book, plannedBook, completedBook],
 			isLoading: false,
 		})
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		await user.click(screen.getByRole('button', { name: /Want to read 1/ }))
 
@@ -89,7 +88,7 @@ describe('MyBooks', () => {
 	it('matches trimmed search text without case sensitivity', async () => {
 		const user = userEvent.setup()
 		books.mockReturnValue({ data: [book, plannedBook], isLoading: false })
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		await user.type(
 			screen.getByRole('textbox', { name: 'Search by title or author' }),
@@ -103,7 +102,7 @@ describe('MyBooks', () => {
 	it('clears search with Escape and restores the full list', async () => {
 		const user = userEvent.setup()
 		books.mockReturnValue({ data: [book, plannedBook], isLoading: false })
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 		const search = screen.getByRole('textbox', {
 			name: 'Search by title or author',
 		})
@@ -118,7 +117,7 @@ describe('MyBooks', () => {
 
 	it('shows a distinct empty state when filters match no books', async () => {
 		const user = userEvent.setup()
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		await user.type(
 			screen.getByRole('textbox', { name: 'Search by title or author' }),
@@ -134,16 +133,16 @@ describe('MyBooks', () => {
 
 	it('opens the add-book modal in add mode', async () => {
 		const user = userEvent.setup()
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		await user.click(screen.getByRole('button', { name: 'Add Book' }))
 
 		expect(screen.getByRole('dialog')).toHaveTextContent('Book modal: add')
 	})
 
-	it('renders book loading skeletons', () => {
+	it('renders book loading skeletons', async () => {
 		books.mockReturnValue({ data: undefined, isLoading: true })
-		renderWithRouter(<MyBooks />)
+		await renderWithRoute('/books', { authenticated: true })
 
 		expect(document.querySelectorAll('.animate-pulse').length).toBeGreaterThan(
 			0,

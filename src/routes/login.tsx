@@ -26,7 +26,7 @@ export const Route = createFileRoute('/login')({
 	component: Login,
 })
 
-export function Login() {
+function Login() {
 	return (
 		<div className="overflow-hidden flex md:grid grid-cols-[1fr_480px] min-h-dvh">
 			<aside className="hidden relative bg-[#0a0a0c] overflow-hidden md:flex flex-col justify-between p-8 lg:p-[48px_52px] border-r border-border animate-fade-up [animation-delay:0.05s]">

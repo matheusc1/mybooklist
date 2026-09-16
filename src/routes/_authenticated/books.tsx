@@ -66,7 +66,7 @@ const filters: Filter[] = [
 	},
 ]
 
-export function MyBooks() {
+function MyBooks() {
 	const { data: books, isLoading } = useBooks()
 	const [activeFilter, setActiveFilter] = useState<ActivityStatus | null>(null) // null = All
 	const [search, setSearch] = useState('')

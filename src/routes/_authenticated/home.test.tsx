@@ -1,7 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { renderWithRouter, screen } from '#/test/test-utils'
-import { Home } from './home'
+import { renderWithRoute, screen } from '#/test/test-utils'
 
 const mocks = vi.hoisted(() => ({
 	dashboard: vi.fn(),
@@ -9,7 +8,10 @@ const mocks = vi.hoisted(() => ({
 }))
 
 vi.mock('#/hooks/use-dashboard', () => ({ useDashboard: mocks.dashboard }))
-vi.mock('#/hooks/use-goal', () => ({ useGoal: mocks.goal }))
+vi.mock('#/hooks/use-goal', () => ({
+	useGoal: mocks.goal,
+	useUpsertGoal: () => ({ mutate: vi.fn(), isPending: false }),
+}))
 vi.mock('#/components/modals/reading-session-modal', () => ({
 	ReadingSessionModal: ({ open }: { open: boolean }) =>
 		open ? <div role="dialog">Reading session modal</div> : null,
@@ -55,7 +57,7 @@ beforeEach(() => {
 describe('Home', () => {
 	it('renders dashboard content and opens the add-record modal', async () => {
 		const user = userEvent.setup()
-		renderWithRouter(<Home />)
+		await renderWithRoute('/home', { authenticated: true })
 
 		expect(
 			screen.getByRole('heading', { name: 'Bookshelf' }),
@@ -68,9 +70,9 @@ describe('Home', () => {
 		)
 	})
 
-	it('renders the dashboard loading screen', () => {
+	it('renders the dashboard loading screen', async () => {
 		mocks.dashboard.mockReturnValue({ data: undefined, isLoading: true })
-		renderWithRouter(<Home />)
+		await renderWithRoute('/home', { authenticated: true })
 
 		expect(
 			screen.getByRole('heading', { name: 'Weekly Stats' }),
@@ -80,7 +82,7 @@ describe('Home', () => {
 		)
 	})
 
-	it('renders empty states for the current book, completed books, and weekly stats', () => {
+	it('renders empty states for the current book, completed books, and weekly stats', async () => {
 		mocks.dashboard.mockReturnValue({
 			data: {
 				currentlyReading: null,
@@ -96,7 +98,7 @@ describe('Home', () => {
 			},
 			isLoading: false,
 		})
-		renderWithRouter(<Home />)
+		await renderWithRoute('/home', { authenticated: true })
 
 		expect(
 			screen.getByText("You're not tracking any book right now."),

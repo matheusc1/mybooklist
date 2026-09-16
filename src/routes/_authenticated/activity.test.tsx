@@ -1,7 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { renderWithRouter, screen } from '#/test/test-utils'
-import { Activity } from './activity'
+import { renderWithRoute, screen } from '#/test/test-utils'
 
 const activity = vi.hoisted(() => vi.fn())
 
@@ -30,7 +29,7 @@ describe('Activity', () => {
 		const expectedMonth = `${previousMonth.getFullYear()}-${String(
 			previousMonth.getMonth() + 1,
 		).padStart(2, '0')}`
-		renderWithRouter(<Activity />)
+		await renderWithRoute('/activity', { authenticated: true })
 
 		expect(
 			screen.getByRole('heading', { name: 'Activity' }),
@@ -40,9 +39,9 @@ describe('Activity', () => {
 		expect(activity).toHaveBeenLastCalledWith(expectedMonth)
 	})
 
-	it('renders the activity loading state', () => {
+	it('renders the activity loading state', async () => {
 		activity.mockReturnValue({ data: undefined, isLoading: true })
-		renderWithRouter(<Activity />)
+		await renderWithRoute('/activity', { authenticated: true })
 
 		expect(
 			screen.getByRole('heading', { name: 'Activity' }),

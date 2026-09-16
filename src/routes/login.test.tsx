@@ -1,16 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
-import { renderWithRouter, screen } from '#/test/test-utils'
-import { Login } from './login'
+import { renderWithRoute, screen } from '#/test/test-utils'
 
 vi.mock('#/http/auth', () => ({
 	getGoogleLoginUrl: () => '/auth/google',
 	getGithubLoginUrl: () => '/auth/github',
-	getMe: vi.fn(),
+	getMe: vi.fn().mockRejectedValue({ status: 401, message: 'Unauthorized' }),
 }))
 
 describe('Login', () => {
-	it('renders provider links and legal navigation', () => {
-		renderWithRouter(<Login />)
+	it('renders provider links and legal navigation', async () => {
+		await renderWithRoute('/login')
 
 		expect(
 			screen.getByRole('link', { name: /Continue with Google/i }),
