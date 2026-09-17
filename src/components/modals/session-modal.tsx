@@ -59,6 +59,7 @@ export function SessionModal({
 					session={
 						sessionModal.session ? { ...sessionModal.session, date } : undefined
 					}
+					defaultDate={date}
 				/>
 			)}
 		</>

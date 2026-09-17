@@ -27,6 +27,7 @@ interface ReadingSessionModalProps {
 		fromPage: number
 		toPage: number
 	}
+	defaultDate?: string
 }
 
 const readingSessionSchema = z
@@ -52,6 +53,7 @@ export function ReadingSessionModal({
 	mode = 'add',
 	session,
 	onOpenChange,
+	defaultDate,
 }: ReadingSessionModalProps) {
 	const { data: books } = useBooks()
 	const { mutate: createReadingSession, isPending: isCreating } =
@@ -73,7 +75,7 @@ export function ReadingSessionModal({
 	const form = useForm({
 		defaultValues: {
 			bookId: session?.bookId ?? '',
-			readAt: session?.date ?? getTodayDate(),
+			readAt: session?.date ?? defaultDate ?? getTodayDate(),
 			fromPage: session?.fromPage ?? (undefined as number | undefined),
 			toPage: session?.toPage ?? (undefined as number | undefined),
 		},
