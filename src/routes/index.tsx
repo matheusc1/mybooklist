@@ -103,7 +103,7 @@ const features = [
 ]
 
 function LandingPage() {
-	const { data: user } = useMe()
+	const { data: user } = useMe({ meta: { suppressErrorToast: true } })
 	const isAuthenticated = !!user
 
 	return (

@@ -17,6 +17,7 @@ export const Route = createFileRoute('/login')({
 			await context.queryClient.ensureQueryData({
 				queryKey: authQueryKey,
 				queryFn: resolveCurrentUser,
+				meta: { suppressErrorToast: true },
 			})
 			throw redirect({ to: '/home' })
 		} catch (error) {
