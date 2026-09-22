@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
+import { useMe } from '#/hooks/use-auth'
 import { useReveal } from '#/hooks/use-reveal'
 import { scrollTo } from '#/utils/scroll-to'
 
@@ -102,6 +103,9 @@ const features = [
 ]
 
 function LandingPage() {
+	const { data: user } = useMe()
+	const isAuthenticated = !!user
+
 	return (
 		<div className="min-h-dvh">
 			<header className="sticky top-0 bg-bg/85 z-100 backdrop-blur-md">
@@ -124,21 +128,28 @@ function LandingPage() {
 							Features
 						</button>
 					</div>
-					<Link to="/login" className={button({ size: 'sm' })}>
-						Get Started
-						<LucideArrowRight className="size-4 hidden sm:block" />
-					</Link>
+					{isAuthenticated ? (
+						<Link to="/home" className={button({ size: 'sm' })}>
+							Go to app
+							<LucideArrowRight className="size-4 hidden sm:block" />
+						</Link>
+					) : (
+						<Link to="/login" className={button({ size: 'sm' })}>
+							Get Started
+							<LucideArrowRight className="size-4 hidden sm:block" />
+						</Link>
+					)}
 				</nav>
 				<div aria-hidden="true" className="w-full h-px bg-border" />
 			</header>
 
 			<main>
-				<HeroSection />
+				<HeroSection isAuthenticated={isAuthenticated} />
 				<StatsSection />
 				<PreviewSection />
 				<FeaturesSection />
 				<QuoteSection />
-				<CtaSection />
+				<CtaSection isAuthenticated={isAuthenticated} />
 			</main>
 
 			<FooterSection />
@@ -146,7 +157,7 @@ function LandingPage() {
 	)
 }
 
-function HeroSection() {
+function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 	return (
 		<section className="relative flex items-center justify-center min-h-[calc(100dvh-69px)] overflow-hidden px-5 sm:px-15">
 			<div
@@ -211,13 +222,23 @@ function HeroSection() {
 				</p>
 
 				<div className="flex items-center gap-3 flex-wrap animate-fade-up [animation-delay:0.34s]">
-					<Link
-						to="/login"
-						className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
-					>
-						Start for free
-						<LucideArrowRight className="size-4" />
-					</Link>
+					{isAuthenticated ? (
+						<Link
+							to="/home"
+							className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
+						>
+							Continue reading
+							<LucideArrowRight className="size-4" />
+						</Link>
+					) : (
+						<Link
+							to="/login"
+							className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
+						>
+							Start for free
+							<LucideArrowRight className="size-4" />
+						</Link>
+					)}
 
 					<a
 						href="#preview"
@@ -232,7 +253,9 @@ function HeroSection() {
 				</div>
 
 				<p className="mt-4 font-mono text-xs text-muted/50 tracking-wider animate-fade-up [animation-delay:0.4s]">
-					Free · No password · Sign in with Google or GitHub
+					{isAuthenticated
+						? 'Welcome back · Your library is waiting'
+						: 'Free · No password · Sign in with Google or GitHub'}
 				</p>
 			</div>
 
@@ -544,7 +567,7 @@ function QuoteSection() {
 	)
 }
 
-function CtaSection() {
+function CtaSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 	const eyebrowRef = useReveal()
 	const titleRef = useReveal()
 	const textRef = useReveal()
@@ -561,54 +584,79 @@ function CtaSection() {
 				ref={eyebrowRef}
 				className="reveal font-mono text-xs uppercase tracking-[0.14em] text-accent mb-4"
 			>
-				Start today
+				{isAuthenticated ? 'Welcome back' : 'Start today'}
 			</p>
 			<h2
 				ref={titleRef}
 				className="reveal max-w-140 font-serif font-bold text-3xl sm:text-4xl lg:text-5xl leading-[1.2] tracking-tight mb-4"
 			>
-				Your reading life,
-				<br />
-				<em className="italic text-accent">finally tracked.</em>
+				{isAuthenticated ? (
+					<>
+						Pick up right
+						<br />
+						<em className="italic text-accent">where you left off.</em>
+					</>
+				) : (
+					<>
+						Your reading life,
+						<br />
+						<em className="italic text-accent">finally tracked.</em>
+					</>
+				)}
 			</h2>
 			<p
 				ref={textRef}
 				className="reveal text-sm/[1.7] text-muted max-w-105 mb-10"
 			>
-				Join thousands of readers who turned a habit into a practice. It's free,
-				and it takes 30 seconds to get started.
+				{isAuthenticated
+					? 'Your books, sessions, and stats are right where you left them.'
+					: "Join thousands of readers who turned a habit into a practice. It's free, and it takes 30 seconds to get started."}
 			</p>
 
 			<div
 				ref={actionsRef}
 				className="reveal flex flex-wrap items-center gap-3"
 			>
-				<Link
-					to="/login"
-					className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
-				>
-					Sign in with Google
-					<LucideArrowRight className="size-4" />
-				</Link>
+				{isAuthenticated ? (
+					<Link
+						to="/home"
+						className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
+					>
+						Go to your dashboard
+						<LucideArrowRight className="size-4" />
+					</Link>
+				) : (
+					<>
+						<Link
+							to="/login"
+							className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
+						>
+							Sign in with Google
+							<LucideArrowRight className="size-4" />
+						</Link>
 
-				<Link
-					to="/login"
-					className={button({
-						variant: 'ghost',
-						size: 'lg',
-						className: 'w-full sm:w-auto',
-					})}
-				>
-					Sign in with GitHub
-				</Link>
+						<Link
+							to="/login"
+							className={button({
+								variant: 'ghost',
+								size: 'lg',
+								className: 'w-full sm:w-auto',
+							})}
+						>
+							Sign in with GitHub
+						</Link>
+					</>
+				)}
 			</div>
 
-			<p
-				ref={noteRef}
-				className="reveal mt-3.5 text-xxs text-muted/50 font-mono tracking-wider"
-			>
-				No credit card. No password. Cancel anytime.
-			</p>
+			{!isAuthenticated && (
+				<p
+					ref={noteRef}
+					className="reveal mt-3.5 text-xxs text-muted/50 font-mono tracking-wider"
+				>
+					No credit card. No password. Cancel anytime.
+				</p>
+			)}
 		</section>
 	)
 }
