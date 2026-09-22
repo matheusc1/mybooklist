@@ -70,7 +70,7 @@ const authenticatedTestUser = {
 	email: 'test@example.com',
 	name: 'Test User',
 	avatarUrl: null,
-	readingSpeed: null,
+	readingSpeed: 250,
 }
 
 export async function renderWithRoute(
