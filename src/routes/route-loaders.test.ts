@@ -12,6 +12,8 @@ vi.mock('#/utils/resolve-current-user', () => ({
 
 afterEach(() => {
 	resolveCurrentUser.mockReset()
+	vi.restoreAllMocks()
+	sessionStorage.clear()
 })
 
 describe('authenticated route loader', () => {
@@ -27,7 +29,10 @@ describe('authenticated route loader', () => {
 		await expect(
 			beforeLoad?.({
 				context: { queryClient },
-				location: { href: 'https://example.test/books' },
+				location: {
+					href: 'https://example.test/books',
+					pathname: '/books',
+				},
 			} as Parameters<NonNullable<typeof beforeLoad>>[0]),
 		).rejects.toSatisfy((error: unknown) => {
 			const search = isRedirect(error) ? error.options.search : undefined
@@ -35,6 +40,7 @@ describe('authenticated route loader', () => {
 				typeof search === 'object' && search !== null && 'redirect' in search
 					? Reflect.get(search, 'redirect')
 					: undefined
+
 			return (
 				isRedirect(error) &&
 				error.options.to === '/login' &&
@@ -52,11 +58,141 @@ describe('authenticated route loader', () => {
 		await expect(
 			AuthenticatedRoute.options.beforeLoad?.({
 				context: { queryClient },
-				location: { href: 'https://example.test/books' },
+				location: {
+					href: 'https://example.test/books',
+					pathname: '/books',
+				},
 			} as Parameters<
 				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
 			>[0]),
 		).rejects.toBe(error)
+	})
+
+	it('redirects to reading-speed when unset and not yet prompted this session', async () => {
+		resolveCurrentUser.mockResolvedValue({
+			id: 'user-1',
+			readingSpeed: null,
+		})
+
+		const queryClient = createTestQueryClient()
+
+		await expect(
+			AuthenticatedRoute.options.beforeLoad?.({
+				context: { queryClient },
+				location: {
+					href: 'https://example.test/home',
+					pathname: '/home',
+				},
+			} as Parameters<
+				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
+			>[0]),
+		).rejects.toSatisfy(
+			(error: unknown) =>
+				isRedirect(error) && error.options.to === '/reading-speed',
+		)
+
+		expect(sessionStorage.getItem('reading-speed-prompted')).toBe('true')
+	})
+
+	it('does not redirect when the user already has a reading speed', async () => {
+		resolveCurrentUser.mockResolvedValue({
+			id: 'user-1',
+			readingSpeed: 250,
+		})
+
+		const queryClient = createTestQueryClient()
+
+		await expect(
+			AuthenticatedRoute.options.beforeLoad?.({
+				context: { queryClient },
+				location: {
+					href: 'https://example.test/home',
+					pathname: '/home',
+				},
+			} as Parameters<
+				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
+			>[0]),
+		).resolves.toBeUndefined()
+
+		expect(sessionStorage.getItem('reading-speed-prompted')).toBeNull()
+	})
+
+	it('does not redirect again once the user was already prompted this session', async () => {
+		sessionStorage.setItem('reading-speed-prompted', 'true')
+
+		resolveCurrentUser.mockResolvedValue({
+			id: 'user-1',
+			readingSpeed: null,
+		})
+
+		const queryClient = createTestQueryClient()
+
+		await expect(
+			AuthenticatedRoute.options.beforeLoad?.({
+				context: { queryClient },
+				location: {
+					href: 'https://example.test/home',
+					pathname: '/home',
+				},
+			} as Parameters<
+				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
+			>[0]),
+		).resolves.toBeUndefined()
+	})
+
+	it('does not redirect when already on the reading-speed route', async () => {
+		resolveCurrentUser.mockResolvedValue({
+			id: 'user-1',
+			readingSpeed: null,
+		})
+
+		const queryClient = createTestQueryClient()
+
+		await expect(
+			AuthenticatedRoute.options.beforeLoad?.({
+				context: { queryClient },
+				location: {
+					href: 'https://example.test/reading-speed',
+					pathname: '/reading-speed',
+				},
+			} as Parameters<
+				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
+			>[0]),
+		).resolves.toBeUndefined()
+
+		expect(sessionStorage.getItem('reading-speed-prompted')).toBeNull()
+	})
+
+	it('does not throw when sessionStorage is unavailable', async () => {
+		vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+			throw new Error('blocked')
+		})
+
+		vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+			throw new Error('blocked')
+		})
+
+		resolveCurrentUser.mockResolvedValue({
+			id: 'user-1',
+			readingSpeed: null,
+		})
+
+		const queryClient = createTestQueryClient()
+
+		await expect(
+			AuthenticatedRoute.options.beforeLoad?.({
+				context: { queryClient },
+				location: {
+					href: 'https://example.test/home',
+					pathname: '/home',
+				},
+			} as Parameters<
+				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
+			>[0]),
+		).rejects.toSatisfy(
+			(error: unknown) =>
+				isRedirect(error) && error.options.to === '/reading-speed',
+		)
 	})
 })
 
@@ -68,9 +204,9 @@ describe('login route loader', () => {
 			LoginRoute.options.beforeLoad?.({
 				context: { queryClient: createTestQueryClient() },
 			} as Parameters<NonNullable<typeof LoginRoute.options.beforeLoad>>[0]),
-		).rejects.toSatisfy((error: unknown) => {
-			return isRedirect(error) && error.options.to === '/home'
-		})
+		).rejects.toSatisfy(
+			(error: unknown) => isRedirect(error) && error.options.to === '/home',
+		)
 	})
 
 	it('allows the login page when authentication fails', async () => {
