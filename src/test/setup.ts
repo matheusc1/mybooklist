@@ -18,5 +18,23 @@ if (!window.ResizeObserver) {
 	} as unknown as typeof ResizeObserver
 }
 
+if (!window.IntersectionObserver) {
+	window.IntersectionObserver = class {
+		root = null
+		rootMargin = ''
+		thresholds = []
+		observe() {}
+		unobserve() {}
+		disconnect() {}
+		takeRecords() {
+			return []
+		}
+	} as unknown as typeof IntersectionObserver
+}
+
+if (!window.scrollTo) {
+	window.scrollTo = () => {}
+}
+
 Element.prototype.hasPointerCapture ??= () => false
 Element.prototype.scrollIntoView ??= () => {}
