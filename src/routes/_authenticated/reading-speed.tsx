@@ -333,6 +333,7 @@ function ResultContent({
 			</div>
 			<Link
 				to="/home"
+				onClick={markReadingSpeedPrompted}
 				className="mt-4 text-xs text-muted hover:text-text underline"
 			>
 				Skip and go to home

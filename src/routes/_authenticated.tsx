@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import {
 	createFileRoute,
 	Outlet,
@@ -7,7 +8,6 @@ import {
 	useRouter,
 } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { GoalModal } from '#/components/modals/goal-modal'
 import { NavBar } from '#/components/ui/nav-bar'
 import { isHttpError } from '#/http/client'
@@ -28,7 +28,6 @@ export const Route = createFileRoute('/_authenticated')({
 					search: { redirect: location.href },
 				})
 			}
-
 			throw error
 		}
 	},
@@ -51,21 +50,17 @@ function Layout() {
 function OnboardingGuard() {
 	const router = useRouter()
 	const location = useLocation()
-	// beforeLoad already populated this query's cache via ensureQueryData,
-	// so this read is synchronous (no extra request) in the common case.
 	const { data: user } = useQuery({
 		queryKey: authQueryKey,
 		queryFn: resolveCurrentUser,
 	})
-	const [checked, setChecked] = useState(false)
+	const [isReady, setIsReady] = useState(() => !!user?.readingSpeed)
 
 	useEffect(() => {
-		// Wait until the cached user is available before deciding anything;
-		// without this guard, a still-loading `user` would be indistinguishable
-		// from "no reading speed yet" and could bounce every user once.
 		if (!user) return
 
 		let prompted = false
+
 		try {
 			prompted = sessionStorage.getItem('reading-speed-prompted') === 'true'
 		} catch {
@@ -83,10 +78,10 @@ function OnboardingGuard() {
 			return
 		}
 
-		setChecked(true)
+		setIsReady(true)
 	}, [user, location.pathname, router])
 
-	if (!checked) {
+	if (!isReady) {
 		return null
 	}
 
