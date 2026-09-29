@@ -54,13 +54,27 @@ function formatPace(seconds: number) {
 	return s === 0 ? `${m} min` : `${m} min ${s} sec`
 }
 
+function markReadingSpeedPrompted() {
+	try {
+		sessionStorage.setItem('reading-speed-prompted', 'true')
+	} catch {
+		// ignore: sessionStorage unavailable
+	}
+}
+
 function ReadingSpeed() {
+	const router = useRouter()
 	const [step, setStep] = useState<Step>('intro')
 	const [secondsPerPage, setSecondsPerPage] = useState(0)
 	const [lastPassageId, setLastPassageId] = useState<string>()
 	const [selectedPassage, setSelectedPassage] = useState(() =>
 		getRandomPassage(),
 	)
+
+	function handleBackToHome() {
+		markReadingSpeedPrompted()
+		router.navigate({ to: '/home' })
+	}
 
 	const handleStart = () => {
 		const nextPassage = getRandomPassage(lastPassageId)
@@ -72,13 +86,14 @@ function ReadingSpeed() {
 		<div className="overflow-hidden min-h-dvh">
 			<div className="sticky top-0 bg-bg z-10">
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-10">
-					<Link
-						to="/home"
+					<button
+						type="button"
 						aria-label="Back to home"
-						className="transition-transform active:scale-95"
+						onClick={handleBackToHome}
+						className="transition-transform active:scale-95 cursor-pointer"
 					>
 						<Logo />
-					</Link>
+					</button>
 
 					<p className="font-mono tracking-widest text-muted text-xs uppercase">
 						Step <span className="text-accent">{stepNumber[step]}</span> of 3
@@ -254,7 +269,12 @@ function ResultContent({
 	function handleSave() {
 		updateReadingSpeed(
 			{ readingSpeed: secondsPerPage },
-			{ onSuccess: () => router.navigate({ to: '/home' }) },
+			{
+				onSuccess: () => {
+					markReadingSpeedPrompted()
+					router.navigate({ to: '/home' })
+				},
+			},
 		)
 	}
 
