@@ -14,7 +14,13 @@ type QueryDomain = keyof typeof queryKeys
 
 const invalidationGraph: Record<QueryDomain, QueryDomain[]> = {
 	books: ['books', 'dashboard', 'goals'],
-	readingSessions: ['readingSessions', 'books', 'dashboard', 'activity'],
+	readingSessions: [
+		'readingSessions',
+		'books',
+		'dashboard',
+		'activity',
+		'goals',
+	],
 	goals: ['goals'],
 	dashboard: ['dashboard'],
 	activity: ['activity'],

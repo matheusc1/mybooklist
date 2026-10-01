@@ -23,7 +23,10 @@ describe('invalidateDomain', () => {
 
 	it.each([
 		['books', ['books', 'dashboard', 'goals']],
-		['readingSessions', ['readingSessions', 'books', 'dashboard', 'activity']],
+		[
+			'readingSessions',
+			['readingSessions', 'books', 'dashboard', 'activity', 'goals'],
+		],
 		['goals', ['goals']],
 		['dashboard', ['dashboard']],
 		['activity', ['activity']],
