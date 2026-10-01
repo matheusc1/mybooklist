@@ -1,14 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import {
-	createFileRoute,
-	Outlet,
-	redirect,
-	useLocation,
-	useMatches,
-	useRouter,
-} from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { createFileRoute, redirect, useMatches } from '@tanstack/react-router'
 import { GoalModal } from '#/components/modals/goal-modal'
+import { OnboardingGuard } from '#/components/onboarding-guard'
 import { NavBar } from '#/components/ui/nav-bar'
 import { isHttpError } from '#/http/client'
 import { authQueryKey } from '#/utils/query-keys'
@@ -45,45 +37,4 @@ function Layout() {
 			<GoalModal />
 		</div>
 	)
-}
-
-function OnboardingGuard() {
-	const router = useRouter()
-	const location = useLocation()
-	const { data: user } = useQuery({
-		queryKey: authQueryKey,
-		queryFn: resolveCurrentUser,
-	})
-	const [isReady, setIsReady] = useState(() => !!user?.readingSpeed)
-
-	useEffect(() => {
-		if (!user) return
-
-		let prompted = false
-
-		try {
-			prompted = sessionStorage.getItem('reading-speed-prompted') === 'true'
-		} catch {
-			// ignore: sessionStorage unavailable
-		}
-
-		const needsOnboarding = !user.readingSpeed
-		const isReadingSpeedRoute = location.pathname === '/reading-speed'
-
-		if (needsOnboarding && !prompted && !isReadingSpeedRoute) {
-			router.navigate({
-				to: '/reading-speed',
-				replace: true,
-			})
-			return
-		}
-
-		setIsReady(true)
-	}, [user, location.pathname, router])
-
-	if (!isReady) {
-		return null
-	}
-
-	return <Outlet />
 }

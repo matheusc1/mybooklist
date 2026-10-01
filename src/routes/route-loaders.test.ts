@@ -12,8 +12,6 @@ vi.mock('#/utils/resolve-current-user', () => ({
 
 afterEach(() => {
 	resolveCurrentUser.mockReset()
-	vi.restoreAllMocks()
-	sessionStorage.clear()
 })
 
 describe('authenticated route loader', () => {
@@ -68,58 +66,11 @@ describe('authenticated route loader', () => {
 		).rejects.toBe(error)
 	})
 
-	it('redirects to reading-speed when unset and not yet prompted this session', async () => {
-		resolveCurrentUser.mockResolvedValue({
-			id: 'user-1',
-			readingSpeed: null,
-		})
-
-		const queryClient = createTestQueryClient()
-
-		await expect(
-			AuthenticatedRoute.options.beforeLoad?.({
-				context: { queryClient },
-				location: {
-					href: 'https://example.test/home',
-					pathname: '/home',
-				},
-			} as Parameters<
-				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
-			>[0]),
-		).rejects.toSatisfy(
-			(error: unknown) =>
-				isRedirect(error) && error.options.to === '/reading-speed',
-		)
-
-		expect(sessionStorage.getItem('reading-speed-prompted')).toBe('true')
-	})
-
-	it('does not redirect when the user already has a reading speed', async () => {
-		resolveCurrentUser.mockResolvedValue({
-			id: 'user-1',
-			readingSpeed: 250,
-		})
-
-		const queryClient = createTestQueryClient()
-
-		await expect(
-			AuthenticatedRoute.options.beforeLoad?.({
-				context: { queryClient },
-				location: {
-					href: 'https://example.test/home',
-					pathname: '/home',
-				},
-			} as Parameters<
-				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
-			>[0]),
-		).resolves.toBeUndefined()
-
-		expect(sessionStorage.getItem('reading-speed-prompted')).toBeNull()
-	})
-
-	it('does not redirect again once the user was already prompted this session', async () => {
-		sessionStorage.setItem('reading-speed-prompted', 'true')
-
+	// beforeLoad also runs on the server, where sessionStorage does not exist, so
+	// the reading-speed redirect lives in the client-side OnboardingGuard instead
+	// (see onboarding-guard.test.tsx). If this starts rejecting, that decision was
+	// reverted and the SSR bounce-back bug is back.
+	it('leaves the onboarding redirect to the client-side guard', async () => {
 		resolveCurrentUser.mockResolvedValue({
 			id: 'user-1',
 			readingSpeed: null,
@@ -138,61 +89,6 @@ describe('authenticated route loader', () => {
 				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
 			>[0]),
 		).resolves.toBeUndefined()
-	})
-
-	it('does not redirect when already on the reading-speed route', async () => {
-		resolveCurrentUser.mockResolvedValue({
-			id: 'user-1',
-			readingSpeed: null,
-		})
-
-		const queryClient = createTestQueryClient()
-
-		await expect(
-			AuthenticatedRoute.options.beforeLoad?.({
-				context: { queryClient },
-				location: {
-					href: 'https://example.test/reading-speed',
-					pathname: '/reading-speed',
-				},
-			} as Parameters<
-				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
-			>[0]),
-		).resolves.toBeUndefined()
-
-		expect(sessionStorage.getItem('reading-speed-prompted')).toBeNull()
-	})
-
-	it('does not throw when sessionStorage is unavailable', async () => {
-		vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-			throw new Error('blocked')
-		})
-
-		vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
-			throw new Error('blocked')
-		})
-
-		resolveCurrentUser.mockResolvedValue({
-			id: 'user-1',
-			readingSpeed: null,
-		})
-
-		const queryClient = createTestQueryClient()
-
-		await expect(
-			AuthenticatedRoute.options.beforeLoad?.({
-				context: { queryClient },
-				location: {
-					href: 'https://example.test/home',
-					pathname: '/home',
-				},
-			} as Parameters<
-				NonNullable<typeof AuthenticatedRoute.options.beforeLoad>
-			>[0]),
-		).rejects.toSatisfy(
-			(error: unknown) =>
-				isRedirect(error) && error.options.to === '/reading-speed',
-		)
 	})
 })
 
