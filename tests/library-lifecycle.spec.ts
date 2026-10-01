@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test'
-import { authTest } from './fixtures/api'
+import { authTest, seedBook } from './fixtures/api'
 
+// P0.2: Complete a book through the UI and verify reflections across pages
 authTest(
 	'completes a book through a reading session and reflects it across the app',
 	async ({ authenticated }, testInfo) => {
@@ -36,7 +37,9 @@ authTest(
 		await bookDialog.getByRole('button', { name: 'Save' }).click()
 		expect((await createBookResponsePromise).ok()).toBeTruthy()
 
-		const titlePattern = new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+		const titlePattern = new RegExp(
+			title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+		)
 		const bookCard = page.getByRole('button', { name: titlePattern })
 		await expect(bookCard).toBeVisible()
 		await expect(bookCard).toHaveAccessibleName(/Reading/)
@@ -83,5 +86,107 @@ authTest(
 		const session = page.getByRole('button', { name: titlePattern })
 		await expect(session).toBeVisible()
 		await expect(session).toContainText(`PP. ${fromPage}-${toPage}`)
+	},
+)
+
+// P1.2: edit and delete a book, checking persistence after a reload
+authTest(
+	'edits and deletes a library book with persisted results',
+	async ({ authenticated }) => {
+		const page = await authenticated.context.newPage()
+		const book = await seedBook(authenticated.context.request, {
+			title: `E2E library edit ${Date.now()}`,
+			status: 'reading',
+		})
+		const updatedTitle = `${book.title} Updated`
+		const originalCard = page.getByRole('button', {
+			name: new RegExp(book.title),
+		})
+
+		await page.goto('/books')
+		await expect(originalCard).toBeVisible()
+		await originalCard.click()
+
+		const detailsDialog = page.getByRole('dialog')
+		await detailsDialog.getByRole('button', { name: 'Edit Book' }).click()
+		await detailsDialog.getByLabel('Title').fill(updatedTitle)
+		const updateResponse = page.waitForResponse(
+			(response) =>
+				/\/books\/[^/]+$/.test(new URL(response.url()).pathname) &&
+				response.request().method() === 'PATCH',
+		)
+		await detailsDialog.getByRole('button', { name: 'Save' }).click()
+		expect((await updateResponse).ok()).toBeTruthy()
+
+		const updatedCard = page.getByRole('button', {
+			name: new RegExp(updatedTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+		})
+		await expect(updatedCard).toBeVisible()
+		await page.reload()
+		await expect(updatedCard).toBeVisible()
+		await updatedCard.click()
+
+		await page.getByRole('button', { name: 'Delete book' }).click()
+		const deleteDialog = page.getByRole('dialog').last()
+		const deleteResponse = page.waitForResponse(
+			(response) =>
+				/\/books\/[^/]+$/.test(new URL(response.url()).pathname) &&
+				response.request().method() === 'DELETE',
+		)
+		await deleteDialog.getByRole('button', { name: 'Delete' }).click()
+		expect((await deleteResponse).ok()).toBeTruthy()
+		await expect(
+			page.getByRole('heading', { name: 'Your library is empty' }),
+		).toBeVisible()
+	},
+)
+
+// P1.2: one smoke check of search and status filter against real data
+authTest(
+	'searches and filters real library books',
+	async ({ authenticated }) => {
+		const request = authenticated.context.request
+		const suffix = Date.now()
+		const readingBook = await seedBook(request, {
+			title: `E2E search reading ${suffix}`,
+			status: 'reading',
+		})
+		const plannedBook = await seedBook(request, {
+			title: `E2E search planned ${suffix}`,
+			status: 'planned',
+		})
+		const page = await authenticated.context.newPage()
+
+		await page.goto('/books')
+		const readingCard = page.getByRole('button', {
+			name: new RegExp(
+				readingBook.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+			),
+		})
+		const plannedCard = page.getByRole('button', {
+			name: new RegExp(
+				plannedBook.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+			),
+		})
+		await expect(readingCard).toBeVisible()
+		await expect(plannedCard).toBeVisible()
+
+		const search = page.getByRole('textbox', {
+			name: 'Search by title or author',
+		})
+		await search.fill(plannedBook.title)
+		await expect(plannedCard).toBeVisible()
+		await expect(readingCard).toBeHidden()
+
+		await search.press('Escape')
+		// Scoped to the filter group: every book card also carries its status label
+		// (for example "Want to read") in its accessible name, so an unscoped match
+		// would hit the planned card as well as the filter button.
+		const statusFilter = page.getByRole('group', {
+			name: 'Filter books by status',
+		})
+		await statusFilter.getByRole('button', { name: /Want to read/ }).click()
+		await expect(plannedCard).toBeVisible()
+		await expect(readingCard).toBeHidden()
 	},
 )

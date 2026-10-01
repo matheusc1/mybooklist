@@ -10,6 +10,7 @@ export function DashboardSkeleton() {
 			>
 				<div className="w-full flex items-baseline justify-between">
 					<h2
+						data-testid="dashboard-skeleton"
 						id="bookshelf-heading"
 						className="font-serif font-semibold tracking-tight text-xl"
 					>

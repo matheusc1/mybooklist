@@ -97,31 +97,60 @@ authTest.describe('first-login reading-speed onboarding', () => {
 		},
 	)
 
-	authTest('prompts again in a fresh browser context for the same user', async ({
-		authenticated,
-	}) => {
-		const sourcePage = await authenticated.context.newPage()
-		await sourcePage.goto('/home')
-		await expect(sourcePage).toHaveURL(/\/reading-speed$/)
+	authTest(
+		'prompts again in a fresh browser context for the same user',
+		async ({ authenticated }) => {
+			const sourcePage = await authenticated.context.newPage()
+			await sourcePage.goto('/home')
+			await expect(sourcePage).toHaveURL(/\/reading-speed$/)
 
-		const browser = authenticated.context.browser()
-		if (!browser) throw new Error('The authenticated browser context is closed')
+			const browser = authenticated.context.browser()
+			if (!browser)
+				throw new Error('The authenticated browser context is closed')
 
-		const freshContext = await browser.newContext()
-		try {
-			await freshContext.addCookies(await authenticated.context.cookies())
-			const page = await freshContext.newPage()
-			const homeUrl = new URL('/home', sourcePage.url())
-			await page.goto(homeUrl.toString())
+			const freshContext = await browser.newContext()
+			try {
+				await freshContext.addCookies(await authenticated.context.cookies())
+				const page = await freshContext.newPage()
+				const homeUrl = new URL('/home', sourcePage.url())
+				await page.goto(homeUrl.toString())
 
+				await expect(page).toHaveURL(/\/reading-speed$/)
+				await expect(
+					page.getByRole('heading', {
+						name: "Let's measure your reading pace",
+					}),
+				).toBeVisible()
+			} finally {
+				await freshContext.close()
+			}
+		},
+	)
+
+	authTest(
+		'skips onboarding from the result and keeps authenticated navigation available',
+		async ({ authenticated }) => {
+			const page = await authenticated.context.newPage()
+
+			await page.goto('/home')
 			await expect(page).toHaveURL(/\/reading-speed$/)
+			await page.getByRole('button', { name: /Start Reading/ }).click()
+			await page.getByRole('button', { name: /Next page/ }).click()
+			await page.getByRole('button', { name: /^Finish/ }).click()
 			await expect(
-				page.getByRole('heading', {
-					name: "Let's measure your reading pace",
-				}),
+				page.getByRole('heading', { name: "Here's your reading pace" }),
 			).toBeVisible()
-		} finally {
-			await freshContext.close()
-		}
-	})
+
+			await page.getByRole('link', { name: 'Skip and go to home' }).click()
+			await expect(page).toHaveURL(/\/home$/)
+			await expect(
+				page.getByRole('heading', { name: 'Bookshelf' }),
+			).toBeVisible()
+			await page.getByRole('link', { name: 'My Books' }).click()
+			await expect(page).toHaveURL(/\/books$/)
+			await expect(
+				page.getByRole('heading', { name: 'Your library is empty' }),
+			).toBeVisible()
+		},
+	)
 })
