@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test'
 import { authTest, seedBook } from './fixtures/api'
 
-// P0.2: Complete a book through the UI and verify reflections across pages
 authTest(
 	'completes a book through a reading session and reflects it across the app',
 	async ({ authenticated }, testInfo) => {
@@ -89,7 +88,6 @@ authTest(
 	},
 )
 
-// P1.2: edit and delete a book, checking persistence after a reload
 authTest(
 	'edits and deletes a library book with persisted results',
 	async ({ authenticated }) => {
@@ -141,7 +139,6 @@ authTest(
 	},
 )
 
-// P1.2: one smoke check of search and status filter against real data
 authTest(
 	'searches and filters real library books',
 	async ({ authenticated }) => {
