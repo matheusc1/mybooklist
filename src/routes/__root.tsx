@@ -30,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			{
 				property: 'og:description',
 				content:
-					'Acompanhe suas leituras, defina metas e monitore seu progresso de leitura.',
+					'Track your books, set goals, and follow your reading progress.',
 			},
 			{
 				property: 'og:image',
