@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, renderWithRouter, screen, waitFor } from '#/test/test-utils'
-import { OnboardingGuard } from '../routes/_authenticated'
+import { OnboardingGuard } from './onboarding-guard'
 
 const resolveCurrentUser = vi.hoisted(() => vi.fn())
 
