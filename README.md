@@ -4,6 +4,19 @@ Aplicação web de tracking de leitura pessoal. Você cadastra seus livros, regi
 
 Este repositório contém só o front-end. A API (NestJS) fica em um repositório separado: [mybooklist-api](https://github.com/matheusc1/mybooklist-api).
 
+## Demo
+
+> O deploy ainda não está disponível. O link será adicionado aqui quando estiver no ar.
+
+| | |
+| --- | --- |
+| ![Landing page do MyBookList](docs/screenshots/landing.png) | ![Página de login com Google e GitHub](docs/screenshots/login.png) |
+| **Landing page** | **Login** |
+| ![Resultado do teste de velocidade de leitura](docs/screenshots/reading-speed.png) | ![Dashboard com meta anual e estatísticas da semana](docs/screenshots/dashboard.png) |
+| **Teste de velocidade de leitura** | **Dashboard** |
+| ![Biblioteca com busca e filtro por status](docs/screenshots/books.png) | ![Calendário mensal de atividade de leitura](docs/screenshots/activity.png) |
+| **Meus Livros** | **Activity** |
+
 ## Funcionalidades
 
 - **Login com Google ou GitHub.** Sem senha. A sessão é um cookie httpOnly emitido pela API.
