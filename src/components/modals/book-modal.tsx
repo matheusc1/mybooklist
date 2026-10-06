@@ -1,5 +1,4 @@
-import { useForm } from '@tanstack/react-form'
-import { useStore } from '@tanstack/react-store'
+import { useForm, useSelector } from '@tanstack/react-form'
 import { LucideTrash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import z from 'zod'
@@ -118,9 +117,9 @@ export function BookModal({
 		},
 	})
 
-	const status = useStore(form.store, (s) => s.values.status)
-	const currentPage = useStore(form.store, (s) => s.values.currentPage)
-	const totalPages = useStore(form.store, (s) => s.values.totalPages)
+	const status = useSelector(form.store, (s) => s.values.status)
+	const currentPage = useSelector(form.store, (s) => s.values.currentPage)
+	const totalPages = useSelector(form.store, (s) => s.values.totalPages)
 	const prevStatusRef = useRef<string | null>(null)
 
 	const progress = getPercent(currentPage ?? 0, totalPages ?? 0)
