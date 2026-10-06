@@ -6,7 +6,8 @@ Este repositório contém só o front-end. A API (NestJS) fica em um repositóri
 
 ## Demo
 
-> O deploy ainda não está disponível. O link será adicionado aqui quando estiver no ar.
+**Acesse em [mybooklist.site](https://mybooklist.site)** (login com Google ou GitHub).
+> A API roda em um plano gratuito, então o primeiro acesso após um período de inatividade pode levar cerca de um minuto.
 
 | | |
 | --- | --- |
