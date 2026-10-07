@@ -160,9 +160,6 @@ describe('Calendar', () => {
 			}),
 		)
 
-		expect(onDayClick).toHaveBeenCalledWith(
-			'2026-09-15',
-			calendar[1].sessions,
-		)
+		expect(onDayClick).toHaveBeenCalledWith('2026-09-15', calendar[1].sessions)
 	})
 })
