@@ -221,7 +221,7 @@ function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 					progress, log sessions, and discover how much you actually read.
 				</p>
 
-				<div className="flex items-center gap-3 flex-wrap animate-fade-up [animation-delay:0.34s]">
+				<div className="flex w-full items-center gap-3 flex-wrap animate-fade-up [animation-delay:0.34s]">
 					{isAuthenticated ? (
 						<Link
 							to="/home"
