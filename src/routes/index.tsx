@@ -35,13 +35,6 @@ export const Route = createFileRoute('/')({
 	component: LandingPage,
 })
 
-const stats = [
-	{ value: '12', sup: 'k+', label: 'Books tracked' },
-	{ value: '3.4', sup: 'k', label: 'Active readers' },
-	{ value: '98', sup: '%', label: 'Goals reached' },
-	{ value: '4.9', sup: '★', label: 'Average rating' },
-]
-
 const books = [
 	{
 		title: 'As I Lay Dying',
@@ -162,7 +155,6 @@ function LandingPage() {
 
 			<main>
 				<HeroSection isAuthenticated={isAuthenticated} />
-				<StatsSection />
 				<PreviewSection />
 				<FeaturesSection />
 				<QuoteSection />
@@ -234,8 +226,8 @@ function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 				</h1>
 
 				<p className="text-muted text-sm lg:text-base leading-[1.75] max-w-130 mb-10 animate-fade-up [animation-delay:0.26s]">
-					MyBookList turns your reading habit into a story worth telling. Track
-					progress, log sessions, and discover how much you actually read.
+					MyBookList is a book and reading tracker. Add your books, log reading
+					sessions, set yearly goals and see how much you actually read.
 				</p>
 
 				<div className="flex w-full items-center gap-3 flex-wrap animate-fade-up [animation-delay:0.34s]">
@@ -282,38 +274,6 @@ function HeroSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 			>
 				<div className="w-px h-8 sm:h-10 bg-linear-to-b from-accent/80 to-transparent animate-pulse" />
 			</div>
-		</section>
-	)
-}
-
-function StatsSection() {
-	const ref = useReveal<HTMLDListElement>()
-
-	return (
-		<section className="py-20 px-15 bg-surface border-t border-b border-border">
-			<dl
-				ref={ref}
-				className="reveal max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-y-8"
-			>
-				{stats.map((stat, i) => (
-					<div
-						key={stat.label}
-						className={`px-5 text-center relative ${
-							i !== 0
-								? 'before:absolute before:left-0 before:top-[20%] before:bottom-[20%] before:w-px before:bg-border'
-								: ''
-						} ${i === 2 ? 'before:hidden sm:before:block' : ''}`}
-					>
-						<dd className="font-serif text-4xl/[1.0] font-bold tracking-tight text-accent mb-1.5">
-							{stat.value}
-							<sup className="text-xl font-normal text-muted">{stat.sup}</sup>
-						</dd>
-						<dt className="font-mono text-xs text-muted uppercase tracking-widest">
-							{stat.label}
-						</dt>
-					</div>
-				))}
-			</dl>
 		</section>
 	)
 }
@@ -627,7 +587,7 @@ function CtaSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 			>
 				{isAuthenticated
 					? 'Your books, sessions, and stats are right where you left them.'
-					: "Join thousands of readers who turned a habit into a practice. It's free, and it takes 30 seconds to get started."}
+					: 'Add your first book, log a reading session, and watch your week take shape. It takes less than a minute to get started.'}
 			</p>
 
 			<div
@@ -671,7 +631,7 @@ function CtaSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 					ref={noteRef}
 					className="reveal mt-3.5 text-xxs text-muted/50 font-mono tracking-wider"
 				>
-					No credit card. No password. Cancel anytime.
+					Free to use · No password · Your data stays private
 				</p>
 			)}
 		</section>
