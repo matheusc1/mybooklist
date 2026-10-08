@@ -10,11 +10,28 @@ import {
 } from 'lucide-react'
 import { button } from '#/components/ui/button'
 import { Logo } from '#/components/ui/logo'
+import { SITE_URL } from '#/constants/site-url'
 import { useMe } from '#/hooks/use-auth'
 import { useReveal } from '#/hooks/use-reveal'
 import { scrollTo } from '#/utils/scroll-to'
 
 export const Route = createFileRoute('/')({
+	head: () => ({
+		meta: [
+			{ title: 'MyBookList: track your books, reading sessions and goals' },
+			{
+				name: 'description',
+				content:
+					'MyBookList is a personal reading tracker. Organize your library, log reading sessions and reach your yearly goal.',
+			},
+			{
+				property: 'og:title',
+				content: 'MyBookList: track your books, reading sessions and goals',
+			},
+			{ property: 'og:url', content: `${SITE_URL}/` },
+		],
+		links: [{ rel: 'canonical', href: `${SITE_URL}/` }],
+	}),
 	component: LandingPage,
 })
 

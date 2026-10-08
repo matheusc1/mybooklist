@@ -9,6 +9,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { useEffect } from 'react'
 import { Toaster } from 'sonner'
+import { SITE_URL } from '#/constants/site-url'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
@@ -32,11 +33,16 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content:
 					'Track your books, set goals, and follow your reading progress.',
 			},
-			{
-				property: 'og:image',
-				content: `${import.meta.env.VITE_SITE_URL ?? ''}/og-image.png`,
-			},
+			{ property: 'og:image', content: `${SITE_URL}/og-image.png` },
+			{ property: 'og:site_name', content: 'MyBookList' },
 			{ property: 'og:type', content: 'website' },
+			{ name: 'twitter:title', content: 'MyBookList' },
+			{
+				name: 'twitter:description',
+				content:
+					'Track your books, set goals, and follow your reading progress.',
+			},
+			{ name: 'twitter:image', content: `${SITE_URL}/og-image.png` },
 			{ name: 'twitter:card', content: 'summary_large_image' },
 			{
 				title: 'MyBookList',
