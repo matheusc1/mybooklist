@@ -1,11 +1,17 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderWithRoute, screen } from '#/test/test-utils'
 
-const getMe = vi.hoisted(() => vi.fn())
+const { getMe, googleUrl, githubUrl } = vi.hoisted(() => ({
+	getMe: vi.fn(),
+	googleUrl: 'https://api.test/auth/google',
+	githubUrl: 'https://api.test/auth/github',
+}))
 
 vi.mock('#/http/auth', () => ({
 	getMe,
 	logout: vi.fn(),
+	getGoogleLoginUrl: () => googleUrl,
+	getGithubLoginUrl: () => githubUrl,
 }))
 
 afterEach(() => {
@@ -13,7 +19,7 @@ afterEach(() => {
 })
 
 describe('landing page CTA', () => {
-	it('shows sign-in CTAs pointing to /login when the visitor is not authenticated', async () => {
+	it('shows sign-in CTAs when the visitor is not authenticated', async () => {
 		getMe.mockRejectedValue({ status: 401, message: 'Unauthorized' })
 
 		await renderWithRoute('/')
@@ -24,12 +30,14 @@ describe('landing page CTA', () => {
 		expect(
 			screen.getByRole('link', { name: /start for free/i }),
 		).toHaveAttribute('href', '/login')
-		expect(
-			screen.getByRole('link', { name: /sign in with google/i }),
-		).toHaveAttribute('href', '/login')
-		expect(
-			screen.getByRole('link', { name: /sign in with github/i }),
-		).toHaveAttribute('href', '/login')
+
+		const google = screen.getByRole('link', { name: /sign in with google/i })
+		expect(google).toHaveAttribute('href', googleUrl)
+		expect(google).toHaveAttribute('rel', 'nofollow')
+
+		const github = screen.getByRole('link', { name: /sign in with github/i })
+		expect(github).toHaveAttribute('href', githubUrl)
+		expect(github).toHaveAttribute('rel', 'nofollow')
 
 		expect(
 			screen.queryByRole('link', { name: /go to app/i }),

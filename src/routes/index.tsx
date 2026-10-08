@@ -13,7 +13,7 @@ import { Logo } from '#/components/ui/logo'
 import { SITE_URL } from '#/constants/site-url'
 import { useMe } from '#/hooks/use-auth'
 import { useReveal } from '#/hooks/use-reveal'
-import { scrollTo } from '#/utils/scroll-to'
+import { getGithubLoginUrl, getGoogleLoginUrl } from '#/http/auth'
 
 export const Route = createFileRoute('/')({
 	head: () => ({
@@ -604,16 +604,18 @@ function CtaSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 					</Link>
 				) : (
 					<>
-						<Link
-							to="/login"
+						<a
+							href={getGoogleLoginUrl()}
+							rel="nofollow"
 							className={button({ size: 'lg', className: 'w-full sm:w-auto' })}
 						>
 							Sign in with Google
 							<LucideArrowRight className="size-4" />
-						</Link>
+						</a>
 
-						<Link
-							to="/login"
+						<a
+							href={getGithubLoginUrl()}
+							rel="nofollow"
 							className={button({
 								variant: 'ghost',
 								size: 'lg',
@@ -621,7 +623,7 @@ function CtaSection({ isAuthenticated }: { isAuthenticated: boolean }) {
 							})}
 						>
 							Sign in with GitHub
-						</Link>
+						</a>
 					</>
 				)}
 			</div>
