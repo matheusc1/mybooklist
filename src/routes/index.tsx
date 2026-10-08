@@ -122,21 +122,19 @@ function LandingPage() {
 				<nav className="flex w-full items-center justify-between h-17 px-5 sm:px-15">
 					<Logo textClassName="hidden sm:block" />
 					<div className="flex gap-0.5 text-xs sm:text-sm text-muted uppercase tracking-wider transition-all">
-						<button
-							type="button"
-							onClick={scrollTo('preview')}
+						<a
+							href="#preview"
 							className="uppercase py-1.5 px-3 rounded-md hover:text-text hover:bg-surface2 cursor-pointer"
 						>
 							Preview
-						</button>
+						</a>
 
-						<button
-							type="button"
-							onClick={scrollTo('features')}
+						<a
+							href="#features"
 							className="uppercase py-1.5 px-3 rounded-md hover:text-text hover:bg-surface2 cursor-pointer"
 						>
 							Features
-						</button>
+						</a>
 					</div>
 					{isAuthenticated ? (
 						<Link to="/home" className={button({ size: 'sm' })}>
@@ -313,7 +311,7 @@ function PreviewSection() {
 					</div>
 
 					<div className="bg-surface3 py-1 px-3 rounded-md font-mono text-muted text-xxs">
-						mybooklist.app
+						mybooklist.site
 					</div>
 
 					<div className="w-13" />
@@ -360,12 +358,13 @@ function PreviewSection() {
 						{books.map((book) => (
 							<div
 								key={book.title}
-								className="flex gap-2 books-center py-2 border-b border-border last:border-none"
+								className="flex gap-2 py-2 border-b border-border last:border-none"
 							>
 								<img
 									src="/book-cover.jpg"
-									alt="Default book cover"
+									alt=""
 									className="w-8 h-12 rounded-sm object-cover"
+									loading="lazy"
 								/>
 
 								<div className="space-y-2 mt-1">
@@ -428,8 +427,9 @@ function PreviewSection() {
 							>
 								<img
 									src={book.bookCover}
-									alt="Book cover"
+									alt={`${book.title} book cover`}
 									className="w-9 h-13.5 rounded-sm object-cover"
+									loading="lazy"
 								/>
 
 								<div>
@@ -488,9 +488,9 @@ function FeaturesSection() {
 							<div className="size-9 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center mb-4 transition-colors group-hover:bg-accent/15">
 								<Icon aria-hidden="true" className="size-4 text-accent" />
 							</div>
-							<p className="font-serif font-semibold tracking-[-0.01em] mb-3">
+							<h3 className="font-serif font-semibold tracking-[-0.01em] mb-3">
 								{feature.title}
-							</p>
+							</h3>
 							<p className="text-sm/[1.7] text-muted">{feature.desc}</p>
 							<span className="inline-block mt-3.5 font-mono text-[10px] uppercase tracking-[0.08em] text-accent border-b border-accent/30 pb-px">
 								{feature.tag}
