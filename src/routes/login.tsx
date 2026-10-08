@@ -12,6 +12,14 @@ import { authQueryKey } from '#/utils/query-keys'
 import { resolveCurrentUser } from '#/utils/resolve-current-user'
 
 export const Route = createFileRoute('/login')({
+	head: () => ({
+		meta: [
+			{
+				name: 'robots',
+				content: 'noindex, nofollow',
+			},
+		],
+	}),
 	beforeLoad: async ({ context }) => {
 		try {
 			await context.queryClient.ensureQueryData({
@@ -98,44 +106,17 @@ function Login() {
 					</footer>
 				</blockquote>
 
-				<dl className="flex items-center gap-6 lg:gap-8">
-					<div>
-						<dd className="font-bold font-serif text-2xl">
-							12<span className="text-accent text-base">k+</span>
-						</dd>
-						<dt className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
-							Books tracked
-						</dt>
-					</div>
-
-					<div
-						aria-hidden="true"
-						className="w-px bg-border h-full hidden lg:block"
-					/>
-
-					<div>
-						<dd className="font-bold font-serif text-2xl">
-							3.4<span className="text-accent text-base">k</span>
-						</dd>
-						<dt className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
-							Active readers
-						</dt>
-					</div>
-
-					<div
-						aria-hidden="true"
-						className="w-px bg-border h-full hidden lg:block"
-					/>
-
-					<div>
-						<dd className="font-bold font-serif text-2xl">
-							98<span className="text-accent text-base">%</span>
-						</dd>
-						<dt className="text-xs text-muted uppercase font-mono tracking-[0.08em]">
-							Goals reached
-						</dt>
-					</div>
-				</dl>
+				<p className="text-xs text-muted font-mono uppercase tracking-[0.08em]">
+					Made with TanStack Start and NestJS ·{' '}
+					<a
+						href="https://github.com/matheusc1/mybooklist"
+						target="_blank"
+						rel="noreferrer"
+						className="hover:text-accent hover:underline"
+					>
+						Source
+					</a>
+				</p>
 			</aside>
 
 			<main className="flex flex-col justify-center p-[40px_20px] md:p-[60px_32px] lg:p-[60px_52px] relative bg-noise animate-fade-up [animation-delay:0.15s] stagger-fade-up">
