@@ -17,6 +17,9 @@ import type { Book } from '#/types/book'
 import type { ModalMode } from '#/types/common'
 
 export const Route = createFileRoute('/_authenticated/books')({
+	head: () => ({
+		meta: [{ title: 'My Books | MyBookList' }],
+	}),
 	component: MyBooks,
 })
 

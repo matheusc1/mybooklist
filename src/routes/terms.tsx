@@ -1,10 +1,21 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
 import { Logo } from '#/components/ui/logo'
+import { SITE_URL } from '#/constants/site-url'
 import { useScrollSpy } from '#/hooks/use-scroll-spy'
 import { scrollTo } from '#/utils/scroll-to'
 
 export const Route = createFileRoute('/terms')({
+	head: () => ({
+		meta: [
+			{ title: 'Terms of Service | MyBookList' },
+			{
+				name: 'description',
+				content: 'The terms that apply when you use MyBookList.',
+			},
+		],
+		links: [{ rel: 'canonical', href: `${SITE_URL}/terms` }],
+	}),
 	component: TermsOfService,
 })
 

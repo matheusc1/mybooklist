@@ -22,6 +22,9 @@ import { useDashboard } from '#/hooks/use-dashboard'
 import { useGoal } from '#/hooks/use-goal'
 
 export const Route = createFileRoute('/_authenticated/home')({
+	head: () => ({
+		meta: [{ title: 'Dashboard | MyBookList' }],
+	}),
 	component: Home,
 })
 

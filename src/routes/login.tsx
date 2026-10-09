@@ -14,10 +14,8 @@ import { resolveCurrentUser } from '#/utils/resolve-current-user'
 export const Route = createFileRoute('/login')({
 	head: () => ({
 		meta: [
-			{
-				name: 'robots',
-				content: 'noindex, nofollow',
-			},
+			{ title: 'Login | MyBookList' },
+			{ name: 'robots', content: 'noindex' },
 		],
 	}),
 	beforeLoad: async ({ context }) => {

@@ -1,10 +1,21 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { LucideArrowLeft } from 'lucide-react'
 import { Logo } from '#/components/ui/logo'
+import { SITE_URL } from '#/constants/site-url'
 import { useScrollSpy } from '#/hooks/use-scroll-spy'
 import { scrollTo } from '#/utils/scroll-to'
 
 export const Route = createFileRoute('/privacy')({
+	head: () => ({
+		meta: [
+			{ title: 'Privacy Policy | MyBookList' },
+			{
+				name: 'description',
+				content: 'How MyBookList handles your data and your privacy.',
+			},
+		],
+		links: [{ rel: 'canonical', href: `${SITE_URL}/privacy` }],
+	}),
 	component: PrivacyPolicy,
 })
 

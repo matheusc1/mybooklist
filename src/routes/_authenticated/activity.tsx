@@ -7,6 +7,9 @@ import { SessionModal } from '#/components/modals/session-modal'
 import { useActivity } from '#/hooks/use-activity'
 
 export const Route = createFileRoute('/_authenticated/activity')({
+	head: () => ({
+		meta: [{ title: 'Activity | MyBookList' }],
+	}),
 	component: Activity,
 })
 

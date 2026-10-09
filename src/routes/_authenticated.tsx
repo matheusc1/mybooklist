@@ -23,6 +23,9 @@ export const Route = createFileRoute('/_authenticated')({
 			throw error
 		}
 	},
+	head: () => ({
+		meta: [{ name: 'robots', content: 'noindex, nofollow' }],
+	}),
 	component: Layout,
 })
 

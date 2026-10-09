@@ -14,6 +14,9 @@ import { type Passage, readingPassages } from '#/data/passages'
 import { useUpdateReadingSpeed } from '#/hooks/use-user'
 
 export const Route = createFileRoute('/_authenticated/reading-speed')({
+	head: () => ({
+		meta: [{ title: 'Reading Speed | MyBookList' }],
+	}),
 	staticData: { hideNav: true },
 	component: ReadingSpeed,
 })
