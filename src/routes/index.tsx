@@ -19,16 +19,6 @@ export const Route = createFileRoute('/')({
 	head: () => ({
 		meta: [
 			{ title: 'MyBookList: track your books, reading sessions and goals' },
-			{
-				name: 'description',
-				content:
-					'MyBookList is a personal reading tracker. Organize your library, log reading sessions and reach your yearly goal.',
-			},
-			{
-				property: 'og:title',
-				content: 'MyBookList: track your books, reading sessions and goals',
-			},
-			{ property: 'og:url', content: `${SITE_URL}/` },
 		],
 		links: [{ rel: 'canonical', href: `${SITE_URL}/` }],
 	}),

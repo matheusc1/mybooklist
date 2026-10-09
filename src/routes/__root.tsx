@@ -17,36 +17,25 @@ interface MyRouterContext {
 	queryClient: QueryClient
 }
 
+const DESCRIPTION =
+	'Track your books, set goals, and follow your reading progress.'
+
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
 		meta: [
-			{
-				charSet: 'utf-8',
-			},
-			{
-				name: 'viewport',
-				content: 'width=device-width, initial-scale=1',
-			},
+			{ charSet: 'utf-8' },
+			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+			{ name: 'description', content: DESCRIPTION },
 			{ property: 'og:title', content: 'MyBookList' },
-			{
-				property: 'og:description',
-				content:
-					'Track your books, set goals, and follow your reading progress.',
-			},
+			{ property: 'og:description', content: DESCRIPTION },
 			{ property: 'og:image', content: `${SITE_URL}/og-image.png` },
 			{ property: 'og:site_name', content: 'MyBookList' },
 			{ property: 'og:type', content: 'website' },
 			{ name: 'twitter:title', content: 'MyBookList' },
-			{
-				name: 'twitter:description',
-				content:
-					'Track your books, set goals, and follow your reading progress.',
-			},
+			{ name: 'twitter:description', content: DESCRIPTION },
 			{ name: 'twitter:image', content: `${SITE_URL}/og-image.png` },
 			{ name: 'twitter:card', content: 'summary_large_image' },
-			{
-				title: 'MyBookList',
-			},
+			{ title: 'MyBookList' },
 		],
 		links: [
 			{
