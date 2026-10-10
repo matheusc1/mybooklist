@@ -1,8 +1,13 @@
+@import '@fontsource-variable/dm-sans/opsz.css';
+@import '@fontsource-variable/playfair-display/index.css';
+@import '@fontsource-variable/playfair-display/wght-italic.css';
+@import '@fontsource/dm-mono/400.css';
+@import '@fontsource/dm-mono/500.css';
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'DM Sans', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'DM Sans Variable', sans-serif;
+  --font-serif: 'Playfair Display Variable', serif;
   --font-mono: 'DM Mono', monospace;
 
   --text-xxs: 0.6875rem;
