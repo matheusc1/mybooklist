@@ -38,19 +38,19 @@ const books = [
 
 const finishedBooks = [
 	{
-		bookCover: '/covers/dune.jpg',
+		bookCover: '/covers/dune.webp',
 		title: 'Dune',
 		author: 'Frank Herbert',
 		stars: '★★★★☆',
 	},
 	{
-		bookCover: '/covers/we.jpg',
+		bookCover: '/covers/we.webp',
 		title: 'We',
 		author: 'Yevgeny Zamyatin',
 		stars: '★★★★★',
 	},
 	{
-		bookCover: '/covers/david-copperfield.jpg',
+		bookCover: '/covers/david-copperfield.webp',
 		title: 'David Copperfield',
 		author: 'Charles Dickens',
 		stars: '★★★☆☆',
@@ -319,9 +319,10 @@ function PreviewSection() {
 							</p>
 							<div className="flex gap-2 items-start">
 								<img
-									src="/covers/hamlet.jpg"
+									src="/covers/hamlet.webp"
 									alt="Hamlet book cover"
 									className="w-10 h-15 object-cover rounded-sm"
+									loading="lazy"
 								/>
 								<div className="flex-1">
 									<p className="font-serif text-xxs font-semibold mb-px">
@@ -351,7 +352,7 @@ function PreviewSection() {
 								className="flex gap-2 py-2 border-b border-border last:border-none"
 							>
 								<img
-									src="/book-cover.jpg"
+									src="/book-cover-sm.webp"
 									alt=""
 									className="w-8 h-12 rounded-sm object-cover"
 									loading="lazy"
