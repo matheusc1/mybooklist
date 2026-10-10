@@ -103,7 +103,7 @@ describe('SessionModal', () => {
 		)
 		expect(screen.getByAltText('Default Book Cover')).toHaveAttribute(
 			'src',
-			'/book-cover.jpg',
+			'/book-cover.webp',
 		)
 	})
 

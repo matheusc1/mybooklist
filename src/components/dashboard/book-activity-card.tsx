@@ -13,7 +13,7 @@ export function BookActivityCard({ book }: BookActivityCardProps) {
 		<div className="flex gap-3 py-3">
 			<div className="flex items-center justify-center w-10 h-15 bg-surface2 rounded-sm shadow-[2px_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
 				<img
-					src={book.coverUrl ?? '/book-cover.jpg'}
+					src={book.coverUrl ?? '/book-cover.webp'}
 					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 					className="w-full h-full object-cover"
 				/>

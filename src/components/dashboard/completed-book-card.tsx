@@ -13,7 +13,7 @@ export function CompletedBookCard({ book }: CompletedBookCardProps) {
 		<div className="group flex gap-3 py-3 border-b border-border transition-all duration-200 cursor-pointer hover:opacity-95">
 			<div className="relative w-13 h-19.5 shrink-0 bg-surface2 rounded overflow-hidden flex items-center justify-center shadow-[3px_3px_12px_rgba(0,0,0,0.4)]">
 				<img
-					src={book.coverUrl ?? '/book-cover.jpg'}
+					src={book.coverUrl ?? '/book-cover.webp'}
 					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 					className="w-full h-full object-cover"
 				/>

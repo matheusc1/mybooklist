@@ -17,7 +17,7 @@ export function CurrentBookCard({ book }: { book: Book }) {
 
 				<div className="flex gap-3.5 items-start">
 					<img
-						src={book.coverUrl ?? '/book-cover.jpg'}
+						src={book.coverUrl ?? '/book-cover.webp'}
 						alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
 						className="w-13.5 h-19 rounded-md object-cover"
 					/>

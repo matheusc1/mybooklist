@@ -142,7 +142,7 @@ describe('BookCombobox', () => {
 		await user.click(screen.getByRole('combobox', { name: 'Search books...' }))
 		expect(document.querySelector('img')).toHaveAttribute(
 			'src',
-			'/book-cover.jpg',
+			'/book-cover.webp',
 		)
 	})
 })
