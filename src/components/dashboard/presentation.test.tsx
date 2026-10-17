@@ -127,7 +127,7 @@ describe('dashboard presentation components', () => {
 		expect(screen.getByText('4')).toBeInTheDocument()
 	})
 
-	it('renders weekly metrics, chart description, and active day', () => {
+	it('renders weekly metrics, chart description, tooltips, and active day', () => {
 		render(<WeeklyStatsContent weeklyStats={weeklyStats} />)
 
 		expect(screen.getByText('30', { selector: 'p' })).toBeInTheDocument()
@@ -137,7 +137,28 @@ describe('dashboard presentation components', () => {
 		expect(
 			screen.getByRole('img', { name: /Tue: 20 pages/ }),
 		).toBeInTheDocument()
+		expect(screen.getByText('10 pages')).toBeInTheDocument()
+		expect(screen.getByText('20 pages')).toBeInTheDocument()
 		expect(screen.getByText('Tue ↑')).toBeInTheDocument()
+	})
+
+	it('uses the singular form for one page in the tooltip and chart description', () => {
+		render(
+			<WeeklyStatsContent
+				weeklyStats={{
+					...weeklyStats,
+					pagesByDay: [
+						{ day: 'Mon', pages: 1 },
+						{ day: 'Tue', pages: 20 },
+					],
+				}}
+			/>,
+		)
+
+		expect(screen.getByText('1 page')).toBeInTheDocument()
+		expect(
+			screen.getByRole('img', { name: /Mon: 1 page,/ }),
+		).toBeInTheDocument()
 	})
 
 	it('renders the weekly empty state', () => {

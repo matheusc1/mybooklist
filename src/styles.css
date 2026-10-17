@@ -139,6 +139,18 @@
   .deco-title {
     @apply absolute font-serif italic text-[rgba(255,255,255,0.028)] whitespace-nowrap leading-none select-none;
   }
+
+  .chart-tooltip {
+    @apply pointer-events-none absolute bottom-full left-1/2 z-10 mb-1
+      -translate-x-1/2 whitespace-nowrap rounded-md border border-border2
+      bg-surface3 px-2 py-1 font-mono text-xxs text-text
+      opacity-0 transition-opacity;
+  }
+
+  .group:hover .chart-tooltip,
+  .group:focus-visible .chart-tooltip {
+    opacity: 1;
+  }
 }
 
 @layer base {
