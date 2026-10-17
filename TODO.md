@@ -13,18 +13,19 @@ página anual. Ordem do mais simples para o mais complexo.
 
 ### 1.1 Gráfico semanal
 
-- [ ] Clicar na barra de um dia abre o `SessionModal` referente àquela data,
-      passando apenas a data
-- [ ] Hover na barra mostra a quantidade de páginas do dia. O mesmo
+- [ ] ~~Clicar na barra de um dia abre o `SessionModal` referente àquela data,
+      passando apenas a data~~ (descartado: a tela de activity e a página do
+      livro já cobrem esse caminho)
+- [x] Hover na barra mostra a quantidade de páginas do dia. O mesmo
       comportamento vale para o gráfico anual (3.1), então vale um tooltip
       reaproveitável
 
 ### 1.2 Campo de texto no livro
 
-- [ ] Textarea de notas no formulário de livro (criação e edição)
-- [ ] Contador de caracteres sempre visível (ex: `131/xxxx`), que fica
+- [x] Textarea de notas no formulário de livro (criação e edição)
+- [x] Contador de caracteres sempre visível (ex: `131/xxxx`), que fica
       vermelho ao chegar a 90% do limite
-- [ ] Limite vindo do backend (depende do 2.1 da API)
+- [x] Limite vindo do backend e reforçado no front-end (depende do 2.1 da API)
 
 ### 1.3 `resetToPlanned` na exclusão da última sessão
 
