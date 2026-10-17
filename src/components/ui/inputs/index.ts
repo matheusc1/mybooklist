@@ -4,6 +4,7 @@ import { FieldLabel } from './field-label'
 import { GenreSelector } from './genre-selector'
 import { Input } from './input'
 import { RatingStars } from './rating-stars'
+import { Textarea } from './textarea'
 
 export {
 	Input,
@@ -12,4 +13,5 @@ export {
 	BookStatusSelector,
 	RatingStars,
 	FieldError,
+	Textarea,
 }

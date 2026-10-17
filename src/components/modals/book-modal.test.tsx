@@ -94,6 +94,7 @@ describe('BookModal', () => {
 		completedAt: null,
 		createdAt: '',
 		updatedAt: '',
+		notes: null,
 	} satisfies Book
 
 	beforeEach(() => {
@@ -166,6 +167,7 @@ describe('BookModal', () => {
 				rating: undefined,
 				startedAt: undefined,
 				completedAt: undefined,
+				notes: '',
 			},
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
@@ -212,6 +214,9 @@ describe('BookModal', () => {
 		expect(screen.getByRole('textbox', { name: 'Author' })).toHaveAttribute(
 			'readonly',
 		)
+		expect(screen.getByRole('textbox', { name: 'Notes' })).toHaveAttribute(
+			'readonly',
+		)
 		expect(
 			screen.getByRole('button', { name: 'Edit Book' }),
 		).toBeInTheDocument()
@@ -242,6 +247,50 @@ describe('BookModal', () => {
 			}),
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
+	})
+
+	it('loads, edits, and saves notes for a book', async () => {
+		const user = userEvent.setup()
+		updateBook.mockImplementation((_input, options) => options.onSuccess())
+		render(
+			<BookModal
+				open
+				mode="edit"
+				book={{ ...book, notes: 'Existing notes' }}
+				onOpenChange={vi.fn()}
+			/>,
+		)
+
+		const notes = screen.getByRole('textbox', { name: 'Notes' })
+		expect(notes).toHaveValue('Existing notes')
+		expect(notes).toHaveAttribute('maxLength', '5000')
+		expect(notes).toHaveAccessibleDescription('14/5000')
+
+		await user.clear(notes)
+		await user.type(notes, 'Updated notes')
+		expect(notes).toHaveAccessibleDescription('13/5000')
+		await user.click(screen.getByRole('button', { name: 'Save' }))
+
+		await waitFor(() =>
+			expect(updateBook).toHaveBeenCalledWith(
+				expect.objectContaining({ id: 'book-1', notes: 'Updated notes' }),
+				expect.objectContaining({ onSuccess: expect.any(Function) }),
+			),
+		)
+	})
+
+	it('starts with empty notes when creating a book or opening a book without notes', () => {
+		const { rerender } = render(<BookModal open onOpenChange={vi.fn()} />)
+		expect(screen.getByRole('textbox', { name: 'Notes' })).toHaveValue('')
+		expect(
+			screen.getByRole('textbox', { name: 'Notes' }),
+		).toHaveAccessibleDescription('0/5000')
+
+		rerender(<BookModal open mode="edit" book={book} onOpenChange={vi.fn()} />)
+		expect(screen.getByRole('textbox', { name: 'Notes' })).toHaveValue('')
+		expect(
+			screen.getByRole('textbox', { name: 'Notes' }),
+		).toHaveAccessibleDescription('0/5000')
 	})
 
 	it('blocks submission for an invalid cover URL', async () => {

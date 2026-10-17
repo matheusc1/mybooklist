@@ -43,6 +43,7 @@ const book: Book = {
 	completedAt: '2026-09-01',
 	createdAt: '',
 	updatedAt: '2026-09-05',
+	notes: null,
 }
 
 const weeklyStats: WeeklyStats = {

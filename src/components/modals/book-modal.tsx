@@ -2,6 +2,7 @@ import { useForm, useSelector } from '@tanstack/react-form'
 import { LucideTrash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import z from 'zod'
+import { MAX_NOTES_LENGTH } from '#/constants/book'
 import type { ActivityStatus } from '#/constants/book-status'
 import { useCreateBook, useDeleteBook, useUpdateBook } from '#/hooks/use-books'
 import type { Book, CreateBook } from '#/types/book'
@@ -15,6 +16,7 @@ import {
 	GenreSelector,
 	Input,
 	RatingStars,
+	Textarea,
 } from '../ui/inputs'
 import { Modal } from '../ui/modal'
 import { DeleteModal } from './delete-modal'
@@ -41,6 +43,7 @@ const bookSchema = z
 		rating: z.union([z.number(), z.undefined()]),
 		startedAt: z.string(),
 		completedAt: z.string(),
+		notes: z.string(),
 	})
 	.refine(
 		(data) =>
@@ -85,6 +88,7 @@ export function BookModal({
 			rating: book?.rating ?? (undefined as number | undefined),
 			startedAt: book?.startedAt ?? '',
 			completedAt: book?.completedAt ?? '',
+			notes: book?.notes ?? '',
 		},
 		validators: {
 			onChange: bookSchema,
@@ -101,6 +105,7 @@ export function BookModal({
 				rating: value.rating,
 				startedAt: value.startedAt || undefined,
 				completedAt: value.completedAt || undefined,
+				notes: value.notes,
 			}
 
 			if (currentMode === 'add') {
@@ -452,6 +457,24 @@ export function BookModal({
 									</form.Field>
 								)}
 							</div>
+
+							<form.Field name="notes">
+								{(field) => (
+									<div className="flex flex-col gap-2">
+										<FieldLabel htmlFor={field.name}>Notes</FieldLabel>
+										<Textarea
+											id={field.name}
+											name={field.name}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={field.handleChange}
+											maxLength={MAX_NOTES_LENGTH}
+											readOnly={isView}
+											placeholder="Thoughts, a summary, your review, or anything else you want to remember about this book..."
+										/>
+									</div>
+								)}
+							</form.Field>
 						</fieldset>
 					</form>
 				</Modal.Body>

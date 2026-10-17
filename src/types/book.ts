@@ -15,6 +15,7 @@ export interface Book {
 	completedAt: string | null
 	createdAt: string
 	updatedAt: string
+	notes: string | null
 }
 
 export interface CreateBook {
@@ -28,6 +29,7 @@ export interface CreateBook {
 	rating?: number
 	startedAt?: string
 	completedAt?: string
+	notes?: string | null
 }
 
 export type UpdateBook = Partial<CreateBook> & { id: string }

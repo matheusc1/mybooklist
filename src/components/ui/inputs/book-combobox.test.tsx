@@ -20,6 +20,7 @@ const books: Book[] = [
 		completedAt: null,
 		createdAt: '',
 		updatedAt: '',
+		notes: null,
 	},
 	{
 		id: 'book-2',
@@ -36,6 +37,7 @@ const books: Book[] = [
 		completedAt: null,
 		createdAt: '',
 		updatedAt: '',
+		notes: null,
 	},
 ]
 
