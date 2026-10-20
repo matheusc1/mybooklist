@@ -92,7 +92,7 @@ export function DeleteModal({
 				</Button>
 				<Button
 					variant="danger"
-					onClick={() => onConfirm(resetToPlanned)}
+					onClick={() => onConfirm(showResetCheckbox && resetToPlanned)}
 					disabled={pending}
 				>
 					{pending ? 'Deleting...' : 'Delete'}
