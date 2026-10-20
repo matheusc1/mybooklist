@@ -8,7 +8,7 @@ interface TextareaProps
 		'value' | 'onChange' | 'maxLength'
 	> {
 	value: string
-	onChange: (value: string) => void
+	onChange?: (value: string) => void
 	maxLength: number
 }
 
@@ -24,7 +24,7 @@ export function Textarea({
 	const isNearLimit = value.length >= maxLength * 0.9
 
 	function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
-		onChange(event.target.value)
+		onChange?.(event.target.value)
 	}
 
 	return (
