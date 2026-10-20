@@ -61,7 +61,7 @@ export function BookCard({ book, onClick }: BookCardProps) {
 				{showProgress && (
 					<div className="absolute bottom-0 left-0 right-0 h-0.75 bg-white/8">
 						<div
-							className="h-full bg-linear-to-r from-accent to-accent2"
+							className="h-full bg-gradient-progress"
 							style={{ width: `${progress}%` }}
 						/>
 					</div>
