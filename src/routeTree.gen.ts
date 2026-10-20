@@ -18,6 +18,7 @@ import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedBooksRouteImport } from './routes/_authenticated/books'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedReadingSpeedRouteImport } from './routes/_authenticated/reading-speed'
+import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books_.$bookId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,12 @@ const AuthenticatedReadingSpeedRoute =
     path: '/reading-speed',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedBooksBookIdRoute =
+  AuthenticatedBooksBookIdRouteImport.update({
+    id: '/books_/$bookId',
+    path: '/books/$bookId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/books': typeof AuthenticatedBooksRoute
   '/home': typeof AuthenticatedHomeRoute
   '/reading-speed': typeof AuthenticatedReadingSpeedRoute
+  '/books/$bookId': typeof AuthenticatedBooksBookIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,6 +92,7 @@ export interface FileRoutesByTo {
   '/books': typeof AuthenticatedBooksRoute
   '/home': typeof AuthenticatedHomeRoute
   '/reading-speed': typeof AuthenticatedReadingSpeedRoute
+  '/books/$bookId': typeof AuthenticatedBooksBookIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,6 +105,7 @@ export interface FileRoutesById {
   '/_authenticated/books': typeof AuthenticatedBooksRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/reading-speed': typeof AuthenticatedReadingSpeedRoute
+  '/_authenticated/books_/$bookId': typeof AuthenticatedBooksBookIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/books'
     | '/home'
     | '/reading-speed'
+    | '/books/$bookId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/books'
     | '/home'
     | '/reading-speed'
+    | '/books/$bookId'
   id:
     | '__root__'
     | '/'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
     | '/_authenticated/books'
     | '/_authenticated/home'
     | '/_authenticated/reading-speed'
+    | '/_authenticated/books_/$bookId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReadingSpeedRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/books_/$bookId': {
+      id: '/_authenticated/books_/$bookId'
+      path: '/books/$bookId'
+      fullPath: '/books/$bookId'
+      preLoaderRoute: typeof AuthenticatedBooksBookIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -212,6 +232,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedBooksRoute: typeof AuthenticatedBooksRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedReadingSpeedRoute: typeof AuthenticatedReadingSpeedRoute
+  AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -219,6 +240,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBooksRoute: AuthenticatedBooksRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedReadingSpeedRoute: AuthenticatedReadingSpeedRoute,
+  AuthenticatedBooksBookIdRoute: AuthenticatedBooksBookIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
