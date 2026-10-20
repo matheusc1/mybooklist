@@ -28,6 +28,7 @@ interface ReadingSessionModalProps {
 		toPage: number
 	}
 	defaultDate?: string
+	defaultBook?: { id: string; currentPage: number }
 }
 
 const readingSessionSchema = z
@@ -54,6 +55,7 @@ export function ReadingSessionModal({
 	session,
 	onOpenChange,
 	defaultDate,
+	defaultBook,
 }: ReadingSessionModalProps) {
 	const { data: books } = useBooks()
 	const { mutate: createReadingSession, isPending: isCreating } =
@@ -74,9 +76,12 @@ export function ReadingSessionModal({
 
 	const form = useForm({
 		defaultValues: {
-			bookId: session?.bookId ?? '',
+			bookId: session?.bookId ?? defaultBook?.id ?? '',
 			readAt: session?.date ?? defaultDate ?? getTodayDate(),
-			fromPage: session?.fromPage ?? (undefined as number | undefined),
+			fromPage:
+				session?.fromPage ??
+				defaultBook?.currentPage ??
+				(undefined as number | undefined),
 			toPage: session?.toPage ?? (undefined as number | undefined),
 		},
 		validators: {
@@ -163,8 +168,8 @@ export function ReadingSessionModal({
 														form.setFieldValue('fromPage', book.currentPage)
 													}
 												}}
-												disabled={isView || isEdit}
-												readOnly={isView || isEdit}
+												disabled={isView || isEdit || !!defaultBook}
+												readOnly={isView || isEdit || !!defaultBook}
 												container={containerRef}
 											/>
 											<FieldError
