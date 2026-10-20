@@ -8,22 +8,25 @@ export const queryKeys = {
 	goals: ['goals'],
 	dashboard: ['dashboard'],
 	activity: ['activity'],
+	bookDetails: ['book-details'],
 } as const
 
 type QueryDomain = keyof typeof queryKeys
 
 const invalidationGraph: Record<QueryDomain, QueryDomain[]> = {
-	books: ['books', 'dashboard', 'goals'],
+	books: ['books', 'dashboard', 'goals', 'bookDetails'],
 	readingSessions: [
 		'readingSessions',
 		'books',
 		'dashboard',
 		'activity',
 		'goals',
+		'bookDetails',
 	],
 	goals: ['goals'],
 	dashboard: ['dashboard'],
 	activity: ['activity'],
+	bookDetails: ['bookDetails'],
 }
 
 export function invalidateDomain(
