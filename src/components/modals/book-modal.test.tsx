@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCreateBook, useDeleteBook, useUpdateBook } from '#/hooks/use-books'
 import { fireEvent, render, screen, waitFor } from '#/test/test-utils'
 import type { Book } from '#/types/book'
+import { getTodayDate } from '#/utils/format-date'
 import { BookModal } from './book-modal'
 
 const createBook = vi.fn()
@@ -193,33 +194,40 @@ describe('BookModal', () => {
 		)
 	})
 
-	it('enters edit mode from view mode', async () => {
-		const user = userEvent.setup()
-		render(<BookModal open mode="view" book={book} onOpenChange={vi.fn()} />)
+	it('fills the completion date with the local date when a book is completed', async () => {
+		render(<BookModal open onOpenChange={vi.fn()} />)
 
-		await user.click(screen.getByRole('button', { name: 'Edit Book' }))
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Total Pages' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Current Page' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
 
-		expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
-		expect(screen.getByRole('textbox', { name: 'Title' })).not.toHaveAttribute(
-			'readonly',
+		await waitFor(() =>
+			expect(screen.getByLabelText('Date Completed')).toHaveValue(
+				getTodayDate(),
+			),
 		)
 	})
 
-	it('renders view fields as read-only before editing', () => {
-		render(<BookModal open mode="view" book={book} onOpenChange={vi.fn()} />)
+	it('uses the add title and does not offer delete when creating', () => {
+		render(<BookModal open onOpenChange={vi.fn()} />)
 
-		expect(screen.getByRole('textbox', { name: 'Title' })).toHaveAttribute(
-			'readonly',
-		)
-		expect(screen.getByRole('textbox', { name: 'Author' })).toHaveAttribute(
-			'readonly',
-		)
-		expect(screen.getByRole('textbox', { name: 'Notes' })).toHaveAttribute(
-			'readonly',
-		)
+		expect(screen.getByText('Add Book')).toBeInTheDocument()
 		expect(
-			screen.getByRole('button', { name: 'Edit Book' }),
-		).toBeInTheDocument()
+			screen.queryByRole('button', { name: 'Delete book' }),
+		).not.toBeInTheDocument()
+	})
+
+	it('uses the edit title and offers delete when editing', () => {
+		render(<BookModal open mode="edit" book={book} onOpenChange={vi.fn()} />)
+
+		expect(screen.getByText('Edit Book')).toBeInTheDocument()
+		expect(screen.getByRole('button', { name: 'Delete book' })).toBeEnabled()
+		expect(screen.getByRole('textbox', { name: 'Title' })).not.toHaveAttribute(
+			'readonly',
+		)
 	})
 
 	it('submits the transformed update payload', async () => {
@@ -322,9 +330,20 @@ describe('BookModal', () => {
 		expect(createBook).not.toHaveBeenCalled()
 	})
 
-	it('deletes a book from view mode', async () => {
+	it('deletes a book from edit mode, closes the modal, and reports it', async () => {
 		const user = userEvent.setup()
-		render(<BookModal open mode="view" book={book} onOpenChange={vi.fn()} />)
+		const onOpenChange = vi.fn()
+		const onDeleted = vi.fn()
+		deleteBook.mockImplementation((_id, options) => options.onSuccess())
+		render(
+			<BookModal
+				open
+				mode="edit"
+				book={book}
+				onOpenChange={onOpenChange}
+				onDeleted={onDeleted}
+			/>,
+		)
 
 		await user.click(screen.getByRole('button', { name: 'Delete book' }))
 		fireEvent.click(
@@ -338,6 +357,27 @@ describe('BookModal', () => {
 			'book-1',
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
+		expect(onOpenChange).toHaveBeenCalledWith(false)
+		expect(onDeleted).toHaveBeenCalledTimes(1)
+	})
+
+	it('deletes a book without requiring an onDeleted callback', async () => {
+		const user = userEvent.setup()
+		const onOpenChange = vi.fn()
+		deleteBook.mockImplementation((_id, options) => options.onSuccess())
+		render(
+			<BookModal open mode="edit" book={book} onOpenChange={onOpenChange} />,
+		)
+
+		await user.click(screen.getByRole('button', { name: 'Delete book' }))
+		fireEvent.click(
+			await screen.findByRole('button', {
+				name: 'Confirm delete',
+				hidden: true,
+			}),
+		)
+
+		expect(onOpenChange).toHaveBeenCalledWith(false)
 	})
 
 	it('disables actions while a mutation is pending', () => {

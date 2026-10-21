@@ -7,6 +7,7 @@ import type { ActivityStatus } from '#/constants/book-status'
 import { useCreateBook, useDeleteBook, useUpdateBook } from '#/hooks/use-books'
 import type { Book, CreateBook } from '#/types/book'
 import type { ModalMode } from '#/types/common'
+import { getTodayDate } from '#/utils/format-date'
 import { getPercent } from '#/utils/get-percent'
 import { Button } from '../ui/button'
 import {
@@ -21,11 +22,14 @@ import {
 import { Modal } from '../ui/modal'
 import { DeleteModal } from './delete-modal'
 
+type BookModalMode = Exclude<ModalMode, 'view'>
+
 interface BookModalProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	mode?: ModalMode
+	mode?: BookModalMode
 	book?: Book
+	onDeleted?: () => void
 }
 
 const bookSchema = z
@@ -54,23 +58,21 @@ const bookSchema = z
 		},
 	)
 
-const headerTitleMap = {
+const headerTitleMap: Record<BookModalMode, string> = {
 	add: 'Add Book',
 	edit: 'Edit Book',
-	view: 'Book Details',
-} as const
+}
 
 export function BookModal({
 	open,
 	onOpenChange,
 	mode = 'add',
 	book,
+	onDeleted,
 }: BookModalProps) {
-	const [currentMode, setCurrentMode] = useState<ModalMode>(mode)
 	const [deleteOpen, setDeleteOpen] = useState(false)
 
-	const isView = currentMode === 'view'
-	const secondaryLabel = isView ? 'Close' : 'Cancel'
+	const isEdit = mode === 'edit'
 
 	const { mutate: createBook, isPending: isCreating } = useCreateBook()
 	const { mutate: updateBook, isPending: isUpdating } = useUpdateBook()
@@ -108,7 +110,7 @@ export function BookModal({
 				notes: value.notes,
 			}
 
-			if (currentMode === 'add') {
+			if (!isEdit) {
 				createBook(payload, { onSuccess: () => onOpenChange(false) })
 				return
 			}
@@ -128,7 +130,6 @@ export function BookModal({
 	const prevStatusRef = useRef<string | null>(null)
 
 	const progress = getPercent(currentPage ?? 0, totalPages ?? 0)
-	const headerTitle = headerTitleMap[currentMode]
 
 	function handlePageChange(
 		value: number,
@@ -142,8 +143,7 @@ export function BookModal({
 		if (total > 0 && current >= total) {
 			if (status !== 'completed') prevStatusRef.current = status
 			form.setFieldValue('status', 'completed')
-			const today = new Date().toISOString().split('T')[0]
-			form.setFieldValue('completedAt', today)
+			form.setFieldValue('completedAt', getTodayDate())
 		} else if (prevStatusRef.current !== null) {
 			form.setFieldValue('status', prevStatusRef.current)
 			form.setFieldValue('completedAt', '')
@@ -153,7 +153,6 @@ export function BookModal({
 
 	function handleCancel() {
 		form.reset()
-		setCurrentMode(mode)
 		onOpenChange(false)
 	}
 
@@ -163,6 +162,7 @@ export function BookModal({
 			onSuccess: () => {
 				setDeleteOpen(false)
 				onOpenChange(false)
+				onDeleted?.()
 			},
 		})
 	}
@@ -170,7 +170,7 @@ export function BookModal({
 	return (
 		<>
 			<Modal.Root open={open} onOpenChange={onOpenChange}>
-				<Modal.Header eyebrow="Library" title={headerTitle} />
+				<Modal.Header eyebrow="Library" title={headerTitleMap[mode]} />
 
 				<Modal.Body>
 					<form
@@ -181,12 +181,12 @@ export function BookModal({
 							form.handleSubmit()
 						}}
 					>
-						<fieldset className="space-y-4" disabled={isView}>
+						<fieldset className="space-y-4">
 							<legend className="sr-only">Book details</legend>
 							<form.Field name="title">
 								{(field) => (
 									<div className="flex flex-col gap-2">
-										<FieldLabel htmlFor={field.name} required={!isView}>
+										<FieldLabel htmlFor={field.name} required>
 											Title
 										</FieldLabel>
 										<Input
@@ -196,7 +196,6 @@ export function BookModal({
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
 											placeholder="e.g. The Name of the Wind"
-											readOnly={isView}
 											aria-describedby={
 												field.state.meta.errors[0]
 													? `${field.name}-error`
@@ -216,7 +215,7 @@ export function BookModal({
 							<form.Field name="author">
 								{(field) => (
 									<div className="flex flex-col gap-2">
-										<FieldLabel htmlFor={field.name} required={!isView}>
+										<FieldLabel htmlFor={field.name} required>
 											Author
 										</FieldLabel>
 										<Input
@@ -226,7 +225,6 @@ export function BookModal({
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
 											placeholder="e.g. Patrick Rothfuss"
-											readOnly={isView}
 											aria-describedby={
 												field.state.meta.errors[0]
 													? `${field.name}-error`
@@ -254,7 +252,6 @@ export function BookModal({
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
 											placeholder="e.g. https://covers.openlibrary.org/b/id/15143311-M.jpg"
-											readOnly={isView}
 											aria-describedby={
 												field.state.meta.errors[0]
 													? `${field.name}-error`
@@ -274,11 +271,10 @@ export function BookModal({
 							<form.Field name="genre">
 								{(field) => (
 									<div className="flex flex-col gap-2">
-										<FieldLabel required={!isView}>Genre</FieldLabel>
+										<FieldLabel required>Genre</FieldLabel>
 										<GenreSelector
 											value={field.state.value}
 											onValueChange={field.handleChange}
-											disabled={isView}
 										/>
 										<FieldError
 											message={field.state.meta.errors[0]?.message}
@@ -291,13 +287,11 @@ export function BookModal({
 							<form.Field name="status">
 								{(field) => (
 									<div className="flex flex-col gap-2">
-										<FieldLabel required={!isView}>Status</FieldLabel>
+										<FieldLabel required>Status</FieldLabel>
 										<BookStatusSelector
 											value={field.state.value}
 											onValueChange={field.handleChange}
 											onBlur={field.handleBlur}
-											disabled={isView}
-											readOnly={isView}
 										/>
 										<FieldError
 											message={field.state.meta.errors[0]?.message}
@@ -307,81 +301,70 @@ export function BookModal({
 								)}
 							</form.Field>
 
-							{!(isView && status === 'completed') && (
-								<div className="flex gap-3">
-									<form.Field name="currentPage">
-										{(field) => (
-											<div className="flex-1 flex flex-col gap-2">
-												<FieldLabel htmlFor={field.name}>
-													Current Page
-												</FieldLabel>
-												<Input
-													id={field.name}
-													name={field.name}
-													type="number"
-													value={field.state.value ?? ''}
-													onBlur={field.handleBlur}
-													onChange={(e) =>
-														handlePageChange(
-															e.target.valueAsNumber,
-															'currentPage',
-														)
-													}
-													placeholder="0"
-													readOnly={isView}
-													aria-describedby={
-														field.state.meta.errors[0]
-															? `${field.name}-error`
-															: undefined
-													}
-													aria-invalid={!!field.state.meta.errors[0]}
-												/>
-												<FieldError
-													id={`${field.name}-error`}
-													message={field.state.meta.errors[0]?.message}
-													className="-mt-1"
-												/>
-											</div>
-										)}
-									</form.Field>
+							<div className="flex gap-3">
+								<form.Field name="currentPage">
+									{(field) => (
+										<div className="flex-1 flex flex-col gap-2">
+											<FieldLabel htmlFor={field.name}>Current Page</FieldLabel>
+											<Input
+												id={field.name}
+												name={field.name}
+												type="number"
+												value={field.state.value ?? ''}
+												onBlur={field.handleBlur}
+												onChange={(e) =>
+													handlePageChange(
+														e.target.valueAsNumber,
+														'currentPage',
+													)
+												}
+												placeholder="0"
+												aria-describedby={
+													field.state.meta.errors[0]
+														? `${field.name}-error`
+														: undefined
+												}
+												aria-invalid={!!field.state.meta.errors[0]}
+											/>
+											<FieldError
+												id={`${field.name}-error`}
+												message={field.state.meta.errors[0]?.message}
+												className="-mt-1"
+											/>
+										</div>
+									)}
+								</form.Field>
 
-									<form.Field name="totalPages">
-										{(field) => (
-											<div className="flex-1 flex flex-col gap-2">
-												<FieldLabel htmlFor={field.name}>
-													Total Pages
-												</FieldLabel>
-												<Input
-													id={field.name}
-													name={field.name}
-													type="number"
-													value={field.state.value ?? ''}
-													onBlur={field.handleBlur}
-													onChange={(e) =>
-														handlePageChange(
-															e.target.valueAsNumber,
-															'totalPages',
-														)
-													}
-													placeholder="e.g. 622"
-													readOnly={isView}
-													aria-describedby={
-														field.state.meta.errors[0]
-															? `${field.name}-error`
-															: undefined
-													}
-													aria-invalid={!!field.state.meta.errors[0]}
-												/>
-												<FieldError
-													id={`${field.name}-error`}
-													message={field.state.meta.errors[0]?.message}
-													className="-mt-1"
-												/>
-											</div>
-										)}
-									</form.Field>
-								</div>
-							)}
+								<form.Field name="totalPages">
+									{(field) => (
+										<div className="flex-1 flex flex-col gap-2">
+											<FieldLabel htmlFor={field.name}>Total Pages</FieldLabel>
+											<Input
+												id={field.name}
+												name={field.name}
+												type="number"
+												value={field.state.value ?? ''}
+												onBlur={field.handleBlur}
+												onChange={(e) =>
+													handlePageChange(e.target.valueAsNumber, 'totalPages')
+												}
+												placeholder="e.g. 622"
+												aria-describedby={
+													field.state.meta.errors[0]
+														? `${field.name}-error`
+														: undefined
+												}
+												aria-invalid={!!field.state.meta.errors[0]}
+											/>
+											<FieldError
+												id={`${field.name}-error`}
+												message={field.state.meta.errors[0]?.message}
+												className="-mt-1"
+											/>
+										</div>
+									)}
+								</form.Field>
+							</div>
 
 							<div className="flex flex-col items-center justify-center gap-2 p-4 bg-surface2 rounded-lg border border-border">
 								<div className="w-full flex justify-between">
@@ -412,7 +395,6 @@ export function BookModal({
 										<RatingStars
 											value={field.state.value}
 											onChange={field.handleChange}
-											disabled={isView}
 										/>
 									</div>
 								)}
@@ -430,7 +412,6 @@ export function BookModal({
 												value={field.state.value}
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
-												readOnly={isView}
 											/>
 										</div>
 									)}
@@ -450,7 +431,6 @@ export function BookModal({
 													value={field.state.value}
 													onBlur={field.handleBlur}
 													onChange={(e) => field.handleChange(e.target.value)}
-													readOnly={isView}
 												/>
 											</div>
 										)}
@@ -469,7 +449,6 @@ export function BookModal({
 											onBlur={field.handleBlur}
 											onChange={field.handleChange}
 											maxLength={MAX_NOTES_LENGTH}
-											readOnly={isView}
 											placeholder="Thoughts, a summary, your review, or anything else you want to remember about this book..."
 										/>
 									</div>
@@ -480,7 +459,7 @@ export function BookModal({
 				</Modal.Body>
 
 				<Modal.Footer>
-					{isView && (
+					{isEdit && (
 						<Button
 							onClick={() => setDeleteOpen(true)}
 							className="mr-auto"
@@ -506,26 +485,15 @@ export function BookModal({
 										onClick={handleCancel}
 										disabled={isPending}
 									>
-										{secondaryLabel}
+										Cancel
 									</Button>
-									{isView ? (
-										<Button
-											key="edit"
-											type="button"
-											onClick={() => setCurrentMode('edit')}
-										>
-											Edit Book
-										</Button>
-									) : (
-										<Button
-											key="save"
-											form="book-form"
-											type="submit"
-											disabled={!canSubmit || isPending}
-										>
-											{isPending ? 'Saving...' : 'Save'}
-										</Button>
-									)}
+									<Button
+										form="book-form"
+										type="submit"
+										disabled={!canSubmit || isPending}
+									>
+										{isPending ? 'Saving...' : 'Save'}
+									</Button>
 								</>
 							)
 						}}
