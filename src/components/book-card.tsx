@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { LucideStar } from 'lucide-react'
 import { BOOK_STATUS } from '#/constants/book-status'
 import type { Book } from '#/types/book'
@@ -6,7 +7,6 @@ import { Skeleton } from './ui/skeleton'
 
 interface BookCardProps {
 	book: Book
-	onClick?: () => void
 }
 
 function Stars({ rating }: { rating: number }) {
@@ -28,7 +28,7 @@ function Stars({ rating }: { rating: number }) {
 	)
 }
 
-export function BookCard({ book, onClick }: BookCardProps) {
+export function BookCard({ book }: BookCardProps) {
 	const showProgress = book.status === 'reading' || book.status === 'paused'
 	const showRating =
 		book.status === 'completed' && !!book.rating && book.rating > 0
@@ -38,10 +38,10 @@ export function BookCard({ book, onClick }: BookCardProps) {
 		: 0
 
 	return (
-		<button
-			type="button"
-			className="group cursor-pointer animate-fade-up text-left w-full"
-			onClick={onClick}
+		<Link
+			to="/books/$bookId"
+			params={{ bookId: String(book.id) }}
+			className="group block animate-fade-up text-left w-full"
 		>
 			<span className="sr-only">
 				{BOOK_STATUS[book.status].label}
@@ -86,7 +86,7 @@ export function BookCard({ book, onClick }: BookCardProps) {
 					{showRating && <Stars rating={book.rating as number} />}
 				</div>
 			</div>
-		</button>
+		</Link>
 	)
 }
 
