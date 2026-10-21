@@ -7,7 +7,7 @@ import {
 	it,
 	vi,
 } from 'vitest'
-import { formatBookDate, getTodayDate } from './format-date'
+import { formatBookDate, formatShortDate, getTodayDate } from './format-date'
 
 describe('formatBookDate', () => {
 	const originalTZ = process.env.TZ
@@ -43,5 +43,11 @@ describe('getTodayDate', () => {
 		vi.setSystemTime(new Date(2024, 6, 9, 14, 30))
 
 		expect(getTodayDate()).toBe('2024-07-09')
+	})
+})
+
+describe('formatShortDate', () => {
+	it('formats date-only values without a year', () => {
+		expect(formatShortDate('2024-01-15')).toBe('Jan 15')
 	})
 })

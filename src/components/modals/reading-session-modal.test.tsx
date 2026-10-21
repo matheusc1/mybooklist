@@ -25,12 +25,18 @@ vi.mock('#/hooks/use-reading-sessions', () => ({
 
 vi.mock('../ui/inputs/book-combobox', () => ({
 	BookCombobox: ({
+		value,
+		disabled,
 		onValueChange,
 	}: {
+		value: { id: string } | null
+		disabled?: boolean
 		onValueChange: (book: unknown) => void
 	}) => (
 		<select
 			aria-label="Book"
+			value={value?.id ?? ''}
+			disabled={disabled}
 			onChange={(event) =>
 				onValueChange(
 					event.target.value
@@ -137,6 +143,22 @@ describe('ReadingSessionModal', () => {
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
 		expect(onOpenChange).toHaveBeenCalledWith(false)
+	})
+
+	it('prefills and locks the book when a default book is provided', () => {
+		render(
+			<ReadingSessionModal
+				open
+				onOpenChange={vi.fn()}
+				defaultBook={{ id: 'book-1', currentPage: 42 }}
+			/>,
+		)
+
+		expect(screen.getByRole('combobox', { name: 'Book' })).toHaveValue('book-1')
+		expect(screen.getByRole('combobox', { name: 'Book' })).toBeDisabled()
+		expect(screen.getByRole('spinbutton', { name: 'From page' })).toHaveValue(
+			42,
+		)
 	})
 
 	it('transitions from view mode to edit mode', async () => {

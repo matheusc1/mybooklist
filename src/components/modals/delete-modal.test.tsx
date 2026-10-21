@@ -48,6 +48,16 @@ describe('DeleteModal', () => {
 		expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
 	})
 
+	it('does not request a progress reset when reset controls are unavailable', async () => {
+		const user = userEvent.setup()
+		const onConfirm = vi.fn()
+		renderDeleteModal({ onConfirm })
+
+		await user.click(screen.getByRole('button', { name: 'Delete' }))
+
+		expect(onConfirm).toHaveBeenCalledWith(false)
+	})
+
 	it('does not show the reset controls for book deletion', () => {
 		renderDeleteModal({ type: 'book' })
 

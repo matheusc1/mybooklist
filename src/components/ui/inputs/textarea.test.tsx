@@ -86,4 +86,27 @@ describe('Textarea', () => {
 
 		expect(screen.getByPlaceholderText('Write here')).toBeInTheDocument()
 	})
+
+	it('supports read-only usage without an onChange callback', () => {
+		render(
+			<Textarea
+				aria-label="Book notes"
+				value="Read-only notes"
+				readOnly
+				maxLength={5000}
+			/>,
+		)
+
+		expect(screen.getByRole('textbox', { name: 'Book notes' })).toHaveValue(
+			'Read-only notes',
+		)
+		expect(screen.getByRole('textbox', { name: 'Book notes' })).toHaveAttribute(
+			'readonly',
+		)
+		expect(() =>
+			fireEvent.change(screen.getByRole('textbox', { name: 'Book notes' }), {
+				target: { value: 'Updated notes' },
+			}),
+		).not.toThrow()
+	})
 })

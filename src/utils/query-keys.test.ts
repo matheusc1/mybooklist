@@ -10,6 +10,7 @@ describe('queryKeys', () => {
 			goals: ['goals'],
 			dashboard: ['dashboard'],
 			activity: ['activity'],
+			bookDetails: ['book-details'],
 		})
 	})
 })
@@ -22,14 +23,22 @@ describe('invalidateDomain', () => {
 	})
 
 	it.each([
-		['books', ['books', 'dashboard', 'goals']],
+		['books', ['books', 'dashboard', 'goals', 'bookDetails']],
 		[
 			'readingSessions',
-			['readingSessions', 'books', 'dashboard', 'activity', 'goals'],
+			[
+				'readingSessions',
+				'books',
+				'dashboard',
+				'activity',
+				'goals',
+				'bookDetails',
+			],
 		],
 		['goals', ['goals']],
 		['dashboard', ['dashboard']],
 		['activity', ['activity']],
+		['bookDetails', ['bookDetails']],
 	] as const)('invalidates the affected domains for %s', (domain, affectedDomains) => {
 		queryClient = new QueryClient()
 		const invalidateQueries = vi.spyOn(queryClient, 'invalidateQueries')
