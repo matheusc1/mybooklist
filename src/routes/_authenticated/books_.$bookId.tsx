@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
 	LucideBookOpen,
 	LucidePencil,
@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { useState } from 'react'
+import { BackLink } from '#/components/book-details/back-link'
 import { BookMetadata } from '#/components/book-details/book-metadata'
 import { RatingDisplay } from '#/components/book-details/rating-display'
 import { BookModal } from '#/components/modals/book-modal'
@@ -18,7 +19,6 @@ import { BookStatusSelector, Textarea } from '#/components/ui/inputs'
 import { MAX_NOTES_LENGTH } from '#/constants/book'
 import { useBookDetails } from '#/hooks/use-book-details'
 import { useDeleteReadingSession } from '#/hooks/use-reading-sessions'
-import type { Book } from '#/types/book'
 import type { ModalMode } from '#/types/common'
 import { formatShortDate } from '#/utils/format-date'
 import { formatReadingTime } from '#/utils/format-reading-time'
@@ -53,12 +53,10 @@ function getElapsedDays(startedAt: string | null, completedAt: string | null) {
 
 function BookDetailsPage() {
 	const { bookId } = Route.useParams()
+	const navigate = useNavigate()
 	const { data: bookDetails, isLoading, isError } = useBookDetails(bookId)
 
-	const [bookModal, setBookModal] = useState<{
-		book?: Book
-		mode: ModalMode
-	} | null>(null)
+	const [isEditOpen, setIsEditOpen] = useState(false)
 
 	const [sessionModal, setSessionModal] = useState<{
 		session?: ModalSession
@@ -100,12 +98,7 @@ function BookDetailsPage() {
 	if (isError || !bookDetails) {
 		return (
 			<main className="mx-auto min-h-[calc(100vh-69px)] max-w-275 p-5 lg:p-10">
-				<Link
-					to="/books"
-					className="text-sm text-muted transition-colors hover:text-accent"
-				>
-					← My Books
-				</Link>
+				<BackLink className="text-sm text-muted transition-colors hover:text-accent" />
 				<div className="mt-12 text-center">
 					<h1 className="font-serif text-xl font-semibold">
 						Unable to load book
@@ -152,18 +145,9 @@ function BookDetailsPage() {
 		<>
 			<main className="mx-auto min-h-[calc(100vh-69px)] w-full max-w-275 space-y-7 px-5 py-6 pb-10 animate-fade-up lg:space-y-8 lg:px-10 lg:py-8">
 				<div className="flex items-center justify-between gap-3">
-					<Link
-						to="/books"
-						className="inline-block font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent"
-					>
-						← My Books
-					</Link>
+					<BackLink className="inline-block font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent" />
 
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={() => setBookModal({ book, mode: 'edit' })}
-					>
+					<Button variant="ghost" size="sm" onClick={() => setIsEditOpen(true)}>
 						<LucidePencil aria-hidden="true" className="size-3.5" />
 						Edit book
 					</Button>
@@ -362,7 +346,7 @@ function BookDetailsPage() {
 															: '—'}
 													</span>
 
-													<div className="col-span-2 flex justify-end gap-1 md:col-span-1">
+													<div className="col-start-2 row-start-1 flex justify-end gap-1 md:col-auto md:row-auto">
 														<button
 															type="button"
 															title="Edit session"
@@ -436,14 +420,13 @@ function BookDetailsPage() {
 				</div>
 			</main>
 
-			{bookModal && (
+			{isEditOpen && (
 				<BookModal
 					open
-					onOpenChange={(open) => {
-						if (!open) setBookModal(null)
-					}}
-					mode={bookModal.mode}
-					book={bookModal.book}
+					onOpenChange={setIsEditOpen}
+					mode="edit"
+					book={book}
+					onDeleted={() => navigate({ to: '/books', replace: true })}
 				/>
 			)}
 

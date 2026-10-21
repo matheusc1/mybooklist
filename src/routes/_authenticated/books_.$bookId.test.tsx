@@ -16,35 +16,49 @@ vi.mock('#/hooks/use-reading-sessions', () => ({
 	useDeleteReadingSession: hooks.useDeleteReadingSession,
 }))
 vi.mock('#/components/modals/book-modal', () => ({
-	BookModal: ({ open }: { open: boolean }) =>
-		open ? <div role="dialog">Book editor</div> : null,
+	BookModal: ({ open, mode }: { open: boolean; mode?: string }) =>
+		open ? <div role="dialog">Book editor: {mode}</div> : null,
 }))
 vi.mock('#/components/modals/reading-session-modal', () => ({
 	ReadingSessionModal: ({
 		open,
+		mode,
+		session,
 		defaultBook,
 	}: {
 		open: boolean
+		mode?: string
+		session?: { id: string; bookId: string; date: string }
 		defaultBook?: { id: string; currentPage: number }
 	}) =>
 		open ? (
 			<div role="dialog">
-				Session book {defaultBook?.id}, from page {defaultBook?.currentPage}
+				Session {mode} book {defaultBook?.id}, from page{' '}
+				{defaultBook?.currentPage}
+				{session && `, editing ${session.id} on ${session.date}`}
 			</div>
 		) : null,
 }))
 vi.mock('#/components/modals/delete-modal', () => ({
 	DeleteModal: ({
 		open,
+		isLastSession,
 		onConfirm,
 	}: {
 		open: boolean
+		isLastSession?: boolean
 		onConfirm: (resetToPlanned: boolean) => void
 	}) =>
 		open ? (
-			<button type="button" onClick={() => onConfirm(false)}>
-				Confirm session deletion
-			</button>
+			<div>
+				<span>Last session: {String(isLastSession)}</span>
+				<button type="button" onClick={() => onConfirm(false)}>
+					Confirm session deletion
+				</button>
+				<button type="button" onClick={() => onConfirm(true)}>
+					Confirm deletion and reset
+				</button>
+			</div>
 		) : null,
 }))
 
@@ -91,6 +105,17 @@ const bookDetails: BookDetails = {
 	stats: { sessions: 2, readingTime: 60, activeDays: 2 },
 }
 
+const completedDetails: BookDetails = {
+	...bookDetails,
+	book: {
+		...bookDetails.book,
+		status: 'completed',
+		currentPage: 300,
+		startedAt: '2024-01-01',
+		completedAt: '2024-01-11',
+	},
+}
+
 beforeEach(() => {
 	vi.clearAllMocks()
 	hooks.useBookDetails.mockReturnValue({
@@ -124,11 +149,46 @@ describe('BookDetailsPage', () => {
 			screen.getByRole('region', { name: 'Reading statistics' }),
 		).toHaveTextContent('2')
 		expect(screen.getByText('Total reading time')).toBeInTheDocument()
-		expect(screen.getByText('A favorite adventure.')).toBeInTheDocument()
 
 		const rows = screen.getAllByRole('listitem')
 		expect(within(rows[0]).getByText('pp. 40-60')).toBeInTheDocument()
 		expect(within(rows[1]).getByText('pp. 20-30')).toBeInTheDocument()
+	})
+
+	it('shows notes as read-only text', async () => {
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		const notes = screen.getByRole('textbox', { name: 'Book notes' })
+		expect(notes).toHaveValue('A favorite adventure.')
+		expect(notes).toHaveAttribute('readonly')
+	})
+
+	it('shows a dash for a session without a calculated duration', async () => {
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		const rows = screen.getAllByRole('listitem')
+		expect(within(rows[1]).getByText('—')).toBeInTheDocument()
+		expect(within(rows[0]).queryByText('—')).not.toBeInTheDocument()
+	})
+
+	it('does not show days it took while the book is not completed', async () => {
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		expect(screen.queryByText('Days it took')).not.toBeInTheDocument()
+	})
+
+	it('shows days it took once the book is completed', async () => {
+		hooks.useBookDetails.mockReturnValue({
+			data: completedDetails,
+			isLoading: false,
+			isError: false,
+		})
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		expect(screen.getByText('Days it took')).toBeInTheDocument()
+		expect(
+			screen.getByRole('region', { name: 'Reading statistics' }),
+		).toHaveTextContent('10')
 	})
 
 	it('shows the empty-session state without reading statistics', async () => {
@@ -176,10 +236,28 @@ describe('BookDetailsPage', () => {
 		expect(
 			screen.getByRole('heading', { name: 'Unable to load book' }),
 		).toBeInTheDocument()
-		expect(screen.getByRole('link', { name: '← My Books' })).toHaveAttribute(
+		expect(screen.getByRole('link', { name: '← Back' })).toHaveAttribute(
 			'href',
 			'/books',
 		)
+	})
+
+	it('links back to the book list from the page header', async () => {
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		expect(screen.getByRole('link', { name: '← Back' })).toHaveAttribute(
+			'href',
+			'/books',
+		)
+	})
+
+	it('opens the book editor in edit mode', async () => {
+		const user = userEvent.setup()
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(screen.getByRole('button', { name: 'Edit book' }))
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('Book editor: edit')
 	})
 
 	it('opens a session form prefilled with this book and its current page', async () => {
@@ -189,7 +267,88 @@ describe('BookDetailsPage', () => {
 		await user.click(screen.getByRole('button', { name: 'Log session' }))
 
 		expect(screen.getByRole('dialog')).toHaveTextContent(
-			'Session book book-1, from page 75',
+			'Session add book book-1, from page 75',
+		)
+	})
+
+	it('opens the session form from the empty state', async () => {
+		const user = userEvent.setup()
+		hooks.useBookDetails.mockReturnValue({
+			data: {
+				...bookDetails,
+				readingSessions: [],
+				stats: { sessions: 0, readingTime: 0, activeDays: 0 },
+			},
+			isLoading: false,
+			isError: false,
+		})
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(screen.getByRole('button', { name: 'Log session' }))
+
+		expect(screen.getByRole('dialog')).toHaveTextContent(
+			'Session add book book-1, from page 75',
+		)
+	})
+
+	it('opens a session in edit mode with its stored values', async () => {
+		const user = userEvent.setup()
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(
+			screen.getAllByRole('button', { name: /Edit session from/ })[0],
+		)
+
+		expect(screen.getByRole('dialog')).toHaveTextContent(
+			'Session edit book book-1',
+		)
+		expect(screen.getByRole('dialog')).toHaveTextContent(
+			'editing session-new on 2024-02-10',
+		)
+	})
+
+	it('deletes the chosen session without resetting the book', async () => {
+		const user = userEvent.setup()
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(
+			screen.getAllByRole('button', { name: /Delete session from/ })[0],
+		)
+		expect(screen.getByText('Last session: false')).toBeInTheDocument()
+		await user.click(
+			screen.getByRole('button', { name: 'Confirm session deletion' }),
+		)
+
+		expect(hooks.deleteSession).toHaveBeenCalledWith(
+			{ id: 'session-new', resetToPlanned: false },
+			expect.objectContaining({ onSuccess: expect.any(Function) }),
+		)
+	})
+
+	it('tells the delete modal when it is the last session and passes the reset choice', async () => {
+		const user = userEvent.setup()
+		hooks.useBookDetails.mockReturnValue({
+			data: {
+				...bookDetails,
+				readingSessions: [bookDetails.readingSessions[1]],
+				stats: { sessions: 1, readingTime: 61, activeDays: 1 },
+			},
+			isLoading: false,
+			isError: false,
+		})
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(
+			screen.getByRole('button', { name: /Delete session from/ }),
+		)
+		expect(screen.getByText('Last session: true')).toBeInTheDocument()
+		await user.click(
+			screen.getByRole('button', { name: 'Confirm deletion and reset' }),
+		)
+
+		expect(hooks.deleteSession).toHaveBeenCalledWith(
+			{ id: 'session-new', resetToPlanned: true },
+			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
 	})
 })
