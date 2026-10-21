@@ -7,16 +7,26 @@ import {
 	LucideX,
 } from 'lucide-react'
 import { useState } from 'react'
+import z from 'zod'
 import { BookCard, BookCardSkeleton } from '#/components/book-card'
 import { BookModal } from '#/components/modals/book-modal'
 import { Button } from '#/components/ui/button'
 import type { ActivityStatus } from '#/constants/book-status'
 import { BOOK_STATUS } from '#/constants/book-status'
 import { useBooks } from '#/hooks/use-books'
-import type { Book } from '#/types/book'
-import type { ModalMode } from '#/types/common'
+
+const STATUS_VALUES = Object.keys(BOOK_STATUS) as [
+	ActivityStatus,
+	...ActivityStatus[],
+]
+
+const booksSearchSchema = z.object({
+	q: z.string().optional().catch(undefined),
+	status: z.enum(STATUS_VALUES).optional().catch(undefined),
+})
 
 export const Route = createFileRoute('/_authenticated/books')({
+	validateSearch: (search) => booksSearchSchema.parse(search),
 	head: () => ({
 		meta: [{ title: 'My Books | MyBookList' }],
 	}),
@@ -71,12 +81,27 @@ const filters: Filter[] = [
 
 function MyBooks() {
 	const { data: books, isLoading } = useBooks()
-	const [activeFilter, setActiveFilter] = useState<ActivityStatus | null>(null) // null = All
-	const [search, setSearch] = useState('')
-	const [bookModal, setBookModal] = useState<{
-		book?: Book
-		mode: ModalMode
-	} | null>(null)
+	const { q, status } = Route.useSearch()
+	const navigate = Route.useNavigate()
+
+	const activeFilter = status ?? null // null = All
+	const [search, setSearch] = useState(q ?? '')
+	const [isAddOpen, setIsAddOpen] = useState(false)
+
+	function updateSearch(value: string) {
+		setSearch(value)
+		navigate({
+			search: (prev) => ({ ...prev, q: value.trim() ? value : undefined }),
+			replace: true,
+		})
+	}
+
+	function updateFilter(next: ActivityStatus | null) {
+		navigate({
+			search: (prev) => ({ ...prev, status: next ?? undefined }),
+			replace: true,
+		})
+	}
 
 	const statusCounts = books?.reduce(
 		(acc, book) => {
@@ -129,7 +154,7 @@ function MyBooks() {
 					</p>
 				</div>
 
-				<Button onClick={() => setBookModal({ mode: 'add' })}>
+				<Button onClick={() => setIsAddOpen(true)}>
 					<LucidePlus aria-hidden="true" className="size-3" />
 					Add Book
 				</Button>
@@ -147,10 +172,10 @@ function MyBooks() {
 							placeholder="Search by title or author..."
 							aria-label="Search by title or author"
 							value={search}
-							onChange={(e) => setSearch(e.target.value)}
+							onChange={(e) => updateSearch(e.target.value)}
 							onKeyDown={(e) => {
 								if (e.key === 'Escape') {
-									setSearch('')
+									updateSearch('')
 								}
 							}}
 							className="w-full text-sm bg-surface border border-border py-2.5 pl-10 pr-10 rounded-lg placeholder:text-muted/55 outline-none input-focus"
@@ -159,7 +184,7 @@ function MyBooks() {
 							<button
 								type="button"
 								aria-label="Clear search"
-								onClick={() => setSearch('')}
+								onClick={() => updateSearch('')}
 								className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-muted hover:text-text hover:bg-surface2 transition-colors"
 							>
 								<LucideX aria-hidden="true" className="size-3.5" />
@@ -177,7 +202,7 @@ function MyBooks() {
 								<Button
 									key={label}
 									variant="ghost"
-									onClick={() => setActiveFilter(status)}
+									onClick={() => updateFilter(status)}
 									aria-pressed={isActive}
 									className={`py-2 px-3 gap-1.5 border-border ${
 										isActive
@@ -224,25 +249,14 @@ function MyBooks() {
 					<ul className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-5">
 						{filteredBooks?.map((book) => (
 							<li key={book.id}>
-								<BookCard
-									book={book}
-									onClick={() => setBookModal({ book, mode: 'view' })}
-								/>
+								<BookCard book={book} />
 							</li>
 						))}
 					</ul>
 				)}
 			</div>
 
-			{bookModal && (
-				<BookModal
-					key={bookModal.book?.id ?? 'add'}
-					open={!!bookModal}
-					onOpenChange={(v) => !v && setBookModal(null)}
-					mode={bookModal.mode}
-					book={bookModal.book}
-				/>
-			)}
+			{isAddOpen && <BookModal open onOpenChange={setIsAddOpen} mode="add" />}
 		</main>
 	)
 }

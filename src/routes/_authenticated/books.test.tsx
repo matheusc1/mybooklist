@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { renderWithRoute, screen } from '#/test/test-utils'
+import { renderWithRoute, screen, waitFor } from '#/test/test-utils'
 
 const books = vi.hoisted(() => vi.fn())
 
@@ -46,7 +46,7 @@ beforeEach(() => {
 })
 
 describe('MyBooks', () => {
-	it('filters books by search and opens a book in view mode', async () => {
+	it('filters books by search and links each book to its details page', async () => {
 		const user = userEvent.setup()
 		await renderWithRoute('/books', { authenticated: true })
 
@@ -54,10 +54,11 @@ describe('MyBooks', () => {
 			screen.getByRole('textbox', { name: 'Search by title or author' }),
 			'Hobbit',
 		)
-		expect(screen.getByText('The Hobbit')).toBeInTheDocument()
-		await user.click(screen.getByText('The Hobbit'))
 
-		expect(screen.getByRole('dialog')).toHaveTextContent('Book modal: view')
+		expect(screen.getByRole('link', { name: /The Hobbit/ })).toHaveAttribute(
+			'href',
+			'/books/book-1',
+		)
 	})
 
 	it('renders the empty library state', async () => {
@@ -80,9 +81,63 @@ describe('MyBooks', () => {
 
 		await user.click(screen.getByRole('button', { name: /Want to read 1/ }))
 
+		await waitFor(() =>
+			expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument(),
+		)
+		expect(screen.getByText('Dune')).toBeInTheDocument()
+		expect(screen.queryByText('1984')).not.toBeInTheDocument()
+	})
+
+	it('restores the full list when the All filter is selected again', async () => {
+		const user = userEvent.setup()
+		books.mockReturnValue({
+			data: [book, plannedBook, completedBook],
+			isLoading: false,
+		})
+		await renderWithRoute('/books', { authenticated: true })
+
+		await user.click(screen.getByRole('button', { name: /Want to read 1/ }))
+		await waitFor(() =>
+			expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument(),
+		)
+		await user.click(screen.getByRole('button', { name: /All 3/ }))
+
+		await waitFor(() =>
+			expect(screen.getByText('The Hobbit')).toBeInTheDocument(),
+		)
+		expect(screen.getByText('Dune')).toBeInTheDocument()
+		expect(screen.getByText('1984')).toBeInTheDocument()
+	})
+
+	it('starts with the search text from the URL', async () => {
+		books.mockReturnValue({ data: [book, plannedBook], isLoading: false })
+		await renderWithRoute('/books?q=Dune', { authenticated: true })
+
+		expect(
+			screen.getByRole('textbox', { name: 'Search by title or author' }),
+		).toHaveValue('Dune')
 		expect(screen.getByText('Dune')).toBeInTheDocument()
 		expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument()
-		expect(screen.queryByText('1984')).not.toBeInTheDocument()
+	})
+
+	it('starts with the status filter from the URL', async () => {
+		books.mockReturnValue({
+			data: [book, plannedBook, completedBook],
+			isLoading: false,
+		})
+		await renderWithRoute('/books?status=completed', { authenticated: true })
+
+		expect(screen.getByText('1984')).toBeInTheDocument()
+		expect(screen.queryByText('The Hobbit')).not.toBeInTheDocument()
+		expect(screen.queryByText('Dune')).not.toBeInTheDocument()
+	})
+
+	it('ignores an invalid status in the URL and shows every book', async () => {
+		books.mockReturnValue({ data: [book, plannedBook], isLoading: false })
+		await renderWithRoute('/books?status=unknown', { authenticated: true })
+
+		expect(screen.getByText('The Hobbit')).toBeInTheDocument()
+		expect(screen.getByText('Dune')).toBeInTheDocument()
 	})
 
 	it('matches trimmed search text without case sensitivity', async () => {
