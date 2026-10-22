@@ -1,6 +1,28 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient, QueryObserver } from '@tanstack/react-query'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { invalidateDomain, queryKeys } from './query-keys'
+import {
+	invalidateAfterBookDeletion,
+	invalidateDomain,
+	queryKeys,
+} from './query-keys'
+
+const queryClient = new QueryClient({
+	defaultOptions: { queries: { retry: false } },
+})
+const unsubscribes: Array<() => void> = []
+
+function observe(queryKey: readonly unknown[]) {
+	const queryFn = vi.fn().mockResolvedValue({})
+	const observer = new QueryObserver(queryClient, { queryKey, queryFn })
+	unsubscribes.push(observer.subscribe(() => {}))
+	return queryFn
+}
+
+afterEach(() => {
+	for (const unsubscribe of unsubscribes.splice(0)) unsubscribe()
+	queryClient.clear()
+	vi.restoreAllMocks()
+})
 
 describe('queryKeys', () => {
 	it('defines the feature query keys', () => {
@@ -16,12 +38,6 @@ describe('queryKeys', () => {
 })
 
 describe('invalidateDomain', () => {
-	let queryClient: QueryClient
-
-	afterEach(() => {
-		queryClient?.clear()
-	})
-
 	it.each([
 		['books', ['books', 'dashboard', 'goals', 'bookDetails']],
 		[
@@ -40,7 +56,6 @@ describe('invalidateDomain', () => {
 		['activity', ['activity']],
 		['bookDetails', ['bookDetails']],
 	] as const)('invalidates the affected domains for %s', (domain, affectedDomains) => {
-		queryClient = new QueryClient()
 		const invalidateQueries = vi.spyOn(queryClient, 'invalidateQueries')
 
 		invalidateDomain(queryClient, domain)
@@ -51,5 +66,30 @@ describe('invalidateDomain', () => {
 				queryKey: queryKeys[affectedDomain],
 			})
 		}
+	})
+})
+
+describe('invalidateAfterBookDeletion', () => {
+	it('refetches related data but not the deleted book details', async () => {
+		const deletedDetails = observe([...queryKeys.bookDetails, 'book-1'])
+		const otherDetails = observe([...queryKeys.bookDetails, 'book-2'])
+		const books = observe(queryKeys.books)
+		const activity = observe(queryKeys.activity)
+
+		await vi.waitFor(() => expect(queryClient.isFetching()).toBe(0))
+		for (const queryFn of [deletedDetails, otherDetails, books, activity]) {
+			expect(queryFn).toHaveBeenCalledTimes(1)
+		}
+
+		await invalidateAfterBookDeletion(queryClient, 'book-1')
+
+		expect(books).toHaveBeenCalledTimes(2)
+		expect(activity).toHaveBeenCalledTimes(2)
+		expect(otherDetails).toHaveBeenCalledTimes(2)
+		expect(deletedDetails).toHaveBeenCalledTimes(1)
+		expect(
+			queryClient.getQueryState([...queryKeys.bookDetails, 'book-1'])
+				?.isInvalidated,
+		).toBe(true)
 	})
 })

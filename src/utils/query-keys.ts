@@ -11,6 +11,14 @@ export const queryKeys = {
 	bookDetails: ['book-details'],
 } as const
 
+const BOOK_DELETION_DOMAINS: QueryDomain[] = [
+	'books',
+	'readingSessions',
+	'dashboard',
+	'activity',
+	'goals',
+]
+
 type QueryDomain = keyof typeof queryKeys
 
 const invalidationGraph: Record<QueryDomain, QueryDomain[]> = {
@@ -36,4 +44,23 @@ export function invalidateDomain(
 	for (const affected of invalidationGraph[domain]) {
 		queryClient.invalidateQueries({ queryKey: queryKeys[affected] })
 	}
+}
+
+export async function invalidateAfterBookDeletion(
+	queryClient: QueryClient,
+	bookId: string,
+) {
+	await Promise.all([
+		...BOOK_DELETION_DOMAINS.map((domain) =>
+			queryClient.invalidateQueries({ queryKey: queryKeys[domain] }),
+		),
+		queryClient.invalidateQueries({
+			queryKey: queryKeys.bookDetails,
+			predicate: (query) => query.queryKey[1] !== bookId,
+		}),
+		queryClient.invalidateQueries({
+			queryKey: [...queryKeys.bookDetails, bookId],
+			refetchType: 'none',
+		}),
+	])
 }
