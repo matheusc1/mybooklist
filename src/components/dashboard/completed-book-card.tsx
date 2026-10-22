@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { LucideLibrary, LucideStar } from 'lucide-react'
 import type { Book } from '#/types/book'
 import { formatBookDate } from '#/utils/format-date'
@@ -10,17 +11,21 @@ export function CompletedBookCard({ book }: CompletedBookCardProps) {
 	const stars = Array.from({ length: 5 }, (_, i) => i < (book.rating ?? 0))
 
 	return (
-		<div className="group flex gap-3 py-3 border-b border-border transition-all duration-200 cursor-pointer hover:opacity-95">
+		<Link
+			to="/books/$bookId"
+			params={{ bookId: String(book.id) }}
+			className="group flex gap-3 py-3 border-b border-border transition-all duration-200 hover:opacity-95"
+		>
 			<div className="relative w-13 h-19.5 shrink-0 bg-surface2 rounded overflow-hidden flex items-center justify-center shadow-[3px_3px_12px_rgba(0,0,0,0.4)]">
 				<img
 					src={book.coverUrl ?? '/book-cover.webp'}
-					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
+					alt=""
 					className="w-full h-full object-cover"
 				/>
 			</div>
 
-			<div className="flex-1">
-				<h3 className="line-clamp-1 text-sm font-semibold font-serif text-text mb-0.5 leading-snug group-hover:text-accent transition-colors duration-200">
+			<div className="min-w-0 flex-1">
+				<h3 className="line-clamp-1 text-sm font-semibold font-serif text-text mb-0.5 leading-snug group-hover:text-accent group-focus-visible:text-accent transition-colors duration-200">
 					{book.title}
 				</h3>
 				<p className="line-clamp-1 text-xs text-muted mb-2">{book.author}</p>
@@ -45,7 +50,7 @@ export function CompletedBookCard({ book }: CompletedBookCardProps) {
 					{formatBookDate(book.completedAt ?? '')}
 				</p>
 			</div>
-		</div>
+		</Link>
 	)
 }
 

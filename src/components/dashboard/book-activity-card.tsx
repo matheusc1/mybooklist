@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { BOOK_STATUS } from '#/constants/book-status'
 import type { Book } from '#/types/book'
 import { formatBookDate } from '#/utils/format-date'
@@ -10,17 +11,23 @@ export function BookActivityCard({ book }: BookActivityCardProps) {
 	const status = BOOK_STATUS[book.status]
 
 	return (
-		<div className="flex gap-3 py-3">
-			<div className="flex items-center justify-center w-10 h-15 bg-surface2 rounded-sm shadow-[2px_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
+		<Link
+			to="/books/$bookId"
+			params={{ bookId: String(book.id) }}
+			className="group transition-all duration-200 hover:opacity-95 flex gap-3 py-3"
+		>
+			<div className="flex items-center justify-center w-10 h-15 shrink-0 bg-surface2 rounded-sm shadow-[2px_2px_8px_rgba(0,0,0,0.4)] overflow-hidden">
 				<img
 					src={book.coverUrl ?? '/book-cover.webp'}
-					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
+					alt=""
 					className="w-full h-full object-cover"
 				/>
 			</div>
-			<div className="flex flex-col justify-between">
+			<div className="flex min-w-0 flex-col justify-between">
 				<div>
-					<p className="line-clamp-1 text-sm font-medium">{book.title}</p>
+					<p className="line-clamp-1 text-sm font-medium group-hover:text-accent group-focus-visible:text-accent transition-colors duration-200">
+						{book.title}
+					</p>
 					<p className="line-clamp-1 text-xs text-muted">{book.author}</p>
 				</div>
 				<div className="flex items-center gap-1.5">
@@ -33,6 +40,6 @@ export function BookActivityCard({ book }: BookActivityCardProps) {
 					</span>
 				</div>
 			</div>
-		</div>
+		</Link>
 	)
 }

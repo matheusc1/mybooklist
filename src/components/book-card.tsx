@@ -50,7 +50,7 @@ export function BookCard({ book }: BookCardProps) {
 			<div className="relative w-full aspect-2/3 rounded-lg overflow-hidden bg-surface2 shadow-[4px_6px_20px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-250 ease-out group-hover:-translate-y-1 group-hover:scale-[1.02] group-hover:shadow-[6px_12px_32px_rgba(0,0,0,0.6)] mb-3">
 				<img
 					src={book.coverUrl ?? '/book-cover.webp'}
-					alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
+					alt=""
 					className="w-full h-full object-cover"
 				/>
 
@@ -75,7 +75,7 @@ export function BookCard({ book }: BookCardProps) {
 			</div>
 
 			<div>
-				<p className="font-serif text-sm/[1.3] font-semibold truncate mb-0.5 transition-colors duration-200 group-hover:text-accent">
+				<p className="font-serif text-sm/[1.3] font-semibold truncate mb-0.5 transition-colors duration-200 group-hover:text-accent group-focus-visible:text-accent">
 					{book.title}
 				</p>
 				<p className="text-xs text-muted truncate mb-1">{book.author}</p>

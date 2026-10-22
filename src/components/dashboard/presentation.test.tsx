@@ -19,9 +19,16 @@ vi.mock('@tanstack/react-router', async (importOriginal) => {
 		Link: ({
 			children,
 			to,
+			params,
 			...props
-		}: ComponentProps<'a'> & { to?: string }) => (
-			<a {...props} href={to}>
+		}: ComponentProps<'a'> & {
+			to?: string
+			params?: Record<string, string>
+		}) => (
+			<a
+				{...props}
+				href={to?.replace(/\$(\w+)/g, (_, key) => params?.[key] ?? '')}
+			>
 				{children}
 			</a>
 		),
@@ -58,8 +65,8 @@ const weeklyStats: WeeklyStats = {
 }
 
 describe('dashboard presentation components', () => {
-	it('renders current book progress and fallback cover', () => {
-		render(<CurrentBookCard book={book} />)
+	it('renders current book progress, details link, and decorative cover', () => {
+		const { container } = render(<CurrentBookCard book={book} />)
 
 		expect(screen.getByText('The Hobbit')).toBeInTheDocument()
 		expect(screen.getByText('Page 100 of 310')).toBeInTheDocument()
@@ -67,9 +74,11 @@ describe('dashboard presentation components', () => {
 			'aria-valuenow',
 			'32',
 		)
-		expect(
-			screen.getByRole('img', { name: 'Default Book Cover' }),
-		).toBeInTheDocument()
+		expect(screen.getByRole('link')).toHaveAttribute('href', '/books/book-1')
+
+		const cover = container.querySelector('img')
+		expect(cover).toHaveAttribute('alt', '')
+		expect(cover).toHaveAttribute('src', '/book-cover.webp')
 	})
 
 	it('renders the current-book empty state with a books link', () => {
@@ -83,13 +92,14 @@ describe('dashboard presentation components', () => {
 		).toHaveAttribute('href', '/books')
 	})
 
-	it('renders completed book rating and empty state copy', () => {
+	it('renders completed book rating, details link, and empty state copy', () => {
 		const { rerender } = render(<CompletedBookCard book={book} />)
 
 		expect(
 			screen.getByRole('img', { name: '4 out of 5 stars' }),
 		).toBeInTheDocument()
 		expect(screen.getByText('Sep 1, 2026')).toBeInTheDocument()
+		expect(screen.getByRole('link')).toHaveAttribute('href', '/books/book-1')
 
 		rerender(<CompletedBooksEmptyState />)
 		expect(screen.getByText('No books completed yet')).toBeInTheDocument()
@@ -103,11 +113,12 @@ describe('dashboard presentation components', () => {
 		).toBeInTheDocument()
 	})
 
-	it('renders recent book activity details from the updated date', () => {
+	it('renders recent book activity details and links to the book', () => {
 		render(<BookActivityCard book={book} />)
 
 		expect(screen.getByText('The Hobbit')).toBeInTheDocument()
 		expect(screen.getByText('Reading · Sep 5, 2026')).toBeInTheDocument()
+		expect(screen.getByRole('link')).toHaveAttribute('href', '/books/book-1')
 	})
 
 	it('renders monthly activity statistics and formatted reading time', () => {

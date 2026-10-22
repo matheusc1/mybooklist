@@ -8,7 +8,11 @@ export function CurrentBookCard({ book }: { book: Book }) {
 	const progress = getPercent(book.currentPage, book.totalPages)
 
 	return (
-		<div className="bg-surface border border-border rounded-xl overflow-hidden">
+		<Link
+			to="/books/$bookId"
+			params={{ bookId: String(book.id) }}
+			className="group bg-surface border border-border rounded-xl overflow-hidden transition-all duration-200 hover:opacity-95"
+		>
 			<div className="h-0.5 bg-gradient-progress" />
 			<div className="p-5 flex flex-col gap-3">
 				<span className="text-accent text-xs uppercase tracking-widest font-medium">
@@ -18,12 +22,12 @@ export function CurrentBookCard({ book }: { book: Book }) {
 				<div className="flex gap-3.5 items-start">
 					<img
 						src={book.coverUrl ?? '/book-cover.webp'}
-						alt={book.coverUrl ? `${book.title} cover` : 'Default Book Cover'}
-						className="w-13.5 h-19 rounded-md object-cover"
+						alt=""
+						className="w-13.5 h-19 shrink-0 rounded-md object-cover"
 					/>
 
-					<div className="flex flex-col flex-1">
-						<h3 className="font-serif font-semibold leading-snug line-clamp-1">
+					<div className="flex min-w-0 flex-col flex-1">
+						<h3 className="font-serif font-semibold leading-snug line-clamp-1 group-hover:text-accent group-focus-visible:text-accent transition-colors duration-200">
 							{book.title}
 						</h3>
 						<p className="text-muted text-xs mt-0.5 mb-2.5 line-clamp-1">
@@ -50,7 +54,7 @@ export function CurrentBookCard({ book }: { book: Book }) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Link>
 	)
 }
 
