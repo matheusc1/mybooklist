@@ -1,11 +1,10 @@
 import { create } from 'zustand'
-
-type GoalModalMode = 'add' | 'edit'
+import type { ModalMode } from '#/types/common'
 
 interface GoalModalStore {
 	open: boolean
-	mode: GoalModalMode
-	openModal: (mode: GoalModalMode) => void
+	mode: ModalMode
+	openModal: (mode: ModalMode) => void
 	closeModal: () => void
 }
 

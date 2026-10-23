@@ -22,12 +22,10 @@ import {
 import { Modal } from '../ui/modal'
 import { DeleteModal } from './delete-modal'
 
-type BookModalMode = Exclude<ModalMode, 'view'>
-
 interface BookModalProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	mode?: BookModalMode
+	mode?: ModalMode
 	book?: Book
 	onDeleted?: () => void
 }
@@ -58,7 +56,7 @@ const bookSchema = z
 		},
 	)
 
-const headerTitleMap: Record<BookModalMode, string> = {
+const headerTitleMap: Record<ModalMode, string> = {
 	add: 'Add Book',
 	edit: 'Edit Book',
 }

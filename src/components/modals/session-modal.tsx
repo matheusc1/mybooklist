@@ -1,13 +1,14 @@
 import { LucideArrowRight, LucideMoon, LucideTimer } from 'lucide-react'
 import { useState } from 'react'
 import type { Activity } from '#/types/activity'
-import type { ModalMode } from '#/types/common'
 import { formatBookDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
 import { Modal } from '../ui/modal'
 import { ReadingSessionModal } from './reading-session-modal'
 
 type Session = Activity['monthlyActivity'][number]['sessions'][number]
+
+type SessionFormState = { mode: 'add' } | { mode: 'edit'; session: Session }
 
 interface SessionModalProps {
 	open: boolean
@@ -22,10 +23,11 @@ export function SessionModal({
 	sessions,
 	onClose,
 }: SessionModalProps) {
-	const [sessionModal, setSessionModal] = useState<{
-		session?: Session
-		mode: ModalMode
-	} | null>(null)
+	const [sessionForm, setSessionForm] = useState<SessionFormState | null>(null)
+
+	function closeSessionForm(isOpen: boolean) {
+		if (!isOpen) setSessionForm(null)
+	}
 
 	return (
 		<>
@@ -35,7 +37,7 @@ export function SessionModal({
 				<SessionModalBody
 					sessions={sessions}
 					onSessionClick={(session) =>
-						setSessionModal({ session, mode: 'view' })
+						setSessionForm({ mode: 'edit', session })
 					}
 				/>
 
@@ -43,26 +45,52 @@ export function SessionModal({
 					<Button
 						variant="dashed"
 						className="w-full text-sm"
-						onClick={() => setSessionModal({ mode: 'add' })}
+						onClick={() => setSessionForm({ mode: 'add' })}
 					>
 						Log a session for this day
 					</Button>
 				</Modal.Footer>
 			</Modal.Root>
 
-			{sessionModal && (
+			{sessionForm?.mode === 'add' && (
 				<ReadingSessionModal
-					key={sessionModal.session?.id ?? 'add'}
-					open={!!sessionModal}
-					onOpenChange={(v) => !v && setSessionModal(null)}
-					mode={sessionModal.mode}
-					session={
-						sessionModal.session ? { ...sessionModal.session, date } : undefined
-					}
+					key="add"
+					open
+					onOpenChange={closeSessionForm}
+					mode="add"
 					defaultDate={date}
 				/>
 			)}
+
+			{sessionForm?.mode === 'edit' && (
+				<EditSessionModal
+					key={sessionForm.session.id}
+					session={sessionForm.session}
+					date={date}
+					onOpenChange={closeSessionForm}
+				/>
+			)}
 		</>
+	)
+}
+
+function EditSessionModal({
+	session,
+	date,
+	onOpenChange,
+}: {
+	session: Session
+	date: string
+	onOpenChange: (open: boolean) => void
+}) {
+	return (
+		<ReadingSessionModal
+			open
+			onOpenChange={onOpenChange}
+			mode="edit"
+			session={{ ...session, date }}
+			defaultDate={date}
+		/>
 	)
 }
 

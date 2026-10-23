@@ -43,11 +43,10 @@ const readingSessionSchema = z
 		path: ['toPage'],
 	})
 
-const headerTitleMap = {
+const headerTitleMap: Record<ModalMode, string> = {
 	add: 'Add Session',
 	edit: 'Edit Session',
-	view: 'View Session',
-} as const
+}
 
 export function ReadingSessionModal({
 	open,
@@ -65,14 +64,10 @@ export function ReadingSessionModal({
 	const { mutate: deleteReadingSession, isPending: isDeleting } =
 		useDeleteReadingSession()
 
-	const [currentMode, setCurrentMode] = useState<ModalMode>(mode)
 	const [deleteOpen, setDeleteOpen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
 
-	const isEdit = currentMode === 'edit' && !!session
-	const isView = currentMode === 'view'
-	const secondaryLabel = isView ? 'Close' : 'Cancel'
-	const headerTitle = headerTitleMap[currentMode]
+	const isEdit = mode === 'edit' && !!session
 
 	const form = useForm({
 		defaultValues: {
@@ -115,7 +110,6 @@ export function ReadingSessionModal({
 
 	function handleCancel() {
 		form.reset()
-		setCurrentMode(mode)
 		onOpenChange(false)
 	}
 
@@ -135,7 +129,7 @@ export function ReadingSessionModal({
 	return (
 		<>
 			<Modal.Root open={open} onOpenChange={onOpenChange}>
-				<Modal.Header eyebrow="Reading session" title={headerTitle} />
+				<Modal.Header eyebrow="Reading session" title={headerTitleMap[mode]} />
 
 				<form
 					onSubmit={(e) => {
@@ -146,7 +140,7 @@ export function ReadingSessionModal({
 				>
 					<Modal.Body>
 						<div ref={containerRef} />
-						<fieldset className="space-y-4" disabled={isView}>
+						<fieldset className="space-y-4">
 							<legend className="sr-only">Session details</legend>
 							<form.Field name="bookId">
 								{(field) => {
@@ -156,7 +150,7 @@ export function ReadingSessionModal({
 
 									return (
 										<div className="flex flex-col gap-2">
-											<FieldLabel htmlFor="book-search" required={!isView}>
+											<FieldLabel htmlFor="book-search" required>
 												Book
 											</FieldLabel>
 											<BookCombobox
@@ -164,12 +158,12 @@ export function ReadingSessionModal({
 												value={selectedBook}
 												onValueChange={(book) => {
 													field.handleChange(book ? String(book.id) : '')
-													if (book && currentMode === 'add') {
+													if (book && mode === 'add') {
 														form.setFieldValue('fromPage', book.currentPage)
 													}
 												}}
-												disabled={isView || isEdit || !!defaultBook}
-												readOnly={isView || isEdit || !!defaultBook}
+												disabled={isEdit || !!defaultBook}
+												readOnly={isEdit || !!defaultBook}
 												container={containerRef}
 											/>
 											<FieldError
@@ -185,7 +179,7 @@ export function ReadingSessionModal({
 							<form.Field name="readAt">
 								{(field) => (
 									<div className="flex flex-col gap-2">
-										<FieldLabel htmlFor={field.name} required={!isView}>
+										<FieldLabel htmlFor={field.name} required>
 											Date
 										</FieldLabel>
 										<Input
@@ -195,7 +189,6 @@ export function ReadingSessionModal({
 											value={field.state.value}
 											onBlur={field.handleBlur}
 											onChange={(e) => field.handleChange(e.target.value)}
-											readOnly={isView}
 											aria-describedby={
 												field.state.meta.errors.length > 0
 													? `${field.name}-error`
@@ -215,7 +208,7 @@ export function ReadingSessionModal({
 								<form.Field name="fromPage">
 									{(field) => (
 										<div className="flex-1 flex flex-col gap-2">
-											<FieldLabel htmlFor={field.name} required={!isView}>
+											<FieldLabel htmlFor={field.name} required>
 												From page
 											</FieldLabel>
 											<Input
@@ -228,7 +221,6 @@ export function ReadingSessionModal({
 													field.handleChange(e.target.valueAsNumber)
 												}
 												placeholder="0"
-												readOnly={isView}
 												aria-describedby={
 													field.state.meta.errors[0]
 														? `${field.name}-error`
@@ -248,7 +240,7 @@ export function ReadingSessionModal({
 								<form.Field name="toPage">
 									{(field) => (
 										<div className="flex-1 flex flex-col gap-2">
-											<FieldLabel htmlFor={field.name} required={!isView}>
+											<FieldLabel htmlFor={field.name} required>
 												To page
 											</FieldLabel>
 											<Input
@@ -261,7 +253,6 @@ export function ReadingSessionModal({
 													field.handleChange(e.target.valueAsNumber)
 												}
 												placeholder="e.g. 22"
-												readOnly={isView}
 												aria-describedby={
 													field.state.meta.errors[0]
 														? `${field.name}-error`
@@ -287,7 +278,7 @@ export function ReadingSessionModal({
 							>
 								{([fromPage, toPage]) => {
 									const bothFilled = fromPage != null && toPage != null
-									const pagesRead = bothFilled ? toPage - fromPage : 0
+									const pagesRead = bothFilled ? toPage - fromPage + 1 : 0
 
 									return (
 										bothFilled &&
@@ -310,7 +301,7 @@ export function ReadingSessionModal({
 					</Modal.Body>
 
 					<Modal.Footer>
-						{isView && (
+						{isEdit && (
 							<Button
 								onClick={() => setDeleteOpen(true)}
 								className="mr-auto"
@@ -337,26 +328,14 @@ export function ReadingSessionModal({
 											onClick={handleCancel}
 											disabled={isPending}
 										>
-											{secondaryLabel}
+											Cancel
 										</Button>
-										<Button
-											type="button"
-											onClick={() => {
-												if (isView) {
-													setCurrentMode('edit')
-												} else {
-													form.handleSubmit()
-												}
-											}}
-											disabled={isView ? false : !canSubmit || isPending}
-										>
+										<Button type="submit" disabled={!canSubmit || isPending}>
 											{isPending
 												? 'Saving...'
-												: currentMode === 'add'
+												: mode === 'add'
 													? 'Set Record'
-													: currentMode === 'edit'
-														? 'Save'
-														: 'Edit'}
+													: 'Save'}
 										</Button>
 									</>
 								)

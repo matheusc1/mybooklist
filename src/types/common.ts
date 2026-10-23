@@ -1,1 +1,1 @@
-export type ModalMode = 'add' | 'edit' | 'view'
+export type ModalMode = 'add' | 'edit'

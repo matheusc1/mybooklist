@@ -66,6 +66,14 @@ vi.mock('./delete-modal', () => ({
 		) : null,
 }))
 
+const session = {
+	id: 'session-1',
+	bookId: 'book-1',
+	date: '2026-09-09',
+	fromPage: 10,
+	toPage: 20,
+}
+
 describe('ReadingSessionModal', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
@@ -128,7 +136,7 @@ describe('ReadingSessionModal', () => {
 		await user.type(screen.getByRole('spinbutton', { name: 'To page' }), '25')
 
 		expect(screen.getByRole('textbox', { name: 'Pages read' })).toHaveValue(
-			'15',
+			'16',
 		)
 		await user.click(screen.getByRole('button', { name: 'Set Record' }))
 
@@ -161,44 +169,35 @@ describe('ReadingSessionModal', () => {
 		)
 	})
 
-	it('transitions from view mode to edit mode', async () => {
-		const user = userEvent.setup()
-		const session = {
-			id: 'session-1',
-			bookId: 'book-1',
-			date: '2026-09-09',
-			fromPage: 10,
-			toPage: 20,
-		}
+	it('uses the add title and does not offer delete when creating', () => {
+		render(<ReadingSessionModal open onOpenChange={vi.fn()} />)
+
+		expect(screen.getByText('Add Session')).toBeInTheDocument()
+		expect(
+			screen.queryByRole('button', { name: 'Delete session' }),
+		).not.toBeInTheDocument()
+	})
+
+	it('uses the edit title, keeps the book locked, and offers delete when editing', () => {
 		render(
 			<ReadingSessionModal
 				open
-				mode="view"
+				mode="edit"
 				session={session}
 				onOpenChange={vi.fn()}
 			/>,
 		)
 
-		expect(screen.getByRole('spinbutton', { name: 'To page' })).toHaveAttribute(
-			'readonly',
-		)
-		await user.click(screen.getByRole('button', { name: 'Edit' }))
-
-		expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
+		expect(screen.getByText('Edit Session')).toBeInTheDocument()
+		expect(screen.getByRole('combobox', { name: 'Book' })).toBeDisabled()
 		expect(
 			screen.getByRole('spinbutton', { name: 'To page' }),
 		).not.toHaveAttribute('readonly')
+		expect(screen.getByRole('button', { name: 'Delete session' })).toBeEnabled()
 	})
 
 	it('submits updated pages in edit mode', async () => {
 		const user = userEvent.setup()
-		const session = {
-			id: 'session-1',
-			bookId: 'book-1',
-			date: '2026-09-09',
-			fromPage: 10,
-			toPage: 20,
-		}
 		updateReadingSession.mockImplementation((_input, options) =>
 			options.onSuccess(),
 		)
@@ -227,21 +226,18 @@ describe('ReadingSessionModal', () => {
 		)
 	})
 
-	it('deletes a session and passes the reset choice', async () => {
+	it('deletes a session from edit mode, passes the reset choice, and closes', async () => {
 		const user = userEvent.setup()
-		const session = {
-			id: 'session-1',
-			bookId: 'book-1',
-			date: '2026-09-09',
-			fromPage: 10,
-			toPage: 20,
-		}
+		const onOpenChange = vi.fn()
+		deleteReadingSession.mockImplementation((_input, options) =>
+			options.onSuccess(),
+		)
 		render(
 			<ReadingSessionModal
 				open
-				mode="view"
+				mode="edit"
 				session={session}
-				onOpenChange={vi.fn()}
+				onOpenChange={onOpenChange}
 			/>,
 		)
 
@@ -257,5 +253,17 @@ describe('ReadingSessionModal', () => {
 			{ id: 'session-1', resetToPlanned: false },
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
+		expect(onOpenChange).toHaveBeenCalledWith(false)
+	})
+
+	it('disables actions while a mutation is pending', () => {
+		vi.mocked(useCreateReadingSession).mockReturnValue({
+			mutate: createReadingSession,
+			isPending: true,
+		} as never)
+		render(<ReadingSessionModal open onOpenChange={vi.fn()} />)
+
+		expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled()
+		expect(screen.getByRole('button', { name: 'Saving...' })).toBeDisabled()
 	})
 })
