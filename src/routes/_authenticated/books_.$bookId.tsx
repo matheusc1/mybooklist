@@ -439,6 +439,7 @@ function BookDetailsPage() {
 					mode={sessionModal.mode}
 					session={sessionModal.session}
 					defaultBook={{ id: String(book.id), currentPage: book.currentPage }}
+					isLastSession={readingSessions.length === 1}
 				/>
 			)}
 

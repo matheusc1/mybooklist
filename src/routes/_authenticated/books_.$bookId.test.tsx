@@ -25,17 +25,20 @@ vi.mock('#/components/modals/reading-session-modal', () => ({
 		mode,
 		session,
 		defaultBook,
+		isLastSession,
 	}: {
 		open: boolean
 		mode?: string
 		session?: { id: string; bookId: string; date: string }
 		defaultBook?: { id: string; currentPage: number }
+		isLastSession?: boolean
 	}) =>
 		open ? (
 			<div role="dialog">
 				Session {mode} book {defaultBook?.id}, from page{' '}
 				{defaultBook?.currentPage}
 				{session && `, editing ${session.id} on ${session.date}`}
+				{`, last session ${String(isLastSession)}`}
 			</div>
 		) : null,
 }))
@@ -305,6 +308,35 @@ describe('BookDetailsPage', () => {
 		expect(screen.getByRole('dialog')).toHaveTextContent(
 			'editing session-new on 2024-02-10',
 		)
+	})
+
+	it('does not flag a session as the last one while the book has several', async () => {
+		const user = userEvent.setup()
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(
+			screen.getAllByRole('button', { name: /Edit session from/ })[0],
+		)
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('last session false')
+	})
+
+	it('flags the only session of the book as the last one in the session form', async () => {
+		const user = userEvent.setup()
+		hooks.useBookDetails.mockReturnValue({
+			data: {
+				...bookDetails,
+				readingSessions: [bookDetails.readingSessions[1]],
+				stats: { sessions: 1, readingTime: 61, activeDays: 1 },
+			},
+			isLoading: false,
+			isError: false,
+		})
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		await user.click(screen.getByRole('button', { name: /Edit session from/ }))
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('last session true')
 	})
 
 	it('deletes the chosen session without resetting the book', async () => {

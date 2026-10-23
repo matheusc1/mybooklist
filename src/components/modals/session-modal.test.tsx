@@ -1,9 +1,11 @@
-﻿import { describe, expect, it, vi } from 'vitest'
+﻿import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen } from '#/test/test-utils'
 import { SessionModal } from './session-modal'
 
 const readingSessionModal = vi.hoisted(() => vi.fn())
+const useBookDetails = vi.hoisted(() => vi.fn())
 
+vi.mock('#/hooks/use-book-details', () => ({ useBookDetails }))
 vi.mock('../ui/modal', () => ({
 	Modal: {
 		Root: ({
@@ -33,6 +35,7 @@ vi.mock('./reading-session-modal', () => ({
 		mode: string
 		defaultDate?: string
 		session?: { date?: string }
+		isLastSession?: boolean
 		onOpenChange: (open: boolean) => void
 	}) => {
 		readingSessionModal(props)
@@ -65,6 +68,14 @@ const session = {
 
 const sessionWithoutCover = { ...session, id: 'session-2', coverUrl: null }
 
+const sessionButtonName =
+	'The Hobbit by J.R.R. Tolkien, pages 10-25, 30 minutes'
+
+beforeEach(() => {
+	vi.clearAllMocks()
+	useBookDetails.mockReturnValue({ data: undefined })
+})
+
 describe('SessionModal', () => {
 	it('renders the empty state and formatted date', () => {
 		render(
@@ -89,9 +100,7 @@ describe('SessionModal', () => {
 		)
 
 		expect(
-			screen.getAllByRole('button', {
-				name: 'The Hobbit by J.R.R. Tolkien, pages 10-25, 30 minutes',
-			})[0],
+			screen.getAllByRole('button', { name: sessionButtonName })[0],
 		).toBeInTheDocument()
 		expect(screen.getAllByText('PP. 10-25')).toHaveLength(2)
 		expect(screen.getAllByText('30min')).toHaveLength(2)
@@ -107,7 +116,7 @@ describe('SessionModal', () => {
 		)
 	})
 
-	it('opens the selected session in view mode with the selected date', async () => {
+	it('opens the selected session in edit mode with the selected date', () => {
 		render(
 			<SessionModal
 				open
@@ -117,22 +126,18 @@ describe('SessionModal', () => {
 			/>,
 		)
 
-		fireEvent.click(
-			screen.getAllByRole('button', {
-				name: 'The Hobbit by J.R.R. Tolkien, pages 10-25, 30 minutes',
-			})[0],
-		)
+		fireEvent.click(screen.getByRole('button', { name: sessionButtonName }))
 
 		expect(
 			screen.getByRole('dialog', { name: 'Reading session form' }),
 		).toBeInTheDocument()
-		expect(screen.getByText('view')).toBeInTheDocument()
+		expect(screen.getByText('edit')).toBeInTheDocument()
 		expect(screen.getByRole('textbox', { name: 'Date' })).toHaveValue(
 			'2026-09-15',
 		)
 		expect(readingSessionModal).toHaveBeenLastCalledWith(
 			expect.objectContaining({
-				mode: 'view',
+				mode: 'edit',
 				defaultDate: '2026-09-15',
 				session: expect.objectContaining({
 					id: 'session-1',
@@ -142,7 +147,79 @@ describe('SessionModal', () => {
 		)
 	})
 
-	it('opens a new session form with the selected day as its default date', async () => {
+	it('loads the book sessions of the selected session', () => {
+		render(
+			<SessionModal
+				open
+				date="2026-09-15"
+				sessions={[session]}
+				onClose={vi.fn()}
+			/>,
+		)
+
+		fireEvent.click(screen.getByRole('button', { name: sessionButtonName }))
+
+		expect(useBookDetails).toHaveBeenCalledWith('book-1')
+	})
+
+	it('marks the session as the last one when the book has a single session', () => {
+		useBookDetails.mockReturnValue({
+			data: { readingSessions: [{ id: 'session-1' }] },
+		})
+		render(
+			<SessionModal
+				open
+				date="2026-09-15"
+				sessions={[session]}
+				onClose={vi.fn()}
+			/>,
+		)
+
+		fireEvent.click(screen.getByRole('button', { name: sessionButtonName }))
+
+		expect(readingSessionModal).toHaveBeenLastCalledWith(
+			expect.objectContaining({ isLastSession: true }),
+		)
+	})
+
+	it('does not mark the session as the last one when the book has more sessions', () => {
+		useBookDetails.mockReturnValue({
+			data: { readingSessions: [{ id: 'session-1' }, { id: 'session-9' }] },
+		})
+		render(
+			<SessionModal
+				open
+				date="2026-09-15"
+				sessions={[session]}
+				onClose={vi.fn()}
+			/>,
+		)
+
+		fireEvent.click(screen.getByRole('button', { name: sessionButtonName }))
+
+		expect(readingSessionModal).toHaveBeenLastCalledWith(
+			expect.objectContaining({ isLastSession: false }),
+		)
+	})
+
+	it('leaves the last-session flag undefined until the book sessions are known', () => {
+		render(
+			<SessionModal
+				open
+				date="2026-09-15"
+				sessions={[session]}
+				onClose={vi.fn()}
+			/>,
+		)
+
+		fireEvent.click(screen.getByRole('button', { name: sessionButtonName }))
+
+		expect(readingSessionModal).toHaveBeenLastCalledWith(
+			expect.objectContaining({ isLastSession: undefined }),
+		)
+	})
+
+	it('opens a new session form with the selected day as its default date', () => {
 		render(
 			<SessionModal open date="2026-09-15" sessions={[]} onClose={vi.fn()} />,
 		)
@@ -160,9 +237,10 @@ describe('SessionModal', () => {
 				defaultDate: '2026-09-15',
 			}),
 		)
+		expect(useBookDetails).not.toHaveBeenCalled()
 	})
 
-	it('closes the nested session form through its onOpenChange callback', async () => {
+	it('closes the nested session form through its onOpenChange callback', () => {
 		render(
 			<SessionModal open date="2026-09-15" sessions={[]} onClose={vi.fn()} />,
 		)
@@ -170,6 +248,26 @@ describe('SessionModal', () => {
 		fireEvent.click(
 			screen.getByRole('button', { name: 'Log a session for this day' }),
 		)
+		fireEvent.click(
+			screen.getByRole('button', { name: 'Close nested session' }),
+		)
+
+		expect(
+			screen.queryByRole('dialog', { name: 'Reading session form' }),
+		).not.toBeInTheDocument()
+	})
+
+	it('closes the nested edit form through its onOpenChange callback', () => {
+		render(
+			<SessionModal
+				open
+				date="2026-09-15"
+				sessions={[session]}
+				onClose={vi.fn()}
+			/>,
+		)
+
+		fireEvent.click(screen.getByRole('button', { name: sessionButtonName }))
 		fireEvent.click(
 			screen.getByRole('button', { name: 'Close nested session' }),
 		)

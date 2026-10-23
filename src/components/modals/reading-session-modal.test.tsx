@@ -54,15 +54,23 @@ vi.mock('../ui/inputs/book-combobox', () => ({
 vi.mock('./delete-modal', () => ({
 	DeleteModal: ({
 		open,
+		isLastSession,
 		onConfirm,
 	}: {
 		open: boolean
+		isLastSession?: boolean
 		onConfirm: (resetToPlanned: boolean) => void
 	}) =>
 		open ? (
-			<button type="button" onClick={() => onConfirm(false)}>
-				Confirm delete
-			</button>
+			<div>
+				<span>Last session: {String(isLastSession)}</span>
+				<button type="button" onClick={() => onConfirm(false)}>
+					Confirm delete
+				</button>
+				<button type="button" onClick={() => onConfirm(true)}>
+					Confirm delete and reset
+				</button>
+			</div>
 		) : null,
 }))
 
@@ -254,6 +262,67 @@ describe('ReadingSessionModal', () => {
 			expect.objectContaining({ onSuccess: expect.any(Function) }),
 		)
 		expect(onOpenChange).toHaveBeenCalledWith(false)
+	})
+
+	it('tells the delete confirmation whether this is the last session of the book', async () => {
+		const user = userEvent.setup()
+		render(
+			<ReadingSessionModal
+				open
+				mode="edit"
+				session={session}
+				isLastSession
+				onOpenChange={vi.fn()}
+			/>,
+		)
+
+		await user.click(screen.getByRole('button', { name: 'Delete session' }))
+
+		expect(await screen.findByText('Last session: true')).toBeInTheDocument()
+	})
+
+	it('leaves the last-session flag undefined when it is not known', async () => {
+		const user = userEvent.setup()
+		render(
+			<ReadingSessionModal
+				open
+				mode="edit"
+				session={session}
+				onOpenChange={vi.fn()}
+			/>,
+		)
+
+		await user.click(screen.getByRole('button', { name: 'Delete session' }))
+
+		expect(
+			await screen.findByText('Last session: undefined'),
+		).toBeInTheDocument()
+	})
+
+	it('passes the reset choice when the last session is deleted', async () => {
+		const user = userEvent.setup()
+		render(
+			<ReadingSessionModal
+				open
+				mode="edit"
+				session={session}
+				isLastSession
+				onOpenChange={vi.fn()}
+			/>,
+		)
+
+		await user.click(screen.getByRole('button', { name: 'Delete session' }))
+		fireEvent.click(
+			await screen.findByRole('button', {
+				name: 'Confirm delete and reset',
+				hidden: true,
+			}),
+		)
+
+		expect(deleteReadingSession).toHaveBeenCalledWith(
+			{ id: 'session-1', resetToPlanned: true },
+			expect.objectContaining({ onSuccess: expect.any(Function) }),
+		)
 	})
 
 	it('disables actions while a mutation is pending', () => {

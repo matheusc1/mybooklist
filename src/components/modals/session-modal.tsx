@@ -1,5 +1,6 @@
 import { LucideArrowRight, LucideMoon, LucideTimer } from 'lucide-react'
 import { useState } from 'react'
+import { useBookDetails } from '#/hooks/use-book-details'
 import type { Activity } from '#/types/activity'
 import { formatBookDate } from '#/utils/format-date'
 import { Button } from '../ui/button'
@@ -83,6 +84,10 @@ function EditSessionModal({
 	date: string
 	onOpenChange: (open: boolean) => void
 }) {
+	// The day only lists its own sessions, so the book's full list tells us
+	// whether deleting this one leaves the book without any session.
+	const { data: bookDetails } = useBookDetails(session.bookId)
+
 	return (
 		<ReadingSessionModal
 			open
@@ -90,6 +95,9 @@ function EditSessionModal({
 			mode="edit"
 			session={{ ...session, date }}
 			defaultDate={date}
+			isLastSession={
+				bookDetails ? bookDetails.readingSessions.length === 1 : undefined
+			}
 		/>
 	)
 }

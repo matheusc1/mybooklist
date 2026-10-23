@@ -29,6 +29,7 @@ interface ReadingSessionModalProps {
 	}
 	defaultDate?: string
 	defaultBook?: { id: string; currentPage: number }
+	isLastSession?: boolean
 }
 
 const readingSessionSchema = z
@@ -55,6 +56,7 @@ export function ReadingSessionModal({
 	onOpenChange,
 	defaultDate,
 	defaultBook,
+	isLastSession,
 }: ReadingSessionModalProps) {
 	const { data: books } = useBooks()
 	const { mutate: createReadingSession, isPending: isCreating } =
@@ -349,6 +351,7 @@ export function ReadingSessionModal({
 				open={deleteOpen}
 				onOpenChange={setDeleteOpen}
 				type="session"
+				isLastSession={isLastSession}
 				bookTitle={
 					books?.find((b) => String(b.id) === session?.bookId)?.title ?? ''
 				}
