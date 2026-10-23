@@ -31,10 +31,9 @@ página anual. Ordem do mais simples para o mais complexo.
 
 Backend já pronto (`DELETE /reading-sessions/:id?resetToPlanned=true`).
 
-- [ ] Opção no `DeleteModal` quando a sessão apagada é a última do livro
-- [ ] Para saber se é a última, buscar as sessões do livro pelo id, ao abrir o
-      modal ou ao clicar em excluir (a definir, a segunda opção é menos
-      fluida, porém mais leve)
+- [x] Opção no `DeleteModal` quando a sessão apagada é a última do livro
+- [x] Para saber se é a última, buscar as sessões do livro pelo id, ao abrir o
+      modal, puxando as informações de book-details
 
 ---
 
@@ -45,22 +44,23 @@ Backend já pronto (`DELETE /reading-sessions/:id?resetToPlanned=true`).
 Visualização de todas as reading-sessions, estatísticas de leitura e
 informações do livro. Consome a rota do `book-details` (depende do 2.3 da API).
 
-- [ ] Rota e página do livro
-- [ ] Cabeçalho com as informações do livro
-- [ ] Estatísticas: tempo total, quantidade de sessões e dias com sessões
+- [x] Rota e página do livro
+- [x] Cabeçalho com as informações do livro
+- [x] Estatísticas: tempo total, quantidade de sessões e dias com sessões
       (vindas da API) e dias que levou (calculado no front com `startedAt` e
       `completedAt`; sem `startedAt`, não aparece)
-- [ ] Lista de reading-sessions, da mais recente para a mais antiga, com
+- [x] Lista de reading-sessions, da mais recente para a mais antiga, com
       editar e apagar reaproveitando `SessionModal` e `DeleteModal`
-- [ ] Exibição das notas do livro (depende do 2.1 da API)
-- [ ] Estado vazio para livro sem sessões, que não depende do status do
+- [x] Exibição das notas do livro (depende do 2.1 da API)
+- [x] Estado vazio para livro sem sessões, que não depende do status do
       livro, com botão para registrar sessão
 
 ### 2.2 Navegação para a página do livro
 
-- [ ] Clique no card de finished books do dashboard leva para a página do livro
-- [ ] Forma de navegar de um livro (na listagem de livros) para a página de
-      detalhes, com o ponto de acesso a definir no design
+- [x] Clique no card de finished books, recent activity e currently reading do dashboard
+      leva para a página do livro
+- [x] Forma de navegar de um livro (na listagem de livros) para a página de
+      detalhes, com o ponto de acesso no card, tirando o view mode do modal de books
 
 ---
 
