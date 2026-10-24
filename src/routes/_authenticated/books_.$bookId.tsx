@@ -5,7 +5,7 @@ import {
 	LucidePlus,
 	LucideTrash2,
 } from 'lucide-react'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, CSSProperties } from 'react'
 import { useState } from 'react'
 import { BackLink } from '#/components/book-details/back-link'
 import { BookMetadata } from '#/components/book-details/book-metadata'
@@ -35,6 +35,13 @@ export const Route = createFileRoute('/_authenticated/books_/$bookId')({
 type ModalSession = NonNullable<
 	ComponentProps<typeof ReadingSessionModal>['session']
 >
+
+const STAT_DELAYS = [
+	'[animation-delay:0.1s]',
+	'[animation-delay:0.14s]',
+	'[animation-delay:0.18s]',
+	'[animation-delay:0.22s]',
+]
 
 function getDaysBetween(start: string, end: string) {
 	const startDate = new Date(`${start}T12:00:00`)
@@ -123,10 +130,34 @@ function BookDetailsPage() {
 
 	const elapsedDays = getElapsedDays(book.startedAt, book.completedAt)
 
+	const statCards = [
+		{
+			label: 'Total reading time',
+			value: formatReadingTime(stats.readingTime),
+			textColor: 'text-accent',
+		},
+		{ label: 'Sessions', value: stats.sessions },
+		{
+			label: 'Days with sessions',
+			value: stats.activeDays,
+			textColor: 'text-accent2',
+		},
+		...(elapsedDays !== null
+			? [{ label: 'Days it took', value: elapsedDays }]
+			: []),
+	]
+
 	const hasMetadata = Boolean(book.startedAt || book.completedAt)
 	const metadataLayout = hasSessions
 		? { beside: 'hidden min-[415px]:block', below: 'min-[415px]:hidden' }
 		: { beside: 'hidden min-[493px]:block', below: 'min-[493px]:hidden' }
+
+	const sessionsDelay = hasSessions
+		? '[animation-delay:0.2s]'
+		: '[animation-delay:0.1s]'
+	const notesDelay = hasSessions
+		? '[animation-delay:0.26s]'
+		: '[animation-delay:0.16s]'
 
 	function openEditSession(session: (typeof readingSessions)[number]) {
 		setSessionModal({
@@ -143,7 +174,7 @@ function BookDetailsPage() {
 
 	return (
 		<>
-			<main className="mx-auto min-h-[calc(100vh-69px)] w-full max-w-275 space-y-7 px-5 py-6 pb-10 animate-fade-up lg:space-y-8 lg:px-10 lg:py-8">
+			<main className="mx-auto min-h-[calc(100vh-69px)] w-full max-w-275 space-y-7 px-5 py-6 pb-10 lg:space-y-8 lg:px-10 lg:py-8">
 				<div className="flex items-center justify-between gap-3">
 					<BackLink className="inline-block font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent" />
 
@@ -153,9 +184,9 @@ function BookDetailsPage() {
 					</Button>
 				</div>
 
-				<section className="border-b border-border pb-7">
+				<section className="animate-fade-up border-b border-border pb-7 [animation-delay:0.05s] motion-reduce:animate-none">
 					<div className="flex items-start gap-5 md:gap-7">
-						<div className="aspect-2/3 w-34 shrink-0 rounded-lg border border-border bg-surface2 shadow-xl sm:w-36">
+						<div className="aspect-2/3 w-34 shrink-0 overflow-hidden rounded-lg border border-border bg-surface2 shadow-xl sm:w-36">
 							<img
 								src={book.coverUrl ?? '/book-cover.webp'}
 								alt={
@@ -199,8 +230,8 @@ function BookDetailsPage() {
 										aria-valuenow={Math.round(progress)}
 										aria-valuemin={0}
 										aria-valuemax={100}
-										className="h-full rounded-full bg-gradient-progress transition-[width]"
-										style={{ width: `${progress}%` }}
+										className="h-full w-(--progress) rounded-full bg-gradient-progress transition-[width] duration-700 ease-out starting:w-0 motion-reduce:transition-none"
+										style={{ '--progress': `${progress}%` } as CSSProperties}
 									/>
 								</div>
 
@@ -241,20 +272,14 @@ function BookDetailsPage() {
 								: 'sm:grid-cols-3 [&>*:last-child]:col-span-2 [&>*:last-child]:sm:col-span-1'
 						}`}
 					>
-						<StatCard
-							value={formatReadingTime(stats.readingTime)}
-							label="Total reading time"
-							textColor="text-accent"
-						/>
-						<StatCard value={stats.sessions} label="Sessions" />
-						<StatCard
-							value={stats.activeDays}
-							label="Days with sessions"
-							textColor="text-accent2"
-						/>
-						{elapsedDays !== null && (
-							<StatCard value={elapsedDays} label="Days it took" />
-						)}
+						{statCards.map((card, index) => (
+							<div
+								key={card.label}
+								className={`animate-fade-up motion-reduce:animate-none *:h-full ${STAT_DELAYS[index]}`}
+							>
+								<StatCard {...card} />
+							</div>
+						))}
 					</section>
 				)}
 
@@ -264,7 +289,10 @@ function BookDetailsPage() {
 						hasSessions ? '' : 'lg:mt-0'
 					}`}
 				>
-					<section aria-labelledby="sessions-heading" className="min-w-0">
+					<section
+						aria-labelledby="sessions-heading"
+						className={`min-w-0 animate-fade-up motion-reduce:animate-none ${sessionsDelay}`}
+					>
 						{hasSessions ? (
 							<>
 								<div className="mb-4 flex items-center justify-between gap-3">
@@ -313,7 +341,7 @@ function BookDetailsPage() {
 											return (
 												<li
 													key={session.id}
-													className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 px-4 py-3.5 text-sm md:grid-cols-[96px_minmax(0,1fr)_84px_80px_64px] md:gap-3"
+													className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 px-4 py-3.5 text-sm transition-colors duration-150 hover:bg-surface2/60 focus-within:bg-surface2/60 motion-reduce:transition-none md:grid-cols-[96px_minmax(0,1fr)_84px_80px_64px] md:gap-3"
 												>
 													<span className="col-start-1 row-start-1 font-mono text-xs text-muted md:col-auto md:row-auto">
 														{formatShortDate(session.readAt)}
@@ -400,7 +428,9 @@ function BookDetailsPage() {
 						)}
 					</section>
 
-					<aside className="min-w-0 lg:sticky lg:top-24">
+					<aside
+						className={`min-w-0 animate-fade-up motion-reduce:animate-none lg:sticky lg:top-24 ${notesDelay}`}
+					>
 						<div className="mb-4 flex items-baseline justify-between">
 							<h2 className="font-serif text-xl font-semibold tracking-tight">
 								Notes

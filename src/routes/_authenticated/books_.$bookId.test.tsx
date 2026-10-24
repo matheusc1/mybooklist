@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { renderWithRoute, screen, within } from '#/test/test-utils'
+import { fireEvent, renderWithRoute, screen, within } from '#/test/test-utils'
 import type { BookDetails } from '#/types/book-details'
 
 const hooks = vi.hoisted(() => ({
@@ -156,6 +156,14 @@ describe('BookDetailsPage', () => {
 		const rows = screen.getAllByRole('listitem')
 		expect(within(rows[0]).getByText('pp. 40-60')).toBeInTheDocument()
 		expect(within(rows[1]).getByText('pp. 20-30')).toBeInTheDocument()
+	})
+
+	it('drives the progress bar width from the reading progress', async () => {
+		await renderWithRoute('/books/book-1', { authenticated: true })
+
+		expect(
+			screen.getByRole('progressbar', { name: 'The Hobbit reading progress' }),
+		).toHaveStyle('--progress: 25%')
 	})
 
 	it('shows notes as read-only text', async () => {
