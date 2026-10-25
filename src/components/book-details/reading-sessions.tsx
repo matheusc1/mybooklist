@@ -87,7 +87,9 @@ export function ReadingSessions({
 												·
 											</span>
 											<span className="text-xs text-accent md:text-sm">
-												{pagesRead} pages
+												<span className="text-xs text-accent md:text-sm">
+													{pagesRead} {pagesRead === 1 ? 'page' : 'pages'}
+												</span>
 											</span>
 										</div>
 
