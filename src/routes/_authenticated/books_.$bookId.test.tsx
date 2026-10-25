@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, renderWithRoute, screen, within } from '#/test/test-utils'
+import { renderWithRoute, screen, within } from '#/test/test-utils'
 import type { BookDetails } from '#/types/book-details'
 
 const hooks = vi.hoisted(() => ({

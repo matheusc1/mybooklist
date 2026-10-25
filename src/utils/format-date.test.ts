@@ -7,7 +7,12 @@ import {
 	it,
 	vi,
 } from 'vitest'
-import { formatBookDate, formatShortDate, getTodayDate } from './format-date'
+import {
+	formatBookDate,
+	formatShortDate,
+	getElapsedDays,
+	getTodayDate,
+} from './format-date'
 
 describe('formatBookDate', () => {
 	const originalTZ = process.env.TZ
@@ -49,5 +54,28 @@ describe('getTodayDate', () => {
 describe('formatShortDate', () => {
 	it('formats date-only values without a year', () => {
 		expect(formatShortDate('2024-01-15')).toBe('Jan 15')
+	})
+})
+
+describe('getElapsedDays', () => {
+	it('returns null when the book has not been started', () => {
+		expect(getElapsedDays(null, '2024-01-11')).toBeNull()
+	})
+
+	it('returns null when the book has not been completed', () => {
+		expect(getElapsedDays('2024-01-01', null)).toBeNull()
+	})
+
+	it('counts the days between the start and the completion', () => {
+		expect(getElapsedDays('2024-01-01', '2024-01-11')).toBe(10)
+	})
+
+	it('counts at least one day when started and completed on the same day', () => {
+		expect(getElapsedDays('2024-01-01', '2024-01-01')).toBe(1)
+	})
+
+	it('is not thrown off by daylight saving changes', () => {
+		expect(getElapsedDays('2024-03-09', '2024-03-11')).toBe(2)
+		expect(getElapsedDays('2024-10-31', '2024-11-04')).toBe(4)
 	})
 })

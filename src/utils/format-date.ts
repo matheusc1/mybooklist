@@ -23,3 +23,21 @@ export function formatShortDate(date: string) {
 		day: 'numeric',
 	})
 }
+
+function getDaysBetween(start: string, end: string) {
+	const startDate = new Date(`${start}T12:00:00`)
+	const endDate = new Date(`${end}T12:00:00`)
+
+	return Math.max(
+		1,
+		Math.round((endDate.getTime() - startDate.getTime()) / 86_400_000),
+	)
+}
+
+export function getElapsedDays(
+	startedAt: string | null,
+	completedAt: string | null,
+) {
+	if (!startedAt || !completedAt) return null
+	return getDaysBetween(startedAt, completedAt)
+}
