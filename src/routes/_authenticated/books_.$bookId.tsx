@@ -3,9 +3,10 @@ import { LucidePencil } from 'lucide-react'
 import { type ComponentProps, useState } from 'react'
 import { BackLink } from '#/components/book-details/back-link'
 import { BookHeader } from '#/components/book-details/book-header'
+import { BookNotes } from '#/components/book-details/book-notes'
 import { BookStats } from '#/components/book-details/book-stats'
 import { BookDetailsError } from '#/components/book-details/error'
-import { SessionsAndNotes } from '#/components/book-details/sessions-and-notes'
+import { ReadingSessions } from '#/components/book-details/reading-sessions'
 import { BookDetailsSkeleton } from '#/components/book-details/skeleton'
 import { BookModal } from '#/components/modals/book-modal'
 import { DeleteModal } from '#/components/modals/delete-modal'
@@ -75,6 +76,13 @@ function BookDetailsPage() {
 		})
 	}
 
+	const sessionsDelay = hasSessions
+		? '[animation-delay:0.2s]'
+		: '[animation-delay:0.1s]'
+	const notesDelay = hasSessions
+		? '[animation-delay:0.26s]'
+		: '[animation-delay:0.16s]'
+
 	return (
 		<>
 			<main className="mx-auto min-h-[calc(100vh-69px)] w-full max-w-275 space-y-7 px-5 py-6 pb-10 lg:space-y-8 lg:px-10 lg:py-8">
@@ -95,13 +103,17 @@ function BookDetailsPage() {
 
 				{hasSessions && <BookStats stats={stats} elapsedDays={elapsedDays} />}
 
-				<SessionsAndNotes
-					sessions={sortedSessions}
-					notes={book.notes}
-					onAddSession={() => setSessionModal({ mode: 'add' })}
-					onEditSession={handleEditSession}
-					onDeleteSession={setSessionToDeleteId}
-				/>
+				<div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-7">
+					<ReadingSessions
+						sessions={sortedSessions}
+						onAddSession={() => setSessionModal({ mode: 'add' })}
+						onEditSession={handleEditSession}
+						onDeleteSession={setSessionToDeleteId}
+						className={sessionsDelay}
+					/>
+
+					<BookNotes notes={book.notes} className={notesDelay} />
+				</div>
 			</main>
 
 			{isEditOpen && (
