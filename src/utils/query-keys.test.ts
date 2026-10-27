@@ -33,13 +33,14 @@ describe('queryKeys', () => {
 			dashboard: ['dashboard'],
 			activity: ['activity'],
 			bookDetails: ['book-details'],
+			yearlyOverview: ['yearly-overview'],
 		})
 	})
 })
 
 describe('invalidateDomain', () => {
 	it.each([
-		['books', ['books', 'dashboard', 'goals', 'bookDetails']],
+		['books', ['books', 'dashboard', 'goals', 'bookDetails', 'yearlyOverview']],
 		[
 			'readingSessions',
 			[
@@ -49,12 +50,14 @@ describe('invalidateDomain', () => {
 				'activity',
 				'goals',
 				'bookDetails',
+				'yearlyOverview',
 			],
 		],
-		['goals', ['goals']],
+		['goals', ['goals', 'yearlyOverview']],
 		['dashboard', ['dashboard']],
 		['activity', ['activity']],
 		['bookDetails', ['bookDetails']],
+		['yearlyOverview', ['yearlyOverview']],
 	] as const)('invalidates the affected domains for %s', (domain, affectedDomains) => {
 		const invalidateQueries = vi.spyOn(queryClient, 'invalidateQueries')
 
@@ -75,9 +78,16 @@ describe('invalidateAfterBookDeletion', () => {
 		const otherDetails = observe([...queryKeys.bookDetails, 'book-2'])
 		const books = observe(queryKeys.books)
 		const activity = observe(queryKeys.activity)
+		const yearlyOverview = observe([...queryKeys.yearlyOverview, 2025])
 
 		await vi.waitFor(() => expect(queryClient.isFetching()).toBe(0))
-		for (const queryFn of [deletedDetails, otherDetails, books, activity]) {
+		for (const queryFn of [
+			deletedDetails,
+			otherDetails,
+			books,
+			activity,
+			yearlyOverview,
+		]) {
 			expect(queryFn).toHaveBeenCalledTimes(1)
 		}
 
@@ -85,6 +95,7 @@ describe('invalidateAfterBookDeletion', () => {
 
 		expect(books).toHaveBeenCalledTimes(2)
 		expect(activity).toHaveBeenCalledTimes(2)
+		expect(yearlyOverview).toHaveBeenCalledTimes(2)
 		expect(otherDetails).toHaveBeenCalledTimes(2)
 		expect(deletedDetails).toHaveBeenCalledTimes(1)
 		expect(

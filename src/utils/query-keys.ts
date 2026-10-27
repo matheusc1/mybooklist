@@ -9,6 +9,7 @@ export const queryKeys = {
 	dashboard: ['dashboard'],
 	activity: ['activity'],
 	bookDetails: ['book-details'],
+	yearlyOverview: ['yearly-overview'],
 } as const
 
 const BOOK_DELETION_DOMAINS: QueryDomain[] = [
@@ -17,12 +18,13 @@ const BOOK_DELETION_DOMAINS: QueryDomain[] = [
 	'dashboard',
 	'activity',
 	'goals',
+	'yearlyOverview',
 ]
 
 type QueryDomain = keyof typeof queryKeys
 
 const invalidationGraph: Record<QueryDomain, QueryDomain[]> = {
-	books: ['books', 'dashboard', 'goals', 'bookDetails'],
+	books: ['books', 'dashboard', 'goals', 'bookDetails', 'yearlyOverview'],
 	readingSessions: [
 		'readingSessions',
 		'books',
@@ -30,11 +32,13 @@ const invalidationGraph: Record<QueryDomain, QueryDomain[]> = {
 		'activity',
 		'goals',
 		'bookDetails',
+		'yearlyOverview',
 	],
-	goals: ['goals'],
+	goals: ['goals', 'yearlyOverview'],
 	dashboard: ['dashboard'],
 	activity: ['activity'],
 	bookDetails: ['bookDetails'],
+	yearlyOverview: ['yearlyOverview'],
 }
 
 export function invalidateDomain(
