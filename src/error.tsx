@@ -3,12 +3,30 @@ import { useState } from 'react'
 import { Button, button } from '@/components/ui/button'
 
 interface ErrorComponentProps {
-	error: Error
+	error: unknown
 	reset?: () => void
+}
+
+function describeError(error: unknown): { name: string; message: string } {
+	if (error instanceof Error) {
+		return { name: error.name || 'Error', message: error.message }
+	}
+
+	if (typeof error === 'string') {
+		return { name: 'Error', message: error }
+	}
+
+	try {
+		const serialized = JSON.stringify(error)
+		return { name: 'Error', message: serialized ?? String(error) }
+	} catch {
+		return { name: 'Error', message: String(error) }
+	}
 }
 
 export function ErrorComponent({ error, reset }: ErrorComponentProps) {
 	const [showDetails, setShowDetails] = useState(false)
+	const { name, message } = describeError(error)
 
 	return (
 		<div className="min-h-screen font-sans flex flex-col">
@@ -60,10 +78,10 @@ export function ErrorComponent({ error, reset }: ErrorComponentProps) {
 							{showDetails && (
 								<div className="mt-3 text-left bg-surface border border-border rounded-lg p-4 animate-fade-in">
 									<div className="text-xxs font-mono uppercase tracking-wider text-muted mb-2">
-										{error.name || 'Error'}
+										{name}
 									</div>
 									<div className="text-xs font-mono text-danger/90 wrap-break-words leading-relaxed">
-										{error.message}
+										{message}
 									</div>
 								</div>
 							)}
