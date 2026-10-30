@@ -62,15 +62,9 @@ test('does not show an Unauthorized toast when navigating to /login on the clien
 	await page.goto('/')
 	await expect(page.getByRole('link', { name: 'Get Started' })).toBeVisible()
 
-	// A client-side navigation runs beforeLoad in the browser, so the 401 is
-	// observable here, unlike on a direct visit.
-	const meResponse = page.waitForResponse(
-		(response) =>
-			response.url() === getApiEndpoint('/auth/me') &&
-			response.status() === 401,
-	)
+	// The landing page has already queried /auth/me, so the login route guard
+	// can reuse that query instead of producing a response after this click.
 	await page.getByRole('link', { name: 'Get Started' }).click()
-	expect((await meResponse).status()).toBe(401)
 	await expect(page).toHaveURL(/\/login$/)
 	await expect(
 		page.getByRole('heading', { name: /Sign In to MyBookList/ }),
@@ -93,7 +87,9 @@ test('renders the root SEO metadata in the hydrated page and server HTML', async
 	const ogDescription =
 		'Track your books, set goals, and follow your reading progress.'
 
-	await expect(page).toHaveTitle('MyBookList')
+	await expect(page).toHaveTitle(
+		'MyBookList: track your books, reading sessions and goals',
+	)
 	await expect(page.locator('meta[charset]')).toHaveAttribute(
 		'charset',
 		'utf-8',
@@ -123,7 +119,9 @@ test('renders the root SEO metadata in the hydrated page and server HTML', async
 		'summary_large_image',
 	)
 
-	expect(serverHtml).toMatch(/<title>MyBookList<\/title>/)
+	expect(serverHtml).toMatch(
+		/<title>MyBookList: track your books, reading sessions and goals<\/title>/,
+	)
 	expect(serverHtml).toMatch(/<meta\b(?=[^>]*charset="utf-8")[^>]*>/i)
 	expect(serverHtml).toMatch(
 		/<meta\b(?=[^>]*name="viewport")(?=[^>]*content="width=device-width, initial-scale=1")[^>]*>/,

@@ -24,7 +24,7 @@ authTest(
 		const bookTitle = new RegExp(
 			book.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
 		)
-		await expect(page.getByRole('button', { name: bookTitle })).toBeVisible({
+		await expect(page.getByRole('link', { name: bookTitle })).toBeVisible({
 			timeout: 20_000,
 		})
 
@@ -52,7 +52,7 @@ authTest(
 		await expect(sessionDialog).toBeHidden()
 
 		await page.getByRole('link', { name: 'My Books' }).click()
-		const readingBook = page.getByRole('button', { name: bookTitle })
+		const readingBook = page.getByRole('link', { name: bookTitle })
 		await expect(readingBook).toBeVisible()
 		await expect(readingBook).toHaveAccessibleName(/Reading/)
 
@@ -86,15 +86,17 @@ authTest(
 		await expect(firstSession).toBeVisible()
 
 		await firstSession.click()
-		const viewDialog = page.getByRole('dialog').last()
-		await viewDialog.getByRole('button', { name: 'Edit' }).click()
-		await viewDialog.getByLabel('To page').fill(String(updatedToPage))
+		const editDialog = page.getByRole('dialog').last()
+		await expect(
+			editDialog.getByRole('heading', { name: 'Edit Session' }),
+		).toBeVisible()
+		await editDialog.getByLabel('To page').fill(String(updatedToPage))
 		const updateResponse = page.waitForResponse(
 			(response) =>
 				/\/reading-sessions\/[^/]+$/.test(new URL(response.url()).pathname) &&
 				response.request().method() === 'PATCH',
 		)
-		await viewDialog.getByRole('button', { name: 'Save' }).click()
+		await editDialog.getByRole('button', { name: 'Save' }).click()
 		expect((await updateResponse).ok()).toBeTruthy()
 		await expect(
 			page.getByRole('heading', { name: 'Edit Session' }),
@@ -123,8 +125,11 @@ authTest(
 		await expect(updatedSession).toBeVisible()
 		await updatedSession.click()
 
-		const sessionViewDialog = page.getByRole('dialog').last()
-		await sessionViewDialog
+		const updatedEditDialog = page.getByRole('dialog').last()
+		await expect(
+			updatedEditDialog.getByRole('heading', { name: 'Edit Session' }),
+		).toBeVisible()
+		await updatedEditDialog
 			.getByRole('button', { name: 'Delete session' })
 			.click()
 		const deleteDialog = page.getByRole('dialog').last()

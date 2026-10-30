@@ -48,36 +48,31 @@ authTest(
 		expect((await createResponse).ok()).toBeTruthy()
 		await expect(dialog).toBeHidden()
 
-		const bookCard = page.getByRole('button', { name: new RegExp(title) })
+		const bookCard = page.getByRole('link', { name: new RegExp(title) })
 		await expect(bookCard).toBeVisible()
-		await expect(
-			bookCard.getByRole('img', { name: `${title} cover` }),
-		).toHaveAttribute('src', coverUrl)
+		await expect(bookCard.locator('img')).toHaveAttribute('src', coverUrl)
 		await expect(
 			bookCard.getByRole('img', { name: `${rating} out of 5 stars` }),
 		).toBeVisible()
 
 		await page.reload()
-		const reloadedCard = page.getByRole('button', {
+		const reloadedCard = page.getByRole('link', {
 			name: new RegExp(title),
 		})
 		await expect(reloadedCard).toBeVisible()
-		await expect(
-			reloadedCard.getByRole('img', { name: `${title} cover` }),
-		).toHaveAttribute('src', coverUrl)
+		await expect(reloadedCard.locator('img')).toHaveAttribute('src', coverUrl)
 		await expect(
 			reloadedCard.getByRole('img', { name: `${rating} out of 5 stars` }),
 		).toBeVisible()
 
 		await reloadedCard.click()
-		const detailsDialog = page.getByRole('dialog')
-		await detailsDialog.getByRole('button', { name: 'Edit Book' }).click()
+		await expect(page).toHaveURL(/\/books\/[^/]+$/)
+		await page.getByRole('button', { name: 'Edit book' }).click()
+		const editDialog = page.getByRole('dialog')
 		await expect(page.getByRole('heading', { name: 'Edit Book' })).toBeVisible()
-		await expect(detailsDialog.getByLabel('Book Cover')).toHaveValue(coverUrl)
-		await expect(detailsDialog.getByLabel('Date Started')).toHaveValue(
-			startedAt,
-		)
-		await expect(detailsDialog.getByLabel('Date Completed')).toHaveValue(
+		await expect(editDialog.getByLabel('Book Cover')).toHaveValue(coverUrl)
+		await expect(editDialog.getByLabel('Date Started')).toHaveValue(startedAt)
+		await expect(editDialog.getByLabel('Date Completed')).toHaveValue(
 			completedAt,
 		)
 	},

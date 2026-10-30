@@ -1,5 +1,50 @@
 import { expect } from '@playwright/test'
-import { authTest, seedBook } from './fixtures/api'
+import { authTest, seedBook, seedSession } from './fixtures/api'
+
+authTest(
+	'navigates from a library book card to its details and back',
+	async ({ authenticated }) => {
+		const book = await seedBook(authenticated.context.request, {
+			title: `E2E book details ${Date.now()}`,
+			currentPage: 1,
+			totalPages: 10,
+			status: 'reading',
+		})
+		const session = await seedSession(authenticated.context.request, {
+			bookId: book.id,
+			fromPage: 1,
+			toPage: 3,
+		})
+		const page = await authenticated.context.newPage()
+		const bookTitle = new RegExp(
+			book.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+		)
+		const bookCard = page.getByRole('link', { name: bookTitle })
+
+		await page.goto('/books')
+		await expect(bookCard).toBeVisible()
+		await bookCard.click()
+
+		await expect(page).toHaveURL(new RegExp(`/books/${book.id}$`))
+		await expect(page.getByRole('heading', { name: book.title })).toBeVisible()
+		await expect(page.getByText(book.author, { exact: true })).toBeVisible()
+		await expect(
+			page.getByText(`Page ${session.toPage} of ${book.totalPages}`, {
+				exact: true,
+			}),
+		).toBeVisible()
+		await expect(page.getByRole('heading', { name: 'Sessions' })).toBeVisible()
+		await expect(
+			page.getByText(`pp. ${session.fromPage}-${session.toPage}`, {
+				exact: true,
+			}),
+		).toBeVisible()
+
+		await page.getByRole('link', { name: '← Back' }).click()
+		await expect(page).toHaveURL(/\/books$/)
+		await expect(bookCard).toBeVisible()
+	},
+)
 
 authTest(
 	'completes a book through a reading session and reflects it across the app',
@@ -39,7 +84,7 @@ authTest(
 		const titlePattern = new RegExp(
 			title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
 		)
-		const bookCard = page.getByRole('button', { name: titlePattern })
+		const bookCard = page.getByRole('link', { name: titlePattern })
 		await expect(bookCard).toBeVisible()
 		await expect(bookCard).toHaveAccessibleName(/Reading/)
 
@@ -66,7 +111,7 @@ authTest(
 
 		await page.getByRole('link', { name: 'My Books' }).click()
 		await expect(page).toHaveURL(/\/books$/)
-		const completedBookCard = page.getByRole('button', { name: titlePattern })
+		const completedBookCard = page.getByRole('link', { name: titlePattern })
 		await expect(completedBookCard).toBeVisible()
 		await expect(completedBookCard).toHaveAccessibleName(/Completed/)
 
@@ -97,26 +142,37 @@ authTest(
 			status: 'reading',
 		})
 		const updatedTitle = `${book.title} Updated`
-		const originalCard = page.getByRole('button', {
+		const originalCard = page.getByRole('link', {
 			name: new RegExp(book.title),
 		})
 
 		await page.goto('/books')
 		await expect(originalCard).toBeVisible()
 		await originalCard.click()
+		await expect(page).toHaveURL(new RegExp(`/books/${book.id}$`))
 
-		const detailsDialog = page.getByRole('dialog')
-		await detailsDialog.getByRole('button', { name: 'Edit Book' }).click()
-		await detailsDialog.getByLabel('Title').fill(updatedTitle)
+		await page.getByRole('button', { name: 'Edit book' }).click()
+		const editDialog = page.getByRole('dialog')
+		await expect(
+			editDialog.getByRole('heading', { name: 'Edit Book' }),
+		).toBeVisible()
+		await editDialog.getByLabel('Title').fill(updatedTitle)
 		const updateResponse = page.waitForResponse(
 			(response) =>
 				/\/books\/[^/]+$/.test(new URL(response.url()).pathname) &&
 				response.request().method() === 'PATCH',
 		)
-		await detailsDialog.getByRole('button', { name: 'Save' }).click()
+		await editDialog.getByRole('button', { name: 'Save' }).click()
 		expect((await updateResponse).ok()).toBeTruthy()
+		await expect(editDialog).toBeHidden()
+		await expect(
+			page.getByRole('heading', {
+				name: new RegExp(updatedTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+			}),
+		).toBeVisible()
 
-		const updatedCard = page.getByRole('button', {
+		await page.getByRole('link', { name: '← Back' }).click()
+		const updatedCard = page.getByRole('link', {
 			name: new RegExp(updatedTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
 		})
 		await expect(updatedCard).toBeVisible()
@@ -124,6 +180,7 @@ authTest(
 		await expect(updatedCard).toBeVisible()
 		await updatedCard.click()
 
+		await page.getByRole('button', { name: 'Edit book' }).click()
 		await page.getByRole('button', { name: 'Delete book' }).click()
 		const deleteDialog = page.getByRole('dialog').last()
 		const deleteResponse = page.waitForResponse(
@@ -133,6 +190,8 @@ authTest(
 		)
 		await deleteDialog.getByRole('button', { name: 'Delete' }).click()
 		expect((await deleteResponse).ok()).toBeTruthy()
+		await expect(page.getByRole('heading', { name: 'Edit Book' })).toBeHidden()
+		await expect(page).toHaveURL(/\/books$/)
 		await expect(
 			page.getByRole('heading', { name: 'Your library is empty' }),
 		).toBeVisible()
@@ -155,12 +214,12 @@ authTest(
 		const page = await authenticated.context.newPage()
 
 		await page.goto('/books')
-		const readingCard = page.getByRole('button', {
+		const readingCard = page.getByRole('link', {
 			name: new RegExp(
 				readingBook.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
 			),
 		})
-		const plannedCard = page.getByRole('button', {
+		const plannedCard = page.getByRole('link', {
 			name: new RegExp(
 				plannedBook.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
 			),
