@@ -1,13 +1,14 @@
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useUpsertGoal } from '#/hooks/use-goal'
+import { useGoal, useUpsertGoal } from '#/hooks/use-goal'
 import { useGoalModalStore } from '#/stores/goal-store'
-import { render, screen, waitFor } from '#/test/test-utils'
+import { act, render, screen, waitFor } from '#/test/test-utils'
 import { GoalModal } from './goal-modal'
 
 const mutate = vi.fn()
 
 vi.mock('#/hooks/use-goal', () => ({
+	useGoal: vi.fn(),
 	useUpsertGoal: vi.fn(),
 }))
 
@@ -15,6 +16,7 @@ describe('GoalModal', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		useGoalModalStore.setState({ open: true, mode: 'add' })
+		vi.mocked(useGoal).mockReturnValue({ data: undefined } as never)
 		vi.mocked(useUpsertGoal).mockReturnValue({
 			mutate,
 			isPending: false,
@@ -87,6 +89,34 @@ describe('GoalModal', () => {
 		await user.click(screen.getByRole('button', { name: 'Cancel' }))
 
 		expect(useGoalModalStore.getState().open).toBe(false)
+	})
+
+	it('discards the draft when dismissed with Escape', async () => {
+		const user = userEvent.setup()
+		render(<GoalModal />)
+
+		await user.type(
+			screen.getByRole('spinbutton', { name: /books to read/i }),
+			'12',
+		)
+		await user.keyboard('{Escape}')
+		expect(useGoalModalStore.getState().open).toBe(false)
+
+		act(() => useGoalModalStore.getState().openModal('add'))
+
+		expect(
+			screen.getByRole('spinbutton', { name: /books to read/i }),
+		).toHaveValue(null)
+	})
+
+	it('prefills the current target when editing', () => {
+		vi.mocked(useGoal).mockReturnValue({ data: { target: 24 } } as never)
+		useGoalModalStore.setState({ open: true, mode: 'edit' })
+		render(<GoalModal />)
+
+		expect(
+			screen.getByRole('spinbutton', { name: /books to read/i }),
+		).toHaveValue(24)
 	})
 
 	it('keeps the form disabled while saving', () => {

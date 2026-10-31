@@ -53,7 +53,7 @@ function DropdownMenuActions({
 	return (
 		<div className="p-1.5">
 			<DropdownMenu.Item
-				onClick={() => openModal(goal ? 'edit' : 'add')}
+				onClick={() => openModal(goal?.target ? 'edit' : 'add')}
 				className={`${itemClassName} hover:bg-surface2 hover:text-text data-highlighted:bg-surface2 data-highlighted:text-text`}
 			>
 				<div className={`${iconClassName} bg-accent/10 border-accent/15`}>

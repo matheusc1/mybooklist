@@ -1,7 +1,8 @@
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
-import { useUpsertGoal } from '#/hooks/use-goal'
+import { useGoal, useUpsertGoal } from '#/hooks/use-goal'
 import { useGoalModalStore } from '#/stores/goal-store'
+import type { ModalMode } from '#/types/common'
 import { Button } from '../ui/button'
 import { FieldError, FieldLabel, Input } from '../ui/inputs'
 import { Modal } from '../ui/modal'
@@ -16,11 +17,26 @@ const year = new Date().getFullYear().toString()
 
 export function GoalModal() {
 	const { open, mode, closeModal } = useGoalModalStore()
+
+	if (!open) return null
+
+	return <GoalModalContent mode={mode} onClose={closeModal} />
+}
+
+interface GoalModalContentProps {
+	mode: ModalMode
+	onClose: () => void
+}
+
+function GoalModalContent({ mode, onClose }: GoalModalContentProps) {
+	const { data: goal } = useGoal()
 	const { mutate: setGoal, isPending } = useUpsertGoal()
 
 	const form = useForm({
 		defaultValues: {
-			target: undefined as number | undefined,
+			target: (mode === 'edit' ? (goal?.target ?? undefined) : undefined) as
+				| number
+				| undefined,
 		},
 		validators: {
 			onChange: goalSchema,
@@ -29,25 +45,12 @@ export function GoalModal() {
 		onSubmit: async ({ value }) => {
 			if (value.target === undefined) return
 
-			setGoal(
-				{ target: value.target },
-				{
-					onSuccess: () => {
-						form.reset()
-						closeModal()
-					},
-				},
-			)
+			setGoal({ target: value.target }, { onSuccess: onClose })
 		},
 	})
 
-	function handleCancel() {
-		form.reset()
-		closeModal()
-	}
-
 	return (
-		<Modal.Root open={open} onOpenChange={(v) => !v && closeModal()}>
+		<Modal.Root open onOpenChange={(v) => !v && onClose()}>
 			<Modal.Header eyebrow="Reading goal" title={year} />
 
 			<form
@@ -103,7 +106,7 @@ export function GoalModal() {
 									<Button
 										type="reset"
 										variant="ghost"
-										onClick={handleCancel}
+										onClick={onClose}
 										disabled={pending}
 									>
 										Cancel
