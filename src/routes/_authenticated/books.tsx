@@ -103,12 +103,12 @@ function MyBooks() {
 		})
 	}
 
-	const statusCounts = books?.reduce(
+	const statusCounts = books?.reduce<Record<ActivityStatus, number>>(
 		(acc, book) => {
-			acc[book.status] = (acc[book.status] ?? 0) + 1
+			acc[book.status] += 1
 			return acc
 		},
-		{} as Record<ActivityStatus, number>,
+		{ reading: 0, planned: 0, paused: 0, completed: 0, dropped: 0 },
 	)
 
 	const normalizedSearch = search.trim().toLowerCase()

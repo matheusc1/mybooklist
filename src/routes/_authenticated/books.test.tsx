@@ -170,6 +170,30 @@ describe('MyBooks', () => {
 		expect(screen.getByText('Dune')).toBeInTheDocument()
 	})
 
+	it('shows zero for statuses without books once data has loaded', async () => {
+		await renderWithRoute('/books', { authenticated: true })
+
+		expect(screen.getByRole('button', { name: /All 1/ })).toBeInTheDocument()
+		expect(
+			screen.getByRole('button', { name: /Want to read 0/ }),
+		).toBeInTheDocument()
+		expect(
+			screen.getByRole('button', { name: /Completed 0/ }),
+		).toBeInTheDocument()
+	})
+
+	it('shows no counts while books are loading', async () => {
+		books.mockReturnValue({ data: undefined, isLoading: true })
+		await renderWithRoute('/books', { authenticated: true })
+
+		expect(
+			screen.queryByRole('button', { name: /Want to read 0/ }),
+		).not.toBeInTheDocument()
+		expect(
+			screen.queryByRole('button', { name: /All 0/ }),
+		).not.toBeInTheDocument()
+	})
+
 	it('shows a distinct empty state when filters match no books', async () => {
 		const user = userEvent.setup()
 		await renderWithRoute('/books', { authenticated: true })
