@@ -211,6 +211,95 @@ describe('BookModal', () => {
 		)
 	})
 
+	it('keeps a manually chosen status after auto-completion is undone', async () => {
+		const user = userEvent.setup()
+		render(<BookModal open onOpenChange={vi.fn()} />)
+
+		await user.click(screen.getByRole('radio', { name: 'Reading' }))
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Total Pages' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Current Page' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		await waitFor(() =>
+			expect(screen.getByRole('radio', { name: 'Completed' })).toBeChecked(),
+		)
+
+		await user.click(screen.getByRole('radio', { name: 'Paused' }))
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Current Page' }), {
+			target: { value: '50', valueAsNumber: 50 },
+		})
+
+		await waitFor(() =>
+			expect(
+				screen.getByRole('spinbutton', { name: 'Current Page' }),
+			).toHaveValue(50),
+		)
+		expect(screen.getByRole('radio', { name: 'Paused' })).toBeChecked()
+	})
+
+	it('restores the previous status and clears the date when the final page is undone', async () => {
+		const user = userEvent.setup()
+		render(<BookModal open onOpenChange={vi.fn()} />)
+
+		await user.click(screen.getByRole('radio', { name: 'Reading' }))
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Total Pages' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Current Page' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		await waitFor(() =>
+			expect(screen.getByLabelText('Date Completed')).toHaveValue(
+				getTodayDate(),
+			),
+		)
+
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Current Page' }), {
+			target: { value: '50', valueAsNumber: 50 },
+		})
+
+		await waitFor(() =>
+			expect(screen.getByRole('radio', { name: 'Reading' })).toBeChecked(),
+		)
+		expect(screen.queryByLabelText('Date Completed')).not.toBeInTheDocument()
+
+		await user.click(screen.getByRole('radio', { name: 'Completed' }))
+
+		expect(screen.getByLabelText('Date Completed')).toHaveValue('')
+	})
+
+	it('does not restore a stale status after cancelling and reopening', async () => {
+		const user = userEvent.setup()
+		const onOpenChange = vi.fn()
+		const view = render(<BookModal open onOpenChange={onOpenChange} />)
+
+		await user.click(screen.getByRole('radio', { name: 'Reading' }))
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Total Pages' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Current Page' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+		await waitFor(() =>
+			expect(screen.getByRole('radio', { name: 'Completed' })).toBeChecked(),
+		)
+
+		await user.click(screen.getByRole('button', { name: 'Cancel' }))
+		view.rerender(<BookModal open onOpenChange={onOpenChange} />)
+		fireEvent.change(screen.getByRole('spinbutton', { name: 'Total Pages' }), {
+			target: { value: '100', valueAsNumber: 100 },
+		})
+
+		await waitFor(() =>
+			expect(
+				screen.getByRole('spinbutton', { name: 'Total Pages' }),
+			).toHaveValue(100),
+		)
+		expect(screen.getByRole('radio', { name: 'Reading' })).not.toBeChecked()
+	})
+
 	it('uses the add title and does not offer delete when creating', () => {
 		render(<BookModal open onOpenChange={vi.fn()} />)
 

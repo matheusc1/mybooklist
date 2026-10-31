@@ -151,6 +151,7 @@ export function BookModal({
 
 	function handleCancel() {
 		form.reset()
+		prevStatusRef.current = null
 		onOpenChange(false)
 	}
 
@@ -288,7 +289,10 @@ export function BookModal({
 										<FieldLabel required>Status</FieldLabel>
 										<BookStatusSelector
 											value={field.state.value}
-											onValueChange={field.handleChange}
+											onValueChange={(next) => {
+												prevStatusRef.current = null
+												field.handleChange(next)
+											}}
 											onBlur={field.handleBlur}
 										/>
 										<FieldError
