@@ -48,4 +48,36 @@ describe('Activity', () => {
 		).toBeInTheDocument()
 		expect(screen.getByRole('button', { name: 'Next month' })).toBeDisabled()
 	})
+
+	it('opens the session modal when a day is clicked', async () => {
+		const user = userEvent.setup()
+		await renderWithRoute('/activity', { authenticated: true })
+
+		await user.click(screen.getAllByRole('button', { name: /click to add/ })[0])
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('Session modal')
+	})
+
+	it('dims month data and ignores day clicks while the next month loads', async () => {
+		const user = userEvent.setup()
+		activity.mockReturnValue({
+			data: {
+				monthlyStats: {
+					sessions: 1,
+					pages: 10,
+					readingTime: 30,
+					activeDays: 1,
+				},
+				monthlyActivity: [],
+			},
+			isLoading: false,
+			isPlaceholderData: true,
+		})
+		await renderWithRoute('/activity', { authenticated: true })
+
+		expect(document.querySelectorAll('[aria-busy="true"]')).toHaveLength(2)
+		await user.click(screen.getAllByRole('button', { name: /click to add/ })[0])
+
+		expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+	})
 })

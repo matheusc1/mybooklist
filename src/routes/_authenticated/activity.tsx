@@ -23,7 +23,11 @@ function Activity() {
 	const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
 	const monthParam = `${view.year}-${String(view.month + 1).padStart(2, '0')}`
-	const { data: activity, isLoading } = useActivity(monthParam)
+	const {
+		data: activity,
+		isLoading,
+		isPlaceholderData,
+	} = useActivity(monthParam)
 
 	const monthlyStats = activity?.monthlyStats
 	const calendar = activity?.monthlyActivity ?? []
@@ -49,15 +53,23 @@ function Activity() {
 				<p className="text-muted text-xs tracking-wider">{currentMonthLabel}</p>
 			</div>
 
-			<MonthlyStats monthlyStats={monthlyStats} />
+			<div
+				aria-busy={isPlaceholderData}
+				className="transition-opacity aria-busy:opacity-60"
+			>
+				<MonthlyStats monthlyStats={monthlyStats} />
+			</div>
 
 			<div className="animate-fade-up [animation-delay:0.15s]">
 				<Calendar
 					calendar={calendar}
 					year={view.year}
 					month={view.month}
+					isStale={isPlaceholderData}
 					onMonthChange={(year, month) => setView({ year, month })}
-					onDayClick={(date) => setSelectedDate(date)}
+					onDayClick={(date) => {
+						if (!isPlaceholderData) setSelectedDate(date)
+					}}
 				/>
 			</div>
 

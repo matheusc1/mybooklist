@@ -20,6 +20,7 @@ interface CalendarProps {
 	month: number
 	onMonthChange: (year: number, month: number) => void
 	onDayClick: (date: string, sessions: Session[]) => void
+	isStale?: boolean
 }
 
 export function Calendar({
@@ -28,6 +29,7 @@ export function Calendar({
 	month,
 	onMonthChange,
 	onDayClick,
+	isStale,
 }: CalendarProps) {
 	const today = new Date()
 
@@ -97,7 +99,10 @@ export function Calendar({
 				</div>
 			</div>
 
-			<div className="space-y-2">
+			<div
+				aria-busy={isStale}
+				className="space-y-2 transition-opacity aria-busy:opacity-60"
+			>
 				<div className="grid grid-cols-7 gap-1">
 					{['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
 						<div

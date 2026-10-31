@@ -162,4 +162,47 @@ describe('Calendar', () => {
 
 		expect(onDayClick).toHaveBeenCalledWith('2026-09-15', calendar[1].sessions)
 	})
+
+	it('marks only the day grid as busy while data is stale', () => {
+		render(
+			<Calendar
+				calendar={calendar}
+				year={2026}
+				month={8}
+				isStale
+				onMonthChange={vi.fn()}
+				onDayClick={vi.fn()}
+			/>,
+		)
+
+		const day = screen.getByRole('button', {
+			name: /September 10, 2026, has reading session/,
+		})
+
+		expect(day.closest('[aria-busy="true"]')).not.toBeNull()
+		expect(
+			screen
+				.getByRole('button', { name: 'Next month' })
+				.closest('[aria-busy="true"]'),
+		).toBeNull()
+		expect(
+			screen
+				.getByRole('heading', { name: 'September 2026' })
+				.closest('[aria-busy="true"]'),
+		).toBeNull()
+	})
+
+	it('is not busy when the data is current', () => {
+		render(
+			<Calendar
+				calendar={calendar}
+				year={2026}
+				month={8}
+				onMonthChange={vi.fn()}
+				onDayClick={vi.fn()}
+			/>,
+		)
+
+		expect(document.querySelector('[aria-busy="true"]')).toBeNull()
+	})
 })
