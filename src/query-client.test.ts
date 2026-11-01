@@ -43,6 +43,7 @@ describe('query client 401 handling', () => {
 			.catch(() => {})
 
 		expect(onUnauthorized).not.toHaveBeenCalled()
+		expect(toast.error).not.toHaveBeenCalled()
 	})
 
 	it('keeps the toast for other errors', async () => {

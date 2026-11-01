@@ -32,11 +32,13 @@ export function getQueryClient({ onUnauthorized }: QueryClientOptions = {}) {
 	return new QueryClient({
 		queryCache: new QueryCache({
 			onError: (error, query) => {
-				// The auth query is excluded on purpose: a 401 there is the normal
-				// answer for a visitor, and the route guard already handles it.
 				const isAuthQuery = query.queryKey[0] === authQueryKey[0]
 
-				if (onUnauthorized && !isAuthQuery && isUnauthorized(error)) {
+				// A 401 on the auth query just means "not signed in". The route guard
+				// handles it, so it should never surface as a toast or trigger recovery.
+				if (isAuthQuery && isUnauthorized(error)) return
+
+				if (onUnauthorized && isUnauthorized(error)) {
 					onUnauthorized()
 					return
 				}
