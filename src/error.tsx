@@ -1,3 +1,4 @@
+import { useQueryErrorResetBoundary } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Button, button } from '@/components/ui/button'
@@ -26,6 +27,7 @@ function describeError(error: unknown): { name: string; message: string } {
 
 export function ErrorComponent({ error, reset }: ErrorComponentProps) {
 	const [showDetails, setShowDetails] = useState(false)
+	const { reset: resetQueryError } = useQueryErrorResetBoundary()
 	const { name, message } = describeError(error)
 
 	return (
@@ -54,7 +56,14 @@ export function ErrorComponent({ error, reset }: ErrorComponentProps) {
 					</p>
 
 					<div className="flex gap-3 flex-wrap justify-center">
-						<Button variant="primary" size="lg" onClick={() => reset?.()}>
+						<Button
+							variant="primary"
+							size="lg"
+							onClick={() => {
+								resetQueryError()
+								reset?.()
+							}}
+						>
 							Try again
 						</Button>
 						<Link

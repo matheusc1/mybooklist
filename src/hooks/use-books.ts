@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createBook, deleteBook, getBooks, updateBook } from '#/http/books'
+import { throwWhenNoData } from '#/utils/query-errors'
 import {
 	invalidateAfterBookDeletion,
 	invalidateDomain,
@@ -10,6 +11,7 @@ export function useBooks() {
 	return useQuery({
 		queryKey: queryKeys.books,
 		queryFn: getBooks,
+		throwOnError: throwWhenNoData,
 	})
 }
 
