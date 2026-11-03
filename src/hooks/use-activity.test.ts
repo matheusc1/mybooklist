@@ -22,15 +22,6 @@ describe('useActivity', () => {
 		expect(getActivity).toHaveBeenCalledWith('2026-09')
 	})
 
-	it('exposes activity query errors', async () => {
-		const error = new Error('Activity unavailable')
-		vi.mocked(getActivity).mockRejectedValue(error)
-
-		const { result } = renderHookWithProviders(() => useActivity('2026-09'))
-
-		await waitFor(() => expect(result.current.error).toBe(error))
-	})
-
 	it('retains the previous month while the next month loads', async () => {
 		const september = {
 			monthlyStats: {

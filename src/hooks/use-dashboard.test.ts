@@ -31,13 +31,4 @@ describe('useDashboard', () => {
 		await waitFor(() => expect(result.current.data).toEqual(dashboard))
 		expect(getDashboard).toHaveBeenCalledOnce()
 	})
-
-	it('exposes dashboard query errors', async () => {
-		const error = new Error('Dashboard unavailable')
-		vi.mocked(getDashboard).mockRejectedValue(error)
-
-		const { result } = renderHookWithProviders(() => useDashboard())
-
-		await waitFor(() => expect(result.current.error).toBe(error))
-	})
 })

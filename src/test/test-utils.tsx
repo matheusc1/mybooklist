@@ -13,6 +13,7 @@ import {
 import type { ReactElement } from 'react'
 import { routeTree } from '#/routeTree.gen'
 import { authQueryKey } from '#/utils/query-keys'
+import { ErrorComponent } from '#/error'
 
 export function createTestQueryClient() {
 	return new QueryClient({
@@ -33,6 +34,7 @@ export function createTestRouter(initialEntries = ['/']) {
 		scrollRestoration: false,
 		defaultPreload: 'intent',
 		defaultPreloadStaleTime: 0,
+		defaultErrorComponent: ErrorComponent,
 	})
 
 	return { router, queryClient }

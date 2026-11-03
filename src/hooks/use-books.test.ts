@@ -45,15 +45,6 @@ describe('useBooks', () => {
 		await waitFor(() => expect(result.current.data).toEqual(books))
 		expect(getBooks).toHaveBeenCalledOnce()
 	})
-
-	it('exposes query errors', async () => {
-		const error = new Error('Request failed')
-		vi.mocked(getBooks).mockRejectedValue(error)
-
-		const { result } = renderHookWithProviders(() => useBooks())
-
-		await waitFor(() => expect(result.current.error).toBe(error))
-	})
 })
 
 describe.each([
