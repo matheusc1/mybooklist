@@ -245,7 +245,7 @@ describe('BookDetailsPage', () => {
 		await renderWithRoute('/books/book-1', { authenticated: true })
 
 		expect(
-			screen.getByRole('heading', { name: 'Unable to load book' }),
+			screen.getByRole('heading', { name: "We couldn't load this book" }),
 		).toBeInTheDocument()
 		expect(screen.getByRole('link', { name: '← Back' })).toHaveAttribute(
 			'href',

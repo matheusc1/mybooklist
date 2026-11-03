@@ -32,7 +32,7 @@ export const Route = createFileRoute('/_authenticated/books_/$bookId')({
 function BookDetailsPage() {
 	const { bookId } = Route.useParams()
 	const navigate = useNavigate()
-	const { data: bookDetails, isLoading, isError } = useBookDetails(bookId)
+	const { data: bookDetails, isLoading } = useBookDetails(bookId)
 	const { mutate: deleteSession, isPending: isDeleting } =
 		useDeleteReadingSession()
 
@@ -45,13 +45,9 @@ function BookDetailsPage() {
 		null,
 	)
 
-	if (isLoading) {
-		return <BookDetailsSkeleton />
-	}
+	if (isLoading) return <BookDetailsSkeleton />
 
-	if (isError || !bookDetails) {
-		return <BookDetailsError />
-	}
+	if (!bookDetails) return <BookDetailsError />
 
 	const { book, readingSessions, stats } = bookDetails
 
