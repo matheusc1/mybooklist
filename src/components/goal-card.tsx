@@ -7,19 +7,34 @@ function formatMonthsRemaining(months: number): string {
 	return `${months} month${months === 1 ? '' : 's'} remaining`
 }
 
-export function GoalCard({ goal }: { goal: GoalProgress | undefined }) {
+export function GoalCard({
+	goal,
+	showInProgress = false,
+}: {
+	goal: GoalProgress | undefined
+	showInProgress?: boolean
+}) {
 	const now = new Date()
+	const year = goal?.year ?? now.getFullYear()
+	const isCurrentYear = year === now.getFullYear()
 
-	if (!goal?.target) return <EmptyCard year={now.getFullYear()} />
+	if (!goal?.target) {
+		return (
+			<EmptyCard
+				year={year}
+				current={goal?.current ?? 0}
+				editable={isCurrentYear}
+				showInProgress={showInProgress}
+			/>
+		)
+	}
 
 	const percent = getPercent(goal.current, goal.target ?? 0)
 	const monthsRemaining = 11 - now.getMonth()
 
 	return (
 		<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
-			<p className="text-muted uppercase tracking-widest text-xs mb-3">
-				Reading Goal · {goal.year}
-			</p>
+			<GoalHeader year={goal.year} showInProgress={showInProgress} />
 
 			<div className="space-y-2">
 				<div className="flex justify-between items-center">
@@ -42,40 +57,80 @@ export function GoalCard({ goal }: { goal: GoalProgress | undefined }) {
 				</div>
 
 				<p className="text-xs text-muted">
-					{percent}% complete · {formatMonthsRemaining(monthsRemaining)}
+					{percent}% complete
+					{isCurrentYear && ` · ${formatMonthsRemaining(monthsRemaining)}`}
 				</p>
 			</div>
 		</div>
 	)
 }
 
-function EmptyCard({ year }: { year: number }) {
+function EmptyCard({
+	year,
+	current,
+	editable,
+	showInProgress,
+}: {
+	year: number
+	current: number
+	editable: boolean
+	showInProgress: boolean
+}) {
 	const { openModal } = useGoalModalStore()
 
 	return (
 		<div className="p-4 lg:p-5 rounded-xl bg-surface border border-border">
-			<p className="text-muted uppercase tracking-widest text-xs mb-3">
-				Reading Goal · {year}
-			</p>
+			<GoalHeader year={year} showInProgress={showInProgress} />
 
 			<div className="space-y-2">
 				<div className="flex justify-between items-center">
-					<span className="font-serif text-2xl font-semibold text-text/20">
-						0
+					<span
+						className={`font-serif text-2xl font-semibold ${current === 0 ? 'text-text/20' : ''}`}
+					>
+						{current}
 					</span>
 					<p className="text-sm text-muted">of -- books</p>
 				</div>
 
 				<div className="h-1.5 bg-surface2 rounded-full" />
 
-				<button
-					onClick={() => openModal('add')}
-					type="button"
-					className="text-left text-xs text-muted underline cursor-pointer"
-				>
-					Set a goal and start reading.
-				</button>
+				{editable ? (
+					<button
+						onClick={() => openModal('add')}
+						type="button"
+						className="text-left text-xs text-muted underline cursor-pointer"
+					>
+						Set a goal and start reading.
+					</button>
+				) : (
+					<p className="text-xs text-muted">No goal was set for {year}.</p>
+				)}
 			</div>
+		</div>
+	)
+}
+
+function GoalHeader({
+	year,
+	showInProgress,
+}: {
+	year: number
+	showInProgress: boolean
+}) {
+	return (
+		<div className="mb-3 flex items-center justify-between gap-3">
+			<p className="text-muted uppercase tracking-widest text-xs">
+				Reading Goal · {year}
+			</p>
+			{showInProgress && (
+				<span className="inline-flex items-center gap-1.5 rounded-full border border-accent2/25 bg-accent2/10 px-2.5 py-1 font-mono text-xxs uppercase tracking-[0.08em] text-accent2">
+					<span
+						aria-hidden="true"
+						className="size-1.25 rounded-full bg-accent2 motion-safe:animate-pulse"
+					/>
+					In progress
+				</span>
+			)}
 		</div>
 	)
 }

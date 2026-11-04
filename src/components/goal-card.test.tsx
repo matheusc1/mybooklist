@@ -32,12 +32,29 @@ describe('GoalCard', () => {
 		).toBeInTheDocument()
 	})
 
-	it('renders the same empty state when the goal target is null', () => {
+	it('shows the real completed count in the current-year empty state', () => {
+		setDate(2026, 8)
+		render(<GoalCard goal={{ year: 2026, current: 3, target: null }} />)
+
+		expect(screen.getByText('Reading Goal · 2026')).toBeInTheDocument()
+		expect(screen.getByText('3')).toBeInTheDocument()
+		expect(screen.getByText('of -- books')).toBeInTheDocument()
+		expect(
+			screen.getByRole('button', { name: 'Set a goal and start reading.' }),
+		).toBeInTheDocument()
+	})
+
+	it('renders a past-year empty state without the set-goal action', () => {
 		setDate(2026, 8)
 		render(<GoalCard goal={{ year: 2025, current: 3, target: null }} />)
 
-		expect(screen.getByText('Reading Goal · 2026')).toBeInTheDocument()
+		expect(screen.getByText('Reading Goal · 2025')).toBeInTheDocument()
+		expect(screen.getByText('3')).toBeInTheDocument()
 		expect(screen.getByText('of -- books')).toBeInTheDocument()
+		expect(screen.getByText('No goal was set for 2025.')).toBeInTheDocument()
+		expect(
+			screen.queryByRole('button', { name: 'Set a goal and start reading.' }),
+		).not.toBeInTheDocument()
 	})
 
 	it('opens the add goal modal from the empty state', async () => {
@@ -99,6 +116,45 @@ describe('GoalCard', () => {
 		expect(
 			screen.getByText('10% complete · < 1 month remaining'),
 		).toBeInTheDocument()
+	})
+
+	it('renders a past-year goal with its own year and no months remaining', () => {
+		setDate(2026, 8)
+		render(<GoalCard goal={{ year: 2025, current: 8, target: 10 }} />)
+
+		expect(screen.getByText('Reading Goal · 2025')).toBeInTheDocument()
+		expect(screen.getByText('of 10 books')).toBeInTheDocument()
+		expect(screen.getByText('80% complete')).toBeInTheDocument()
+		expect(screen.queryByText(/remaining/)).not.toBeInTheDocument()
+	})
+
+	it('does not show the in-progress badge by default', () => {
+		setDate(2026, 8)
+		const { rerender } = render(
+			<GoalCard goal={{ year: 2026, current: 4, target: 10 }} />,
+		)
+
+		expect(screen.queryByText('In progress')).not.toBeInTheDocument()
+
+		rerender(<GoalCard goal={undefined} />)
+
+		expect(screen.queryByText('In progress')).not.toBeInTheDocument()
+	})
+
+	it('shows the in-progress badge with a goal when requested', () => {
+		setDate(2026, 8)
+		render(
+			<GoalCard goal={{ year: 2026, current: 4, target: 10 }} showInProgress />,
+		)
+
+		expect(screen.getByText('In progress')).toBeInTheDocument()
+	})
+
+	it('shows the in-progress badge in the empty state when requested', () => {
+		setDate(2026, 8)
+		render(<GoalCard goal={undefined} showInProgress />)
+
+		expect(screen.getByText('In progress')).toBeInTheDocument()
 	})
 })
 
