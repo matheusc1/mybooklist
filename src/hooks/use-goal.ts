@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getGoal, upsertGoal } from '#/http/goals'
-import { queryKeys } from '#/utils/query-keys'
+import { invalidateDomain, queryKeys } from '#/utils/query-keys'
 
 export function useGoal() {
 	return useQuery({
@@ -16,6 +16,7 @@ export function useUpsertGoal() {
 		mutationFn: upsertGoal,
 		onSuccess: (goal) => {
 			queryClient.setQueryData(queryKeys.goals, goal)
+			invalidateDomain(queryClient, 'goals')
 		},
 	})
 }
