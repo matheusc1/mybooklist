@@ -21,4 +21,18 @@ describe('RatingDisplay', () => {
 		).toBeInTheDocument()
 		expect(container.querySelectorAll('svg.fill-accent')).toHaveLength(0)
 	})
+
+	it('uses the default star size when none is given', () => {
+		const { container } = render(<RatingDisplay value={3} />)
+
+		expect(container.querySelectorAll('svg.size-5')).toHaveLength(5)
+		expect(container.querySelectorAll('svg.size-3')).toHaveLength(0)
+	})
+
+	it('uses smaller stars with the small size', () => {
+		const { container } = render(<RatingDisplay value={3} size="small" />)
+
+		expect(container.querySelectorAll('svg.size-3')).toHaveLength(5)
+		expect(container.querySelectorAll('svg.size-5')).toHaveLength(0)
+	})
 })

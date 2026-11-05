@@ -2,8 +2,8 @@ import type { CSSProperties } from 'react'
 import { BookStatusSelector } from '#/components/ui/inputs'
 import type { Book } from '#/types/book'
 import { getPercent } from '#/utils/get-percent'
+import { RatingDisplay } from '../rating-display'
 import { BookMetadata } from './book-metadata'
-import { RatingDisplay } from './rating-display'
 
 interface BookHeaderProps {
 	book: Book
