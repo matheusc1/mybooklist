@@ -19,6 +19,7 @@ import { Route as AuthenticatedBooksRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedReadingSpeedRouteImport } from './routes/_authenticated/reading-speed'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books_.$bookId'
+import { Route as AuthenticatedYearlyYearRouteImport } from './routes/_authenticated/yearly.$year'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -71,6 +72,11 @@ const AuthenticatedBooksBookIdRoute =
     path: '/books/$bookId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedYearlyYearRoute = AuthenticatedYearlyYearRouteImport.update({
+  id: '/yearly/$year',
+  path: '/yearly/$year',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeRoute
   '/reading-speed': typeof AuthenticatedReadingSpeedRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRoute
+  '/yearly/$year': typeof AuthenticatedYearlyYearRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeRoute
   '/reading-speed': typeof AuthenticatedReadingSpeedRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRoute
+  '/yearly/$year': typeof AuthenticatedYearlyYearRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/reading-speed': typeof AuthenticatedReadingSpeedRoute
   '/_authenticated/books_/$bookId': typeof AuthenticatedBooksBookIdRoute
+  '/_authenticated/yearly/$year': typeof AuthenticatedYearlyYearRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/reading-speed'
     | '/books/$bookId'
+    | '/yearly/$year'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/reading-speed'
     | '/books/$bookId'
+    | '/yearly/$year'
   id:
     | '__root__'
     | '/'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/_authenticated/home'
     | '/_authenticated/reading-speed'
     | '/_authenticated/books_/$bookId'
+    | '/_authenticated/yearly/$year'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBooksBookIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/yearly/$year': {
+      id: '/_authenticated/yearly/$year'
+      path: '/yearly/$year'
+      fullPath: '/yearly/$year'
+      preLoaderRoute: typeof AuthenticatedYearlyYearRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -233,6 +252,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedReadingSpeedRoute: typeof AuthenticatedReadingSpeedRoute
   AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRoute
+  AuthenticatedYearlyYearRoute: typeof AuthenticatedYearlyYearRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -241,6 +261,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedReadingSpeedRoute: AuthenticatedReadingSpeedRoute,
   AuthenticatedBooksBookIdRoute: AuthenticatedBooksBookIdRoute,
+  AuthenticatedYearlyYearRoute: AuthenticatedYearlyYearRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
