@@ -69,6 +69,31 @@ afterEach(() => {
 })
 
 describe('YearlyOverviewPage', () => {
+	it('keeps the page header and year switcher visible while loading', async () => {
+		hooks.useYearlyOverview.mockReturnValue({
+			data: undefined,
+			isLoading: true,
+			isError: false,
+		})
+		await renderWithRoute('/yearly/2025', { authenticated: true })
+
+		expect(
+			screen.getByRole('heading', { level: 1, name: 'Yearly Stats' }),
+		).toBeInTheDocument()
+		expect(
+			screen.getByRole('navigation', { name: 'Change year' }),
+		).toBeInTheDocument()
+		expect(
+			screen.getByRole('region', { name: 'Loading yearly overview' }),
+		).toHaveAttribute('aria-busy', 'true')
+		expect(document.querySelectorAll('.animate-pulse').length).toBeGreaterThan(
+			0,
+		)
+		expect(
+			screen.queryByRole('region', { name: 'Completed Books' }),
+		).not.toBeInTheDocument()
+	})
+
 	it('renders the goal, statistics, chart and completed books for the year', async () => {
 		await renderWithRoute('/yearly/2025', { authenticated: true })
 
