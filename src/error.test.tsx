@@ -6,6 +6,7 @@ const http = vi.hoisted(() => ({
 	getBooks: vi.fn(),
 	getDashboard: vi.fn(),
 	getActivity: vi.fn(),
+	getYearlyOverview: vi.fn(),
 }))
 
 vi.mock('#/http/books', async (importOriginal) => ({
@@ -19,6 +20,10 @@ vi.mock('#/http/dashboard', async (importOriginal) => ({
 vi.mock('#/http/activity', async (importOriginal) => ({
 	...(await importOriginal<typeof import('#/http/activity')>()),
 	getActivity: http.getActivity,
+}))
+vi.mock('#/http/yearly-overview', async (importOriginal) => ({
+	...(await importOriginal<typeof import('#/http/yearly-overview')>()),
+	getYearlyOverview: http.getYearlyOverview,
 }))
 
 const circular: Record<string, unknown> = {}
@@ -39,6 +44,7 @@ describe('ErrorComponent', () => {
 		['/books', http.getBooks],
 		['/home', http.getDashboard],
 		['/activity', http.getActivity],
+		['/yearly/2025', http.getYearlyOverview],
 	])('replaces %s when its query fails without data', async (path, request) => {
 		request.mockRejectedValue(new Error('Server error'))
 

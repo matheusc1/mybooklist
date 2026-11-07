@@ -37,13 +37,4 @@ describe('useYearlyOverview', () => {
 			queryClient.getQueryData([...queryKeys.yearlyOverview, 2025]),
 		).toEqual(overview)
 	})
-
-	it('exposes errors from the overview request', async () => {
-		const error = new Error('Request failed')
-		vi.mocked(getYearlyOverview).mockRejectedValue(error)
-
-		const { result } = renderHookWithProviders(() => useYearlyOverview(2025))
-
-		await waitFor(() => expect(result.current.error).toBe(error))
-	})
 })
