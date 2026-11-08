@@ -1,6 +1,11 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Link } from '@tanstack/react-router'
-import { LucideGauge, LucideLogOut, LucideTarget } from 'lucide-react'
+import {
+	LucideCalendarRange,
+	LucideGauge,
+	LucideLogOut,
+	LucideTarget,
+} from 'lucide-react'
 import { useGoalModalStore } from '#/stores/goal-store'
 import type { GoalProgress } from '#/types/goal'
 import type { UserUI } from '#/types/user'
@@ -52,6 +57,22 @@ function DropdownMenuActions({
 
 	return (
 		<div className="p-1.5">
+			<DropdownMenu.Item asChild>
+				<Link
+					to="/yearly/$year"
+					params={{ year: new Date().getFullYear() }}
+					className={`${itemClassName} hover:bg-surface2 hover:text-text data-highlighted:bg-surface2 data-highlighted:text-text`}
+				>
+					<div className={`${iconClassName} bg-accent/10 border-accent/15`}>
+						<LucideCalendarRange
+							aria-hidden="true"
+							className="size-4 text-accent"
+						/>
+					</div>
+					View yearly overview
+				</Link>
+			</DropdownMenu.Item>
+
 			<DropdownMenu.Item
 				onClick={() => openModal(goal?.target ? 'edit' : 'add')}
 				className={`${itemClassName} hover:bg-surface2 hover:text-text data-highlighted:bg-surface2 data-highlighted:text-text`}

@@ -31,6 +31,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+	vi.useRealTimers()
 	useGoalModalStore.setState({ open: false, mode: 'add' })
 })
 
@@ -44,6 +45,19 @@ describe('UserMenu', () => {
 		expect(screen.getAllByText('Ada Lovelace').length).toBeGreaterThan(0)
 		expect(screen.getByText('No reading goal set.')).toBeInTheDocument()
 		expect(screen.getByText('Take reading speed test')).toBeInTheDocument()
+	})
+
+	it('links to the yearly overview of the current year', async () => {
+		vi.useFakeTimers({ toFake: ['Date'] })
+		vi.setSystemTime(new Date(2026, 8, 2, 12))
+		const user = userEvent.setup()
+		renderWithRouter(<UserMenu />)
+
+		await user.click(screen.getByRole('button', { name: 'Open user menu' }))
+
+		expect(
+			screen.getByText('View yearly overview').closest('a'),
+		).toHaveAttribute('href', '/yearly/2026')
 	})
 
 	it('calls logout from the sign-out action', async () => {
