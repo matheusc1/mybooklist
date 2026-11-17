@@ -133,6 +133,15 @@
   .stagger-fade-up > *:nth-child(5) { animation-delay: 0.50s; }
   .stagger-fade-up > *:nth-child(6) { animation-delay: 0.56s; }
   .stagger-fade-up > *:nth-child(7) { animation-delay: 0.62s; }
+
+   @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in,
+    .animate-slide-up,
+    .animate-fade-up,
+    .stagger-fade-up > * {
+      animation: none;
+    }
+  }
 }
 
 @layer components {
