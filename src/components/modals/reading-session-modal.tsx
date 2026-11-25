@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form'
 import { LucideTrash2 } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import z from 'zod'
 import { useBooks } from '#/hooks/use-books'
 import {
@@ -65,6 +65,17 @@ export function ReadingSessionModal({
 		useUpdateReadingSession()
 	const { mutate: deleteReadingSession, isPending: isDeleting } =
 		useDeleteReadingSession()
+
+	const lockedBookId = session?.bookId ?? defaultBook?.id
+
+	const selectableBooks = useMemo(
+		() =>
+			books?.filter(
+				(book) =>
+					book.status !== 'completed' || String(book.id) === lockedBookId,
+			) ?? [],
+		[books, lockedBookId],
+	)
 
 	const [deleteOpen, setDeleteOpen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -147,8 +158,9 @@ export function ReadingSessionModal({
 							<form.Field name="bookId">
 								{(field) => {
 									const selectedBook =
-										books?.find((b) => String(b.id) === field.state.value) ??
-										null
+										selectableBooks.find(
+											(b) => String(b.id) === field.state.value,
+										) ?? null
 
 									return (
 										<div className="flex flex-col gap-2">
@@ -156,7 +168,7 @@ export function ReadingSessionModal({
 												Book
 											</FieldLabel>
 											<BookCombobox
-												books={books ?? []}
+												books={selectableBooks}
 												value={selectedBook}
 												onValueChange={(book) => {
 													field.handleChange(book ? String(book.id) : '')

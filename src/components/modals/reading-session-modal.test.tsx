@@ -25,10 +25,12 @@ vi.mock('#/hooks/use-reading-sessions', () => ({
 
 vi.mock('../ui/inputs/book-combobox', () => ({
 	BookCombobox: ({
+		books,
 		value,
 		disabled,
 		onValueChange,
 	}: {
+		books: { id: string; title: string; currentPage: number }[]
 		value: { id: string } | null
 		disabled?: boolean
 		onValueChange: (book: unknown) => void
@@ -38,15 +40,15 @@ vi.mock('../ui/inputs/book-combobox', () => ({
 			value={value?.id ?? ''}
 			disabled={disabled}
 			onChange={(event) =>
-				onValueChange(
-					event.target.value
-						? { id: event.target.value, currentPage: 10 }
-						: null,
-				)
+				onValueChange(books.find((b) => b.id === event.target.value) ?? null)
 			}
 		>
 			<option value="">Select a book</option>
-			<option value="book-1">The Hobbit</option>
+			{books.map((book) => (
+				<option key={book.id} value={book.id}>
+					{book.title}
+				</option>
+			))}
 		</select>
 	),
 }))
@@ -82,6 +84,13 @@ const session = {
 	toPage: 20,
 }
 
+const completedBook = {
+	id: 'book-2',
+	title: 'Dune',
+	currentPage: 400,
+	status: 'completed',
+}
+
 describe('ReadingSessionModal', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
@@ -91,6 +100,7 @@ describe('ReadingSessionModal', () => {
 					id: 'book-1',
 					title: 'The Hobbit',
 					currentPage: 10,
+					status: 'reading',
 				},
 			],
 		} as never)
@@ -334,5 +344,76 @@ describe('ReadingSessionModal', () => {
 
 		expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled()
 		expect(screen.getByRole('button', { name: 'Saving...' })).toBeDisabled()
+	})
+
+	it('does not offer completed books when adding a session', () => {
+		vi.mocked(useBooks).mockReturnValue({
+			data: [
+				{
+					id: 'book-1',
+					title: 'The Hobbit',
+					currentPage: 10,
+					status: 'reading',
+				},
+				completedBook,
+			],
+		} as never)
+		render(<ReadingSessionModal open onOpenChange={vi.fn()} />)
+
+		expect(
+			screen.getByRole('option', { name: 'The Hobbit' }),
+		).toBeInTheDocument()
+		expect(
+			screen.queryByRole('option', { name: 'Dune' }),
+		).not.toBeInTheDocument()
+	})
+
+	it('keeps the session book selected in edit mode even if it is now completed', () => {
+		vi.mocked(useBooks).mockReturnValue({
+			data: [{ ...completedBook, id: 'book-1', title: 'The Hobbit' }],
+		} as never)
+		render(
+			<ReadingSessionModal
+				open
+				mode="edit"
+				session={session}
+				onOpenChange={vi.fn()}
+			/>,
+		)
+
+		expect(screen.getByRole('combobox', { name: 'Book' })).toHaveValue('book-1')
+	})
+
+	it('keeps the default book selected even if it is now completed', () => {
+		vi.mocked(useBooks).mockReturnValue({
+			data: [{ ...completedBook, id: 'book-1', title: 'The Hobbit' }],
+		} as never)
+		render(
+			<ReadingSessionModal
+				open
+				onOpenChange={vi.fn()}
+				defaultBook={{ id: 'book-1', currentPage: 42 }}
+			/>,
+		)
+
+		expect(screen.getByRole('combobox', { name: 'Book' })).toHaveValue('book-1')
+	})
+
+	it('shows the required message when a page field is cleared', async () => {
+		const user = userEvent.setup()
+		render(<ReadingSessionModal open onOpenChange={vi.fn()} />)
+
+		await user.selectOptions(
+			screen.getByRole('combobox', { name: 'Book' }),
+			'book-1',
+		)
+		const toPage = screen.getByRole('spinbutton', { name: 'To page' })
+		await user.type(toPage, '5')
+		await user.clear(toPage)
+
+		expect(toPage).toHaveDisplayValue('')
+		expect(
+			await screen.findByText('Final page is required'),
+		).toBeInTheDocument()
 	})
 })
