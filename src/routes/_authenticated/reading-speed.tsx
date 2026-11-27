@@ -141,7 +141,7 @@ function IntroContent({ onStart }: { onStart: () => void }) {
 				</h1>
 				<p className="max-w-125 text-muted text-sm/[1.7]">
 					You'll read 2 short passages at your own natural pace. We'll use the
-					time to estimate how long your reading sessions actually take — no
+					time to estimate how long your reading sessions actually take. No
 					averages, just you.
 				</p>
 			</div>
@@ -236,7 +236,7 @@ function ReadingContent({
 			<div className="-mt-1 flex items-center gap-2 p-3 bg-surface border border-border border-l-2 border-l-accent rounded-lg">
 				<LucideLightbulb aria-hidden="true" className="size-5 text-accent/80" />
 				<p className="text-xs/normal text-muted">
-					Read at your usual pace — don't rush or slow down. This is about your
+					Read at your usual pace. Don't rush or slow down, this is about your
 					natural rhythm.
 				</p>
 			</div>
